@@ -27,7 +27,7 @@ urlpatterns = [  # attention: use this patterns only for general paths
     path('', TemplateView.as_view(template_name='base.html'), {"TITLE": settings.PROJECT_TITLE}),
 
     path(settings.ADMIN_URL, admin.site.urls),
-    path('', include('apps.users.urls', namespace="users")),
+    # path('', include('apps.users.urls', namespace="users")),
 ] + [  # the project-specific urlpatterns
     # path('', include('apps.things.urls', namespace="things")),
 ]

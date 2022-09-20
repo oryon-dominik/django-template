@@ -146,7 +146,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Users
 # -----------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#auth-user-model
-AUTH_USER_MODEL = "users.User"
+AUTH_USER_MODEL = "auth.User"  # -> users.User if the app is customized.
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#login-redirect-url
 LOGIN_REDIRECT_URL = "/" # "users:redirect"
 LOGOUT_REDIRECT_URL = "users:login"

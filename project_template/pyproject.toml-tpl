@@ -7,6 +7,7 @@ exclude = '''
     | \.git          # root of the project
     | build
     | dist
+    | pyproject.toml
   )/
 )
 '''
@@ -60,9 +61,13 @@ httpx = "^0.23.0"
 psycopg2 = "^2.9.3"
 gunicorn = "^20.1.0"
 Django = "^4.1.1"
+djangorestframework = "^3.13.1"
 django-debug-toolbar = "^3.6.0"
 django-environ = "^0.9.0"
 django-extensions = "^3.2.1"
+django-widget-tweaks = "^1.4.12
+django-crispy-forms = "^1.14.0"
+crispy-tailwind = "^0.5.0"
 
 [tool.poetry.group.development.dependencies]
 black = "^22.8.0"
