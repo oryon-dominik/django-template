@@ -62,19 +62,20 @@ SECRET_KEY = env.str("DJANGO_SECRET_KEY", default=generate_secret_key())
 # DATABASES
 # -----------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#databases
-POSTGRES_DB = env.str("POSTGRES_DB", default="{{ project_name }}")
-POSTGRES_USER = env.str("POSTGRES_USER")
-POSTGRES_PASSWORD = env.str("POSTGRES_PASSWORD")
-POSTGRES_HOST = env.str("POSTGRES_HOST")
-POSTGRES_PORT = env.int("POSTGRES_PORT")
-POSTGRES_OPTIONS = ""
-POSTGRES_SSL = "require" if DEBUG else "allow"
-POSTGRES_CONNECTION_STRING = f"postgres://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}{POSTGRES_OPTIONS}"
-DATABASE_URL = env.str("DATABASE_URL", default=POSTGRES_CONNECTION_STRING)
-DATABASES = {"default": env.db("DATABASE_URL", default=DATABASE_URL)}
-# sqlite:
-# DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': ROOT_DIR / 'database' / 'sqlite3.db'}}
-# DATABASES["default"]["ATOMIC_REQUESTS"] = True
+# Postgres:
+# POSTGRES_DB = env.str("POSTGRES_DB", default="{{ project_name }}")
+# POSTGRES_USER = env.str("POSTGRES_USER")
+# POSTGRES_PASSWORD = env.str("POSTGRES_PASSWORD")
+# POSTGRES_HOST = env.str("POSTGRES_HOST")
+# POSTGRES_PORT = env.int("POSTGRES_PORT")
+# POSTGRES_OPTIONS = ""
+# POSTGRES_SSL = "require" if DEBUG else "allow"
+# POSTGRES_CONNECTION_STRING = f"postgres://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}{POSTGRES_OPTIONS}"
+# DATABASE_URL = env.str("DATABASE_URL", default=POSTGRES_CONNECTION_STRING)
+# DATABASES = {"default": env.db("DATABASE_URL", default=DATABASE_URL)}
+# SQLite:
+DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': ROOT_DIR / 'database' / 'sqlite3.db'}}
+DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#default-auto-field
