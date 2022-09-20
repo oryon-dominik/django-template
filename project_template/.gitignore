@@ -1,0 +1,36 @@
+# -- GIT is ignoring --
+
+# Git itself
+.git/
+
+# Logs
+**/logs/*.log
+
+# Editor settings
+.vscode/
+
+# Database
+database/sqlite3.db
+# don't ignore migrations
+!**/migrations/__init__.py
+
+# Environment
+.env
+.secrets
+production.env
+
+# Static files
+staticfiles
+
+# ===================
+## Python
+# ===================
+__pycache__
+*.py[cod]
+# Keep keep.pyc to allow empty Django-template directories to be committed to git.
+!**/keep.pyc
+.pytest_cache
+
+# Jupyter
+.ipynb_checkpoints/
+.ipython/
