@@ -6,8 +6,8 @@ This repository contains two templates: one for a project structure and one for 
 
 You can use these by referring to their release files during project/app creation:
 
-    django-admin startproject --template https://github.com/oryon-dominik/django-template/releases/download/v0.1.0/project_template.zip <project_name>
-    ./manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/v0.1.0/app_template.zip <app_name>
+    django-admin startproject --template https://github.com/oryon-dominik/django-template/releases/download/latest/project_template.zip <project_name>
+    ./manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template.zip <app_name>
 
 ## Credits
 
