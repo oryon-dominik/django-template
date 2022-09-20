@@ -8,15 +8,15 @@ You can use these by referring to their release files during project/app creatio
 
 Project:
 
-    django-admin startproject --template https://github.com/oryon-dominik/django-template/releases/download/latest/project_template.zip <project_name>
+    django-admin startproject --template https://github.com/oryon-dominik/django-template/releases/download/latest/project_template.zip --extension=py,md,toml <project_name>
 
 Default App:
 
-    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_default.zip apps/<app_name>
+    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_default.zip --extension=py,md,toml apps/<app_name>
 
 Rest App:
 
-    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_rest.zip apps/<app_name>
+    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_rest.zip --extension=py,md,toml apps/<app_name>
 
 
 ## Credits
