@@ -1,4 +1,6 @@
-# Project And App Structure for Django
+# django-template
+
+> Project And App Structure for Django
 
 This repository contains two templates: one for a project structure and one for an app structure.
 
