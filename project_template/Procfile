@@ -1,3 +1,4 @@
 # postgres: postgres -D databases/postgres
 # web: PYTHONUNBUFFERED=true $WORKON_HOME/{{ project_name }}/bin/python manage.py runserver 0.0.0.0:8000 --settings=config.settings.development
+web: gunicorn {{project_name}}.config.wsgi:application
 # notebook: DJANGO_ALLOW_ASYNC_UNSAFE=true DJANGO_SETTINGS_MODULE=config.settings.development python manage.py shell_plus --notebook
