@@ -12,8 +12,12 @@ jobs:
       - uses: actions/checkout@v3
       - uses: vimtor/action-zip@v1
         with:
-          files: app_template/
-          dest: app_template.zip
+          files: app_template_default/
+          dest: app_template_default.zip
+      - uses: vimtor/action-zip@v1
+        with:
+          files: app_template_rest/
+          dest: app_template_rest.zip
       - uses: vimtor/action-zip@v1
         with:
           files: project_template/
@@ -25,5 +29,6 @@ jobs:
           prerelease: false
           title: "Latest Template Build"
           files: |
-            app_template.zip
+            app_template_default.zip
+            app_template_rest.zip
             project_template.zip

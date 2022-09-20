@@ -10,9 +10,14 @@ Project:
 
     django-admin startproject --template https://github.com/oryon-dominik/django-template/releases/download/latest/project_template.zip <project_name>
 
-App:
+Default App:
 
-    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template.zip apps/<app_name>
+    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_default.zip apps/<app_name>
+
+Rest App:
+
+    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_rest.zip apps/<app_name>
+
 
 ## Credits
 

@@ -1,0 +1,8 @@
+from django.urls import include, path
+
+from . import views
+from .routers import {{ app_name }}_router
+
+urlpatterns = [
+    path('', include({{ app_name }}_router.urls)),
+]
