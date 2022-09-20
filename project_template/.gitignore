@@ -16,7 +16,7 @@ database/sqlite3.db
 
 # Environment
 .env
-.secrets
+.secretkey
 production.env
 
 # Static files
