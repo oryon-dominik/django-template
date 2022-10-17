@@ -12,11 +12,11 @@ Project:
 
 Default App:
 
-    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_default.zip --extension=py,md,toml apps/<app_name>
+    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_default.zip --extension=py,md,toml app_name> apps
 
 Rest App:
 
-    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_rest.zip --extension=py,md,toml apps/<app_name>
+    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_rest.zip --extension=py,md,toml <app_name> apps
 
 
 ## Credits
