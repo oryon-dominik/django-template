@@ -1,0 +1,25 @@
+"""
+Overwriting Djangos builtin Management Commands.
+
+"""
+import sys
+from pathlib import Path
+
+from django.core.management.commands import startapp
+from django.conf import settings
+
+
+class Command(startapp.Command):
+
+    def handle(self, *args, **options):
+        """
+        Overwrite the handle method to add the app to the apps directory
+        """
+        _directory = options.get('directory') or options.get('name')
+        apps = Path(f'{settings.ROOT_DIR}/apps')
+        if apps in [Path(p) for p in sys.path]:
+            sys.path = [p for p in sys.path if Path(p) != apps]
+        app = apps / f'{_directory}'
+        app.mkdir(exist_ok=True)
+        options['directory'] = f"{app.resolve()}"
+        super().handle(*args, **options)

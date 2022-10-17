@@ -85,8 +85,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # APPS definition
 # -----------------------------------------------------------------------------
 # project specific apps
+MANAGEMENT_COMMANDS = [
+    "config.core.app.CoreConfig"
+]
 PROJECT_APPS = [
+    
     # "apps.things.apps.ThingsConfig",
+    
 ]
 # custom apps for all projects
 LOCAL_APPS = [
@@ -110,7 +115,7 @@ THIRD_PARTY_APPS = [  # order is important!!
 ]
 # See: https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#installed-apps
 # local apps shall override djangos default, so order is important
-INSTALLED_APPS = PROJECT_APPS + LOCAL_APPS + DJANGO_APPS + THIRD_PARTY_APPS
+INSTALLED_APPS = MANAGEMENT_COMMANDS + PROJECT_APPS + LOCAL_APPS + DJANGO_APPS + THIRD_PARTY_APPS
 
 
 MIDDLEWARE = [  # order is important: https://docs.djangoproject.com/en/{{ docs_version }}/ref/middleware/#middleware-ordering
