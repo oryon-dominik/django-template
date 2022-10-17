@@ -22,7 +22,8 @@ repos:
     hooks:
       - id: black
         language_version: python3.10
-
+        args:
+          - --force-exclude='pyproject.toml'
   - repo: https://github.com/timothycrosley/isort
     rev: 5.10.1
     hooks:
