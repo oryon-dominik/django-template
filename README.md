@@ -8,7 +8,7 @@ You can use these by referring to their release files during project/app creatio
 
 Project:
 
-    django-admin startproject --template https://github.com/oryon-dominik/django-template/releases/download/latest/project_template.zip --extension=py,md,toml,. <project_name>
+    django-admin startproject --template https://github.com/oryon-dominik/django-template/releases/download/latest/project_template.zip --extension=py,md,toml,. <project_name> <directory>
 
 Default App (will be created in the project's `apps` folder):
 
