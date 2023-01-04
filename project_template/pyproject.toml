@@ -51,7 +51,7 @@ authors = ["oryon-dominik <oryon@cyberise.de>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.11"
 humanize = "^4.3.0"
 pendulum = "^2.1.2"
 rich = "^12.5.1"
