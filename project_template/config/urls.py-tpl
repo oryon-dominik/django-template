@@ -23,7 +23,7 @@ from django.views.generic import TemplateView
 
 urlpatterns = [  # attention: use this patterns only for general paths
                  # that are used by all forks from the base-skeleton
-     # ! defining Views directly in the urls.py (like the line below) is an anti-pattern. We'll keep it here for simplicity for now.
+    # ! defining Views directly in the urls.py (like the line below) is an anti-pattern. We'll keep it here for simplicity for now.
     path('', TemplateView.as_view(template_name='base.html'), {"TITLE": settings.PROJECT_TITLE}),
 
     path(settings.ADMIN_URL, admin.site.urls),
