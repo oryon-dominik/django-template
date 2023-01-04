@@ -14,7 +14,7 @@ https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 from .base import *  # NOSONAR, noqa
 
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#debug
-DEBUG = env.bool("DJANGO_DEBUG", True)  # ! in development only!
+DEBUG = env.bool("DJANGO_DEBUG", True)  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE  # ! in development only!
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '{{ secret_key }}'
@@ -45,7 +45,7 @@ CORS_ALLOW_METHODS = [
 LOG_DATABASE = False
 
 # Django Admin URL.
-ADMIN_URL = env.str("DJANGO_ADMIN_URL", default="admin/")
+ADMIN_URL = env.str("DJANGO_ADMIN_URL", default="admin/")  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
 
 # for development emails are send to console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
