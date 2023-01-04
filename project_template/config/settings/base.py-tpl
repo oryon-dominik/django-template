@@ -26,7 +26,7 @@ if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
     dotenvpath = ROOT_DIR / "envs" / "production.env"
     if not dotenvpath.exists():
-        raise ValueError("Production dotenv file does not exist (create .envs/.production.env)")
+        raise ValueError("Production dotenv file does not exist (create envs/production.env)")
     env.read_env(str(dotenvpath))
 
 # make sure our apps & config directories are on the python path

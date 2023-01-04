@@ -11,6 +11,17 @@ https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 
 from .base import *  # NOSONAR, noqa
 
+# Read environment from .env
+env = environ.Env()
+READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
+if READ_DOT_ENV_FILE:
+    # OS environment variables take precedence over variables from .env
+    dotenvpath = ROOT_DIR / "envs" / "test.env"
+    if not dotenvpath.exists():
+        raise ValueError("Test dotenv file does not exist (create envs/test.env)")
+    env.read_env(str(dotenvpath))
+
+
 # DEBUG
 # ------------------------------------------------------------------------------
 # Turn debug off so tests run faster
