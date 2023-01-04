@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 
 from .base import *  # NOSONAR, noqa
 
+
 # Read environment from .env
 env = environ.Env()
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
@@ -19,8 +20,9 @@ if READ_DOT_ENV_FILE:
     dotenvpath = ROOT_DIR / "envs" / "test.env"
     if not dotenvpath.exists():
         raise ValueError("Test dotenv file does not exist (create envs/test.env)")
-    env.read_env(str(dotenvpath))
+    env.read_env(str(dotenvpath), override=True)
 
+SECRET_KEY = env.str("DJANGO_SECRET_KEY", default='{{ secret_key }}')  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
 
 # DEBUG
 # ------------------------------------------------------------------------------
@@ -44,3 +46,5 @@ EMAIL_PORT = 1025
 
 # Make tests faster by using a noop hasher
 PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
+
+LOGGING['loggers']['django.db.backends']['level'] = 'INFO'

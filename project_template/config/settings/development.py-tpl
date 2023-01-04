@@ -19,7 +19,7 @@ if READ_DOT_ENV_FILE:
     dotenvpath = ROOT_DIR / "envs" / "develop.env"
     if not dotenvpath.exists():
         raise ValueError("Develop dotenv file does not exist (create envs/develop.env)")
-    env.read_env(str(dotenvpath))
+    env.read_env(str(dotenvpath), override=True)
 
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#debug
 DEBUG = env.bool("DJANGO_DEBUG", True)  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE  # ! in development only!

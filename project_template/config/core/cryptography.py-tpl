@@ -1,0 +1,5 @@
+import secrets
+
+def generate_secret_key(nbytes: int = 66):
+    """Generate a random secret key."""
+    return secrets.token_urlsafe(nbytes)
