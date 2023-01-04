@@ -1,0 +1,9 @@
+from pathlib import Path
+from functools import cache
+
+import toml
+
+
+@cache
+def load_pyproject(project_path: Path):
+    return toml.load(project_path / "pyproject.toml")

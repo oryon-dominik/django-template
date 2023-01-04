@@ -68,6 +68,7 @@ django-extensions = "^3.2.1"
 django-widget-tweaks = "^1.4.12"
 django-crispy-forms = "^1.14.0"
 crispy-tailwind = "^0.5.0"
+toml = "^0.10.2"
 
 [tool.poetry.group.development.dependencies]
 black = "^22.8.0"

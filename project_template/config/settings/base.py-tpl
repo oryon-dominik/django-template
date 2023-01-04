@@ -15,9 +15,15 @@ from pathlib import Path
 
 import environ
 
+from ..core.pyproject import load_pyproject
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 APPS_DIR = ROOT_DIR / 'apps'
+
+pyproject = load_pyproject(project_path=ROOT_DIR)
+VERSION = pyproject["tool"]["poetry"]["version"]
 
 # Read environment from .env
 env = environ.Env()
@@ -36,7 +42,7 @@ sys.path.append(f'{ROOT_DIR / "config"}')
 
 #======PROJECT-SPECIFIC-SETTINGS===============================================
 # add project specific CONSTANTS here
-PROJECT_TITLE = "{{ project_name }}"
+PROJECT_TITLE = pyproject["tool"]["poetry"]["name"]
 # Production checklist:
 # See https://docs.djangoproject.com/en/{{ docs_version }}/howto/deployment/checklist/
 #==============================================================================
