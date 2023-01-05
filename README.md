@@ -1,12 +1,17 @@
 # django-template
 
-> Project And App Structure for Django
+> Project And App Structure Templates for Django.
 
-This repository contains two templates: one for a project structure and one for an app structure.
+---
 
-You can use these by referring to their release files during project/app creation.
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-Project:
+You can use these template by referring to their release files during project/app creation.  
+Preinstalled `Django in your local python version is required.`  
+Although this should be pretty self-explanatory, please remember to replace `<project_name>` and `<app_name>` with your project/app name ;-).
+
+
+## Project:
 
     django-admin startproject --template https://github.com/oryon-dominik/django-template/releases/download/latest/project_template.zip --extension=py,md,toml,. <project_name> <directory>
 
@@ -14,13 +19,21 @@ You can call it with your local python with
 
     python -c 'import os;import sys;from pathlib import Path;os.system(str((Path(sys.executable).parent / \"Scripts\" / \"django-admin\").resolve()) + \" startproject --template https://github.com/oryon-dominik/django-template/releases/download/latest/project_template.zip --extension=py,md,toml,. <project_name> .\")'
 
-Default App (will be created in the project's `apps` folder):
+
+## Default App
+
+(will be created in the project's `apps` folder)
 
     python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_default.zip --extension=py,md,toml,. <app_name>
 
-Rest App (will be created in the project's `apps` folder):
+
+## Rest App
+
+(will be created in the project's `apps` folder)
 
     python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_rest.zip --extension=py,md,toml,. <app_name>
+
+Add `'rest_framework'` to `THIRD_PARTY_APPS` in `config.settings.base.py`.
 
 
 ## Credits
