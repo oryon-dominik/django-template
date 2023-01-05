@@ -23,7 +23,11 @@ norecursedirs = ".git staticfiles docs assets logs media notebooks"
 
 [tool.flake8]
 statistics = "True"
-ignore = ["D203" , "W503"]
+extend-ignore = [
+  "D203",  # 1 blank line required before class docstring
+  "W503",  # line break before binary operator
+  "E203",  # whitespace before ':' - for black compatibility
+]
 exclude = '''
     **/migrations/*,
     .git,
