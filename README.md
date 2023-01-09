@@ -20,11 +20,17 @@ You can call it with your local python with
     python -c 'import os;import sys;from pathlib import Path;os.system(str((Path(sys.executable).parent / \"Scripts\" / \"django-admin\").resolve()) + \" startproject --template https://github.com/oryon-dominik/django-template/releases/download/latest/project_template.zip --extension=py,md,toml,. <project_name> .\")'
 
 
+For any subsequent command (creating apps..) *install the dependencies* and *activate your virtual environment*.
+
+
 ## Default App
 
 (will be created in the project's `apps` folder)
 
     python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_default.zip --extension=py,md,toml,. <app_name>
+
+
+Add `'apps.<app_name>.apps.<app_name.capitalize()>Config'` to `LOCAL_APPS` in `config.settings.base.py`.  
 
 
 ## Rest App
@@ -33,7 +39,9 @@ You can call it with your local python with
 
     python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_rest.zip --extension=py,md,toml,. <app_name>
 
-Add `'rest_framework'` to `THIRD_PARTY_APPS` in `config.settings.base.py`.
+
+Add `'apps.<app_name>.apps.<app_name.capitalize()>Config'` to `LOCAL_APPS` in `config.settings.base.py`.  
+Add `'rest_framework'` to `THIRD_PARTY_APPS` in `config.settings.base.py`.  
 
 
 ## Credits
