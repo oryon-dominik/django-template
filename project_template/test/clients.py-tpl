@@ -1,0 +1,36 @@
+import json
+
+from django.test import Client
+
+
+class RestClient(Client):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def post(self, *args, headers=None, **kwargs):
+        if headers is None:
+            headers = {}
+
+        json_data = kwargs.pop('json', "")
+        if json_data:
+            kwargs['content_type'] = 'application/json'
+            kwargs['data'] = json.dumps(json_data)
+
+        kwargs.update(**headers)
+        
+        response = super().post(*args, **kwargs)
+        def _json():
+            return json.loads(response.content)
+
+        if response.headers['Content-Type'] == 'application/json':  # type: ignore
+            setattr(response, 'json', _json)
+        return response
+
+    def get(self, *args, headers=None, **kwargs):
+        if headers is None:
+            headers = {}
+
+        kwargs.update(**headers)
+        
+        response = super().get(*args, **kwargs)
+        return response

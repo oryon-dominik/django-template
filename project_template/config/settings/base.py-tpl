@@ -15,7 +15,7 @@ from pathlib import Path
 
 import environ
 
-from ..core.pyproject import load_pyproject
+from core.pyproject import load_pyproject
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -39,6 +39,8 @@ if READ_DOT_ENV_FILE:
 # This allows easy placement of apps within the interior apps directory.
 sys.path.append(f'{ROOT_DIR / "apps"}')
 sys.path.append(f'{ROOT_DIR / "config"}')
+sys.path.append(f'{ROOT_DIR / "core"}')
+sys.path.append(f'{ROOT_DIR / "test"}')
 
 #======PROJECT-SPECIFIC-SETTINGS===============================================
 # add project specific CONSTANTS here
@@ -83,7 +85,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # -----------------------------------------------------------------------------
 # project specific apps
 MANAGEMENT_COMMANDS = [
-    "config.core.app.CoreConfig"
+    "core.app.CoreConfig"
 ]
 PROJECT_APPS = [
     

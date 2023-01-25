@@ -1,0 +1,57 @@
+from datetime import timedelta
+from django.utils import timezone
+import secrets
+
+from jose import jwt
+
+from django.conf import settings
+
+
+DEFAULT_JWT_TOKEN_ALGORITHM = "HS512"
+DEFAULT_JWT_TOKEN_ACCESS_EXPIRATION_MINUTES = 5  # 5 minutes
+DEFAULT_JWT_TOKEN_REFRESH_EXPIRATION_MINUTES = 60 * 24 * 7  # 7 days
+DEFAULT_JWT_TOKEN_TYPE = 'jwt'
+
+
+
+def urlsafe_token(nbytes: int = 66):
+    """Generate a random urlsafe secret key."""
+    return secrets.token_urlsafe(nbytes)
+
+
+def jwt_token(email: str, expires_in: int, scope: str = "", audience: str = ""):
+    """
+    Generate a random jwt token.
+
+    expires_in: in minutes
+        recommended:
+            access token:  5       minutes
+            refresh token: 60*24*7 minutes (a week)
+
+    scope:
+        The value of the "scope" claim is a JSON string containing a
+        space-separated list of scopes associated with the token...
+        https://datatracker.ietf.org/doc/html/rfc8693#name-scope-scopes-claim
+    
+    audience:
+        The logical name of the target service where the client intends to use
+        the requested security token.
+
+    """
+    now = timezone.now()
+    claims = {
+        "iss": settings.DOMAIN,
+        "exp": now + timedelta(minutes=expires_in),
+        "sub": email,
+        "iat": now,
+        "zoneinfo": settings.TIME_ZONE,
+    }
+    if scope:
+        claims["scope"] = scope
+    if audience:
+        claims["aud"] = audience
+    headers = {
+        "alg": DEFAULT_JWT_TOKEN_ALGORITHM,
+        "typ": DEFAULT_JWT_TOKEN_TYPE,
+    }
+    return jwt.encode(claims=claims, key=settings.SECRET_KEY, algorithm=DEFAULT_JWT_TOKEN_ALGORITHM, headers=headers)

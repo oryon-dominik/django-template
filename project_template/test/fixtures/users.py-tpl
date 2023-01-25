@@ -1,0 +1,42 @@
+import pytest
+
+from django.contrib.auth import get_user_model
+
+from test.factories import generic_user_factory
+
+
+@pytest.fixture
+def valid_password() -> str:
+    return "secretpasswordthatpassesvalidation1!"
+
+@pytest.fixture
+def wrong_password() -> str:
+    return "wrongpasswordthatpassesvalidation1!"
+
+@pytest.fixture
+def invalid_password() -> str:
+    return "invalid"
+
+@pytest.fixture
+def user(valid_password):
+    """Explicitly create a user from the factory or the original fixture will
+    be overwritten in a case of a test that uses both of the fixtures."""
+    user = generic_user_factory(password=valid_password)
+    yield user
+    get_user_model().objects.get(email=user.email).delete()  # type: ignore[no-untyped-call]
+
+@pytest.fixture
+def verified_user(valid_password):
+    """Explicitly create a user from the factory or the original fixture will
+    be overwritten in a case of a test that uses both of the fixtures."""
+    user = generic_user_factory(is_active=True, password=valid_password)
+    yield user
+    get_user_model().objects.get(email=user.email).delete()  # type: ignore[no-untyped-call]
+
+@pytest.fixture
+def unverified_user(valid_password):
+    """Explicitly create a user from the factory or the original fixture will
+    be overwritten in a case of a test that uses both of the fixtures."""
+    user = generic_user_factory(is_active=False, password=valid_password)
+    yield user
+    get_user_model().objects.get(email=user.email).delete()  # type: ignore[no-untyped-call]

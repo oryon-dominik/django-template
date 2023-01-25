@@ -1,0 +1,47 @@
+from typing import Any, TypeAlias
+
+import pytest
+from faker import Factory as FakerFactory
+
+from django.conf import settings
+from django.contrib.auth import get_user_model
+
+# for all providers see: https://faker.readthedocs.io/en/master/providers.html
+faker: Any = FakerFactory.create()
+faker.seed(settings.TEST_FAKER_SEED)
+
+UserModel = get_user_model()
+User: TypeAlias = UserModel
+
+
+def generic_user_factory(
+        first_name: str = "",
+        last_name: str = "",
+        username: str = "",
+        email: str = "",
+        password: str = "",
+        is_staff: bool = False,
+        is_active: bool = False,
+
+    ) -> User:
+    """
+    User factory.
+    Produces a generic the user fixture
+    """
+    first_name = first_name if first_name else faker.first_name()
+    last_name = last_name if last_name else faker.last_name()
+    password = password if password else faker.password(length=36, special_chars=True, digits=True, upper_case=True, lower_case=True)
+    username = username if username else f"{last_name.lower()}-{first_name.lower()}"
+    email = email if email else f"{last_name.lower()}.{first_name.lower()}@{faker.domain_name()}"
+
+    user = UserModel.objects.create(
+        first_name=first_name,
+        last_name=last_name,
+        username=username,
+        email=email,
+        is_staff=is_staff,
+        is_active=is_active,
+    )
+    user.set_password(raw_password=password)
+    user.save()
+    return user

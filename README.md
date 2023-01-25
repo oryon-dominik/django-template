@@ -30,8 +30,8 @@ For any subsequent command (creating apps..) *install the dependencies* and *act
     python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_default.zip --extension=py,md,toml,. <app_name>
 
 
-Add `'apps.<app_name>.apps.<app_name.capitalize()>Config'` to `LOCAL_APPS` in `config.settings.base.py`.  
-
+- Add `'apps.<app_name>.apps.<app_name.capitalize()>Config'` to `LOCAL_APPS` or `PROJECT_APPS` in `config.settings.base.py`.  
+- Add the apps routes to `urlpatterns` in `config.urls.py` like this: `path('', include('apps.<app_name>.urls', namespace="<app_name>")),`  
 
 ## Rest App
 
@@ -40,8 +40,9 @@ Add `'apps.<app_name>.apps.<app_name.capitalize()>Config'` to `LOCAL_APPS` in `c
     python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_rest.zip --extension=py,md,toml,. <app_name>
 
 
-Add `'apps.<app_name>.apps.<app_name.capitalize()>Config'` to `LOCAL_APPS` in `config.settings.base.py`.  
-Add `'rest_framework'` to `THIRD_PARTY_APPS` in `config.settings.base.py`.  
+- Add `'apps.<app_name>.apps.<app_name.capitalize()>Config'` to `LOCAL_APPS` or `PROJECT_APPS` in `config.settings.base.py`.  
+- Add `'rest_framework'` to `THIRD_PARTY_APPS` in `config.settings.base.py`.  
+- Add the apps routes to `urlpatterns` in `config.urls.py` like this: `path('', include('apps.<app_name>.api.urls', namespace="<app_name>")),`  
 
 
 ## Credits
