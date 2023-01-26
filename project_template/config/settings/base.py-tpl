@@ -128,6 +128,7 @@ MIDDLEWARE = [  # order is important: https://docs.djangoproject.com/en/{{ docs_
 ]
 
 ROOT_URLCONF = 'config.urls'
+API_BASE_URL: str = env.str("API_BASE_URL", default="api")  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
 
 TEMPLATES = [
     {

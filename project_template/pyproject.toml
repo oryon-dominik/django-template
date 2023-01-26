@@ -45,7 +45,7 @@ ignore_missing_imports = true
 plugins = ["mypy_django_plugin.main"]
 
 [tool.django-stubs]
-django_settings_module = "config.settings.development"
+django_settings_module = "config.settings.develop"
 
 [tool.poetry]
 name = "{{ project_name }}"
@@ -77,7 +77,7 @@ toml = "^0.10.2"
 
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 
-[tool.poetry.group.development.dependencies]
+[tool.poetry.group.develop.dependencies]
 black = "^22.8.0"
 coverage = "^6.4.4"
 django-stubs = "^1.12.0"

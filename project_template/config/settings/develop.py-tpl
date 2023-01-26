@@ -59,7 +59,7 @@ ADMIN_URL = env.str("DJANGO_ADMIN_URL", default="admin/")  # type: ignore[no-unt
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # alternatively, deactivate email-verification with ACCOUNT_EMAIL_VERIFICATION = 'none'
 
-IPYTHON_ARGUMENTS = ["--debug", "--settings=config.settings.development"]
+IPYTHON_ARGUMENTS = ["--debug", "--settings=config.settings.develop"]
 NOTEBOOK_ARGUMENTS = [  # to run the notebook with django 3 async set env DJANGO_ALLOW_ASYNC_UNSAFE=true
     "--port", "8888",
     "--ip", "0.0.0.0",
