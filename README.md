@@ -33,6 +33,7 @@ For any subsequent command (creating apps..) *install the dependencies* and *act
 - Add `'apps.<app_name>.apps.<app_name.capitalize()>Config'` to `LOCAL_APPS` or `PROJECT_APPS` in `config.settings.base.py`.  
 - Add the apps routes to `urlpatterns` in `config.urls.py` like this: `path('', include('apps.<app_name>.urls', namespace="<app_name>")),`  
 
+
 ## Rest App
 
 (will be created in the project's `apps` folder)
@@ -41,8 +42,18 @@ For any subsequent command (creating apps..) *install the dependencies* and *act
 
 
 - Add `'apps.<app_name>.apps.<app_name.capitalize()>Config'` to `LOCAL_APPS` or `PROJECT_APPS` in `config.settings.base.py`.  
-- Add `'rest_framework'` to `THIRD_PARTY_APPS` in `config.settings.base.py`.  
 - Add the apps routes to `urlpatterns` in `config.urls.py` like this: `path('', include('apps.<app_name>.api.urls', namespace="<app_name>")),`  
+
+
+## Authentication App for JWT
+
+(will be created in the project's `apps` folder)
+
+    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_authentication.zip --extension=py,md,toml,. authentication
+
+authentication is checking blacklisted tokens (whitelisting is a BAD idea ;-P) and will have a slow default cache (database access) for production.
+If you only use one worker, you might want to switch to memory for development.
+    python manage.py createcachetable  # for database cache is required before running anything
 
 
 ## Credits
