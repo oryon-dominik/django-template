@@ -9,8 +9,7 @@ from rest_framework.exceptions import NotAuthenticated
 from rest_framework import status
 
 from core.cypher import tokens
-
-from apps.users.crud import get_user_by_email, UserModel
+from core.crud.users import get_user_by_email, UserModel
 
 
 MSG_AUTHENTICATION_FAILED = "Authentication failed"
