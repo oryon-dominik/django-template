@@ -22,7 +22,6 @@ def generic_user_factory(
         password: str = "",
         is_staff: bool = False,
         is_active: bool = False,
-
     ) -> User:
     """
     User factory.
@@ -43,5 +42,31 @@ def generic_user_factory(
         is_active=is_active,
     )
     user.set_password(raw_password=password)
+    user.save()
+    return user
+
+def admin_user_factory(
+        first_name: str = "",
+        last_name: str = "",
+        username: str = "",
+        email: str = "",
+        password: str = "",
+        is_staff: bool = False,
+        is_active: bool = False,
+    ) -> User:
+    """
+    AdminUser factory.
+    Produces an adminuser fixture
+    """
+    user = generic_user_factory(
+        first_name=first_name,
+        last_name=last_name,
+        username=username,
+        email=email,
+        password=password,
+        is_staff=is_staff,
+        is_active=is_active,
+    )
+    user.is_superuser = True
     user.save()
     return user

@@ -2,7 +2,7 @@ import pytest
 
 from django.contrib.auth import get_user_model
 
-from test.factories import generic_user_factory
+from test.factories import generic_user_factory, admin_user_factory
 
 
 @pytest.fixture
@@ -30,6 +30,14 @@ def verified_user(valid_password):
     """Explicitly create a user from the factory or the original fixture will
     be overwritten in a case of a test that uses both of the fixtures."""
     user = generic_user_factory(is_active=True, password=valid_password)
+    yield user
+    get_user_model().objects.get(email=user.email).delete()  # type: ignore[no-untyped-call]
+
+@pytest.fixture
+def verified_admin_user(valid_password):
+    """Explicitly create a user from the factory or the original fixture will
+    be overwritten in a case of a test that uses both of the fixtures."""
+    user = admin_user_factory(is_active=True, is_staff=True, password=valid_password)
     yield user
     get_user_model().objects.get(email=user.email).delete()  # type: ignore[no-untyped-call]
 

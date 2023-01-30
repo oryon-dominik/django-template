@@ -5,7 +5,7 @@ from django.test import Client
 
 class RestClient(Client):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, enforce_csrf_checks=True, **kwargs)
 
     def post(self, *args, headers=None, **kwargs):
         if headers is None:
