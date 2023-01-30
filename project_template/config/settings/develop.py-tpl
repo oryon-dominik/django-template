@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 
 from .base import *  # NOSONAR, noqa
 
-READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
+READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=True)  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
 if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
     dotenvpath = ROOT_DIR / "envs" / "develop.env"
@@ -25,7 +25,15 @@ if READ_DOT_ENV_FILE:
 DEBUG = env.bool("DJANGO_DEBUG", True)  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE  # ! in development only!
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '{{ secret_key }}'
+SECRET_KEY = env.str("DJANGO_SECRET_KEY", default='django-insecure-{{ secret_key }}')  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
+
+#======PROJECT-SPECIFIC-SETTINGS===============================================
+# add project specific production settings here
+PROJECT_FQDN = env.url("PROJECT_FQDN")
+# Production checklist:
+# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
+#==============================================================================
+
 
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = ['*']
@@ -47,6 +55,8 @@ CORS_ALLOW_METHODS = [
     # 'PATCH',
     # 'PUT',
 ]
+
+CACHES['jwt-blacklist']['BACKEND'] = 'django.core.cache.backends.locmem.LocMemCache'
 
 # The logging-filter 'log_database_queries' will log to the file, if LOG_DATABASE is True
 # Turn it only on in develop

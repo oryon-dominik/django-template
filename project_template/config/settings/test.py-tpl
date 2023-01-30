@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 
 from .base import *  # NOSONAR, noqa
 
-
 # Read environment from .env
 env = environ.Env()
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
@@ -22,18 +21,31 @@ if READ_DOT_ENV_FILE:
         raise ValueError("Test dotenv file does not exist (create envs/test.env)")
     env.read_env(str(dotenvpath), override=True)
 
-SECRET_KEY = env.str("DJANGO_SECRET_KEY", default='{{ secret_key }}')  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
+SECRET_KEY = env.str("DJANGO_SECRET_KEY", default='django-insecure-{{ secret_key }}')  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
+
+#======PROJECT-SPECIFIC-SETTINGS===============================================
+# add project specific production settings here
+PROJECT_FQDN = env.url("PROJECT_FQDN", default="http://localhost:8000")  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
+# Production checklist:
+# See https://docs.djangoproject.com/en/{{ docs_version }}/howto/deployment/checklist/
+#==============================================================================
+
 
 # DEBUG
 # ------------------------------------------------------------------------------
 # Turn debug off so tests run faster
 DEBUG = False
+# https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#test-runner
+IS_TESTING = True
 
 ALLOWED_HOSTS = ['testserver']
 
 INSTALLED_APPS += []
 
+CACHES['jwt-blacklist']['BACKEND'] = 'django.core.cache.backends.locmem.LocMemCache'
+
 TEST_RUNNER = 'test.runners.PytestTestRunner'
+TEST_FAKER_SEED = 1337
 
 # EMAIL
 # ------------------------------------------------------------------------------

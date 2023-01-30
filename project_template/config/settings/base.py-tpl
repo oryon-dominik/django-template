@@ -14,8 +14,13 @@ import sys
 from pathlib import Path
 
 import environ
+import django_stubs_ext
 
 from core.pyproject import load_pyproject
+
+# Monkeypatching Django, so stubs will work for all generics,
+# see: https://github.com/typeddjango/django-stubs
+django_stubs_ext.monkeypatch()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -80,6 +85,14 @@ DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+CACHES = {
+    'jwt-blacklist': {
+        # 'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # ! this is not thread-safe and not recommended, if you use multiple workers
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',  # ! this is slow in production. Maybe use redis or memcached
+        'LOCATION': 'blacklisted_jwts_cache',
+    }
+}
+
 
 # APPS definition
 # -----------------------------------------------------------------------------
@@ -111,6 +124,7 @@ THIRD_PARTY_APPS = [  # order is important!!
     "crispy_tailwind",
     "django_extensions",
     'widget_tweaks',
+    'rest_framework',
 ]
 # See: https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#installed-apps
 # local apps shall override djangos default, so order is important
@@ -149,16 +163,30 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 
+# Django-REST-Framework (DRF)
+# -----------------------------------------------------------------------------
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        'apps.authentication.api.backends.JWTAuthentication',
+    ),
+    "DEFAULT_PERMISSION_CLASSES": (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+}
+
 # Users
 # -----------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "auth.User"  # -> users.User if the app is customized.
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#login-redirect-url
-LOGIN_REDIRECT_URL = "/" # "users:redirect"
-LOGOUT_REDIRECT_URL = "users:login"
+LOGIN_REDIRECT_URL = "api:api-root"  # "users:redirect"
+LOGOUT_REDIRECT_URL = "api:api-root"  # "users:login"
 # LOGIN_REDIRECT_URL = "/"
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#login-url
-LOGIN_URL = "users:login"
+LOGIN_URL = "api:api-root"  # "users:login"
 
 # Django Admin URL.
 # a little protection to script-kiddie-attacks. This is no REAL security.

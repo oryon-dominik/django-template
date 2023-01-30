@@ -21,16 +21,23 @@ from django.conf import settings
 from django.views.generic import TemplateView
 
 
-urlpatterns = [  # attention: use this patterns only for general paths
-                 # that are used by all forks from the base-skeleton
-    # ! defining Views directly in the urls.py (like the line below) is an anti-pattern. We'll keep it here for simplicity for now.
-    path('', TemplateView.as_view(template_name='base.html'), {"TITLE": settings.PROJECT_TITLE}),
+urlpatterns = [
+    # ! attention: use this patterns only for general paths
+    # that are used by all forks from the base-skeleton
 
-    path(settings.ADMIN_URL, admin.site.urls),
+    # ! defining Views directly in the urls.py (like the line below) is an anti-pattern. We'll keep it here for simplicity for now.
+    # path('', TemplateView.as_view(template_name='base.html'), {"TITLE": settings.PROJECT_TITLE}),
+
+    # path(settings.ADMIN_URL, admin.site.urls),
     # path('', include('apps.users.urls', namespace="users")),
 ] + [  # the project-specific urlpatterns
     # path('', include('apps.things.urls', namespace="things")),
 ]
+
+# the project-specific api-interfaces live in 'config/apis.py'
+# namespaces may be accessed with: {% url 'api:appname-modelname-crudmethod' %}
+# e.g.: {% url 'api:users-user-list' %}
+urlpatterns += [path(f"{settings.API_BASE_URL}/", include('config.apis', namespace='api')),]
 
 
 if settings.DEBUG:
@@ -40,7 +47,7 @@ if settings.DEBUG:
     # Serve static and media files from development server
     urlpatterns += staticfiles_urlpatterns()
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    
+
     # debug toolbar
     import debug_toolbar
     urlpatterns += [path('__debug__/', include(debug_toolbar.urls)),]
