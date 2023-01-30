@@ -19,7 +19,8 @@ from rest_framework import status
 from rest_framework.exceptions import NotAuthenticated
 
 from core.cypher import tokens
-from core.middlewares import middleware_on_class, EnsureCsrfCookie
+from core.middlewares.decorators import middleware_on_class
+from core.middlewares.csrf import EnsureCsrfCookie
 from apps.users.crud import get_user_by_email, UserModel
 from .backends import MSG_AUTHENTICATION_FAILED, MSG_VERIFICATION_FAILED, JWTAuthentication
 
