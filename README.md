@@ -51,6 +51,8 @@ For any subsequent command (creating apps..) *install the dependencies* and *act
 
     python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_authentication.zip --extension=py,md,toml,. authentication
 
+- In `config.urls.api` comment `path('', include('apps.authentication.api.urls')),` in.
+
 authentication is checking blacklisted tokens (whitelisting is a BAD idea ;-P) and will have a slow default cache (database access) for production.
 If you only use one worker, you might want to switch to memory for development.
     python manage.py createcachetable  # for database cache is required before running anything
