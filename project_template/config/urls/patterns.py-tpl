@@ -14,9 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 # from django.contrib import admin
-# from django.urls import path, include
+from django.urls import path, include
 
-# from django.conf import settings
+from django.conf import settings
 
 # from django.views.generic import TemplateView
 
@@ -34,20 +34,20 @@ urlpatterns = [
     # path('', include('apps.things.urls', namespace="things")),
 ]
 
-# the project-specific api-interfaces live in 'config/apis.py'
-# namespaces may be accessed with: {% url 'api:appname-modelname-crudmethod' %}
-# e.g.: {% url 'api:users-user-list' %}
-# urlpatterns += [path(f"{settings.API_BASE_URL}/", include('config.apis', namespace='api')),]
+# the project-specific api-interfaces live in 'config/urls/apis.py'
+# namespaces may be accessed in jinja with: url 'api:appname-modelname-crudmethod'
+# e.g.: {<percent> url 'api:users-user-list' <percent>}
+urlpatterns += [path(f"{settings.API_BASE_URL}/", include('config.apis', namespace='api')),]
 
 
-# if settings.DEBUG:
-#     from django.conf.urls.static import static
-#     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+if settings.DEBUG:
+    from django.conf.urls.static import static
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-#     # Serve static and media files from development server
-#     urlpatterns += staticfiles_urlpatterns()
-#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # Serve static and media files from development server
+    urlpatterns += staticfiles_urlpatterns()
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-#     # debug toolbar
-#     import debug_toolbar
-#     urlpatterns += [path('__debug__/', include(debug_toolbar.urls)),]
+    # debug toolbar
+    import debug_toolbar
+    urlpatterns += [path('__debug__/', include(debug_toolbar.urls)),]
