@@ -13,7 +13,7 @@ Although this should be pretty self-explanatory, please remember to replace `<pr
 
 ## Project:
 
-    django-admin startproject --template https://github.com/oryon-dominik/django-template/releases/download/latest/project_template.zip --extension=py,md,toml,. <project_name> <directory>
+    django-admin startproject --template https://github.com/oryon-dominik/django-template/releases/download/latest/project_template.zip --extension=py,md,toml,code-workspace. <project_name> <directory>
 
 You can call it with your local python with
 
