@@ -4,9 +4,9 @@
 
 # from django.urls import include, path
 # from django.views.generic import RedirectView
-from django.conf import settings
+# from django.conf import settings
 
-app_name = 'api'
+# app_name = 'api'
 
 # Configure the api root view here
 # @api_view(['GET'])
@@ -28,6 +28,6 @@ urlpatterns = [
     # path('', RedirectView.as_view(url=''), name='api-root'),
 ]
 
-if settings.DEBUG:
-    # development only
-    pass
+# if settings.DEBUG:
+#     # development only
+#     pass
