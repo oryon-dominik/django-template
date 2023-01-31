@@ -37,7 +37,7 @@ urlpatterns = [
 # the project-specific api-interfaces live in 'config/apis.py'
 # namespaces may be accessed with: {% url 'api:appname-modelname-crudmethod' %}
 # e.g.: {% url 'api:users-user-list' %}
-urlpatterns += [path(f"{settings.API_BASE_URL}/", include('config.apis', namespace='api')),]
+# urlpatterns += [path(f"{settings.API_BASE_URL}/", include('config.apis', namespace='api')),]
 
 
 if settings.DEBUG:
