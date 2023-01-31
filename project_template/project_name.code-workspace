@@ -1,7 +1,6 @@
 {
     "folders": [
         {
-            "name": "{{ project_name }}",
             "path": "."
         }
     ],
