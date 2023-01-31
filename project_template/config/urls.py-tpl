@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from django.conf import settings
+# from django.conf import settings
 
 from django.views.generic import TemplateView
 
@@ -40,14 +40,14 @@ urlpatterns = [
 # urlpatterns += [path(f"{settings.API_BASE_URL}/", include('config.apis', namespace='api')),]
 
 
-if settings.DEBUG:
-    from django.conf.urls.static import static
-    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+# if settings.DEBUG:
+#     from django.conf.urls.static import static
+#     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-    # Serve static and media files from development server
-    urlpatterns += staticfiles_urlpatterns()
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+#     # Serve static and media files from development server
+#     urlpatterns += staticfiles_urlpatterns()
+#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-    # debug toolbar
-    import debug_toolbar
-    urlpatterns += [path('__debug__/', include(debug_toolbar.urls)),]
+#     # debug toolbar
+#     import debug_toolbar
+#     urlpatterns += [path('__debug__/', include(debug_toolbar.urls)),]
