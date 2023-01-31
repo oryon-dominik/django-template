@@ -86,6 +86,10 @@ DATABASES["default"]["ATOMIC_REQUESTS"] = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake-{{ project_name }}-cache',
+    },
     'jwt-blacklist': {
         # 'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # ! this is not thread-safe and not recommended, if you use multiple workers
         'BACKEND': 'django.core.cache.backends.db.DatabaseCache',  # ! this is slow in production. Maybe use redis or memcached
