@@ -21,7 +21,7 @@ if READ_DOT_ENV_FILE:
         raise ValueError("Test dotenv file does not exist (create envs/test.env)")
     env.read_env(str(dotenvpath), override=True)
 
-SECRET_KEY = env.str("DJANGO_SECRET_KEY", default='django-insecure-{{ secret_key }}')  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
+SECRET_KEY = env.str("DJANGO_SECRET_KEY", default='{{ secret_key }}')  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
 
 #======PROJECT-SPECIFIC-SETTINGS===============================================
 # add project specific production settings here
