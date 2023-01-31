@@ -141,7 +141,7 @@ MIDDLEWARE = [  # order is important: https://docs.djangoproject.com/en/{{ docs_
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = 'config.routes.urls'
 API_BASE_URL: str = env.str("API_BASE_URL", default="api")  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
 
 TEMPLATES = [
