@@ -43,6 +43,7 @@ if hasattr(settings, 'IS_TESTING'):
             """
             foo = ['foo', 'bar', 'baz']
             return JsonResponse({'foo': foo})
+
     class AdminProtectionTestView(APIView):
         """
         ... example view that requires authentication.

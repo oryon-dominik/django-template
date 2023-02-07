@@ -1,4 +1,5 @@
 from datetime import timedelta, datetime
+from typing import Literal, TypeAlias
 import secrets
 
 from jose import jwt
@@ -12,6 +13,9 @@ DEFAULT_JWT_TOKEN_REFRESH_EXPIRATION_MINUTES = 60 * 24 * 7  # 7 days
 DEFAULT_JWT_TOKEN_PREFIX = 'Bearer'
 DEFAULT_JWT_TOKEN_TYPE = 'jwt'
 DEFAULT_JWT_TOKEN_COOKIE_KEY = 'Authentication'
+
+
+JWTTokenType: TypeAlias = Literal["access", "refresh", "unique"]
 
 
 class JWTAccessToken(str):
@@ -39,7 +43,15 @@ def urlsafe_token(nbytes: int = 66):
     return secrets.token_urlsafe(nbytes)
 
 
-def jwt_token(email: str, now: datetime, expires_in: int, scope: str = "", audience: str = "") -> JWTAccessToken:
+def jwt_token(
+        email: str,
+        now: datetime,
+        expires_in: int,
+        scope: str = "",
+        audience: str = "",
+        signature: str = "",
+        tokentype: JWTTokenType = "unique",
+    ) -> JWTAccessToken:
     """
     Generate a random jwt token.
 
@@ -62,11 +74,15 @@ def jwt_token(email: str, now: datetime, expires_in: int, scope: str = "", audie
         the requested security token.
 
     """
+    if signature == "":
+        signature = urlsafe_token(8)
     claims = {
         "iss": settings.PROJECT_FQDN,
         "exp": now + timedelta(minutes=expires_in),
         "sub": email,
         "iat": now,
+        "signature": signature,
+        "type": tokentype,
         "zoneinfo": settings.TIME_ZONE,
     }
     if scope:
@@ -79,3 +95,12 @@ def jwt_token(email: str, now: datetime, expires_in: int, scope: str = "", audie
     }
     return JWTAccessToken(jwt.encode(claims=claims, key=settings.SECRET_KEY, algorithm=DEFAULT_JWT_TOKEN_ALGORITHM, headers=headers))
 
+
+def insecure_decode_jwt_token(token: str, force: bool = False) -> dict:
+    """
+    Decode a jwt token ignoring all errors.
+    """
+    if not force:
+        raise ValueError("A call to this function shall be forced explicitly!")
+    payload = jwt.decode(token, key=settings.SECRET_KEY, algorithms=[DEFAULT_JWT_TOKEN_ALGORITHM], options={"verify_signature": False})
+    return payload

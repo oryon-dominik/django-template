@@ -58,8 +58,21 @@ class AuthTokenLogin(APIView):
 
         now = timezone.now()
 
-        access_token: tokens.JWTAccessToken = tokens.jwt_token(email=user.email, now=now, expires_in=tokens.DEFAULT_JWT_TOKEN_ACCESS_EXPIRATION_MINUTES)
-        refresh_token: tokens.JWTAccessToken = tokens.jwt_token(email=user.email, now=now, expires_in=tokens.DEFAULT_JWT_TOKEN_REFRESH_EXPIRATION_MINUTES)
+        signature = tokens.urlsafe_token(8)
+        access_token: tokens.JWTAccessToken = tokens.jwt_token(
+            tokentype='access',
+            signature=signature,
+            email=user.email,
+            now=now,
+            expires_in=tokens.DEFAULT_JWT_TOKEN_ACCESS_EXPIRATION_MINUTES,
+        )
+        refresh_token: tokens.JWTAccessToken = tokens.jwt_token(
+            tokentype='refresh',
+            signature=signature,
+            email=user.email,
+            now=now,
+            expires_in=tokens.DEFAULT_JWT_TOKEN_REFRESH_EXPIRATION_MINUTES
+        )
         response = JsonResponse({'refresh': f'{refresh_token}'})
         response.set_cookie(
             key=tokens.DEFAULT_JWT_TOKEN_COOKIE_KEY,
@@ -110,28 +123,58 @@ class AuthTokenRefresh(APIView):
         """
         Refresh a token.
         """
+        authentication_failed_repsonse = Response({'error': MSG_AUTHENTICATION_FAILED}, status=status.HTTP_401_UNAUTHORIZED)
+
         refresh_token = request.data.get('refresh')
         if refresh_token is None:
-            return Response({'error': MSG_AUTHENTICATION_FAILED}, status=status.HTTP_401_UNAUTHORIZED)
+            return authentication_failed_repsonse
         if caches['jwt-blacklist'].get(refresh_token[:247]):
-            return Response({'error': MSG_AUTHENTICATION_FAILED}, status=status.HTTP_401_UNAUTHORIZED)
+            return authentication_failed_repsonse
         try:
             payload: dict = jwt.decode(token=refresh_token, key=settings.SECRET_KEY, algorithms=[tokens.DEFAULT_JWT_TOKEN_ALGORITHM])
         except JWTError:
-            return Response({'error': MSG_AUTHENTICATION_FAILED}, status=status.HTTP_401_UNAUTHORIZED)
+            return authentication_failed_repsonse
+        if payload['type'] != 'refresh':
+            return authentication_failed_repsonse
+
+        # the access token shall still be included in the cookie
+        authentication = request.COOKIES.get(tokens.DEFAULT_JWT_TOKEN_COOKIE_KEY)
+        if authentication is None:
+            return authentication_failed_repsonse
+        if tokens.DEFAULT_JWT_TOKEN_PREFIX.lower() not in authentication.lower():
+            return authentication_failed_repsonse
+
+        access_token: tokens.JWTAccessToken = authentication.removeprefix(f'{tokens.DEFAULT_JWT_TOKEN_PREFIX} ')  # ! note that the space is required
+
+        # now we validate the random signature included upon creation
+        acccess_payload = tokens.insecure_decode_jwt_token(access_token, force=True)
+        if payload['signature'] != acccess_payload['signature']:
+            return authentication_failed_repsonse
+
         user = get_user_by_email(email=payload['sub'])
         if user is None:
-            return Response({'error': MSG_AUTHENTICATION_FAILED}, status=status.HTTP_401_UNAUTHORIZED)
+            return authentication_failed_repsonse
         if user.is_active is False:
-            return Response({'error': MSG_AUTHENTICATION_FAILED}, status=status.HTTP_401_UNAUTHORIZED)
-
+            return authentication_failed_repsonse
         assert hasattr(user, 'email')  # Should be enforced by the user model.
         assert user.email  # Should be enforced by the user model.
-
         now = timezone.now()
 
-        access_token: tokens.JWTAccessToken = tokens.jwt_token(email=user.email, now=now, expires_in=tokens.DEFAULT_JWT_TOKEN_ACCESS_EXPIRATION_MINUTES)
-        refresh_token: tokens.JWTAccessToken = tokens.jwt_token(email=user.email, now=now, expires_in=tokens.DEFAULT_JWT_TOKEN_REFRESH_EXPIRATION_MINUTES)
+        signature = tokens.urlsafe_token(8)
+        access_token: tokens.JWTAccessToken = tokens.jwt_token(
+            tokentype='access',
+            signature=signature,
+            email=user.email,
+            now=now,
+            expires_in=tokens.DEFAULT_JWT_TOKEN_ACCESS_EXPIRATION_MINUTES,
+        )
+        refresh_token: tokens.JWTAccessToken = tokens.jwt_token(
+            tokentype='refresh',
+            signature=signature,
+            email=user.email,
+            now=now,
+            expires_in=tokens.DEFAULT_JWT_TOKEN_REFRESH_EXPIRATION_MINUTES
+        )
         response = JsonResponse({'refresh': f'{refresh_token}'})
         response.set_cookie(
             key=tokens.DEFAULT_JWT_TOKEN_COOKIE_KEY,

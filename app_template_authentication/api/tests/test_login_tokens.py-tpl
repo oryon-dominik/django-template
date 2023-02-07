@@ -232,6 +232,7 @@ def test_obtain_a_fresh_access_token_with_valid_refresh_token_succeeds(client, v
 def test_obtain_a_fresh_access_token_with_expired_refresh_token_fails(client, verified_user, valid_password: str):
     # Obtain an access token
     login_payload = {'email': f"{verified_user.email}", 'password': valid_password}
+
     now = timezone.now()
     login_response = client.post(f'/{settings.API_BASE_URL}/auth/token/', json=login_payload)
     assert login_response.status_code == 200
@@ -250,6 +251,36 @@ def test_obtain_a_fresh_access_token_with_expired_refresh_token_fails(client, ve
         response = client.post(f'/{settings.API_BASE_URL}/auth/token/refresh/', json=payload, headers={settings.CSRF_HEADER_NAME: csrf})
 
     assert response.status_code == 401
+
+@pytest.mark.django_db
+def test_just_login_with_refresh_token_as_access_token_fails(client, verified_user, valid_password: str):
+    # Obtain an access token
+    login_payload = {'email': f"{verified_user.email}", 'password': valid_password}
+    login_response = client.post(f'/{settings.API_BASE_URL}/auth/token/', json=login_payload)
+    assert login_response.status_code == 200
+    # login with refresh token as access token
+    refresh_token = login_response.json()['refresh']
+    client.cookies = cookies.SimpleCookie({'Authentication': f'Bearer {refresh_token}'})
+    response = client.get(f'/{settings.API_BASE_URL}/protectiontest/')
+    assert response.status_code == 401, "Should fail with 401 because refresh tokens should not be allowed to access"
+
+@pytest.mark.django_db
+def test_cant_refresh_with_accesstoken(client, verified_user, valid_password: str):
+    # Obtain the access token
+    login_payload = {'email': f"{verified_user.email}", 'password': valid_password}
+    login_response = client.post(f'/{settings.API_BASE_URL}/auth/token/', json=login_payload)
+    assert login_response.status_code == 200
+    
+    auth_cookie: cookies.Morsel = login_response.cookies['Authentication']
+    access_token: tokens.JWTAccessToken = tokens.JWTAccessToken(auth_cookie.value.removeprefix(f'{tokens.DEFAULT_JWT_TOKEN_PREFIX} '))
+
+    # Obtain a new access token with the refresh token
+    client.get(f'/{settings.API_BASE_URL}/auth/token/refresh/')
+    csrf = client.cookies['csrftoken'].value
+    payload = {'refresh': access_token}
+
+    response = client.post(f'/{settings.API_BASE_URL}/auth/token/refresh/', json=payload, headers={settings.CSRF_HEADER_NAME: csrf})
+    assert response.status_code == 401, 'Access tokens can not be used to refresh'
 
 @pytest.mark.django_db
 def test_cant_access_after_logout(client, verified_user, valid_password: str):
@@ -274,7 +305,11 @@ def test_cant_access_after_logout(client, verified_user, valid_password: str):
 def test_cant_refresh_after_logout_with_wrong_payload(client, verified_user, valid_password: str):
     # Obtain the access token
     login_payload = {'email': f"{verified_user.email}", 'password': valid_password}
+    now = timezone.now()
     login_response = client.post(f'/{settings.API_BASE_URL}/auth/token/', json=login_payload)
+    auth_cookie: cookies.Morsel = login_response.cookies['Authentication']
+    assert auth_cookie.key == 'Authentication'
+    old_access_token: tokens.JWTAccessToken = tokens.JWTAccessToken(auth_cookie.value.removeprefix(f'{tokens.DEFAULT_JWT_TOKEN_PREFIX} '))
     assert login_response.status_code == 200
     # Logout
     response = client.post(f'/{settings.API_BASE_URL}/auth/token/logout/', json={})
@@ -289,9 +324,22 @@ def test_cant_refresh_after_logout_with_wrong_payload(client, verified_user, val
     # fails 401 with csrf token and no payload
     response = client.post(f'/{settings.API_BASE_URL}/auth/token/refresh/', headers={settings.CSRF_HEADER_NAME: csrf})
     assert response.status_code == 401
-    payload = {'refresh': login_response.json()['refresh']}
-    response = client.post(f'/{settings.API_BASE_URL}/auth/token/refresh/', payload=payload, headers={settings.CSRF_HEADER_NAME: csrf})
-    assert response.status_code == 401
+
+    # We should have another time by now, or tokens might be blacklisted, because they are literalaly the same for that user
+    then = now + timedelta(seconds=1)
+    with freeze_time(then):
+    # create another valid token
+        new_token = tokens.jwt_token(
+                tokentype='refresh',
+                email=verified_user.email,
+                now=timezone.now(),
+                expires_in=tokens.DEFAULT_JWT_TOKEN_ACCESS_EXPIRATION_MINUTES,
+        )
+        payload = {'refresh': new_token}
+        headers = {settings.CSRF_HEADER_NAME: csrf}
+        client.cookies['Authentication'] = f'Bearer {old_access_token}'
+        response = client.post(f'/{settings.API_BASE_URL}/auth/token/refresh/', json=payload, headers=headers)
+    assert response.status_code == 401, "The tokens should have a comparable random secret included, so the new_token should have a different signature and fail."
 
 @pytest.mark.django_db
 def test_cant_refresh_after_logout_with_payload(client, verified_user, valid_password: str):
@@ -312,6 +360,6 @@ def test_cant_refresh_after_logout_with_payload(client, verified_user, valid_pas
     # fails without csrf token
     response = client.post(f'/{settings.API_BASE_URL}/auth/token/refresh/', json=payload)
     assert response.status_code == 403
-    # I'am logged out though csrf token
+    # I'am logged out though csrf token - because access token is blacklisted
     response = client.post(f'/{settings.API_BASE_URL}/auth/token/refresh/', json=payload, headers={settings.CSRF_HEADER_NAME: csrf})
     assert response.status_code == 401

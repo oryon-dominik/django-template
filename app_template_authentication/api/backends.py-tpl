@@ -44,7 +44,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
 
         authentication = request.COOKIES.get(tokens.DEFAULT_JWT_TOKEN_COOKIE_KEY)
 
-        if authentication is None:
+        if not authentication:
             raise credentials_exception
         if tokens.DEFAULT_JWT_TOKEN_PREFIX.lower() not in authentication.lower():
             raise credentials_exception
@@ -56,6 +56,9 @@ class JWTAuthentication(authentication.BaseAuthentication):
             payload: dict = jwt.decode(token=token, key=settings.SECRET_KEY, algorithms=[tokens.DEFAULT_JWT_TOKEN_ALGORITHM])
         except JWTError:
             raise credentials_exception
+        if payload['type'] != 'access':
+            raise credentials_exception
+
         user = get_user_by_email(email=payload['sub'])
         try:
             assert user is not None
