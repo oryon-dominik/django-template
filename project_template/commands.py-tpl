@@ -13,7 +13,7 @@ from rich import print  # noqa
 from rich.markdown import Markdown
 
 
-#--------- CONFIG -------------------------------------------------------------
+# --------- CONFIG -------------------------------------------------------------
 cli = typer.Typer()
 DEBUG = True
 CWD = Path(__file__).parent
@@ -29,6 +29,7 @@ def env_with_pythonpath():
         env["PATH"] += wd
     return env
 
+
 def delete_folder(path: Path):
     for element in path.iterdir():
         if element.is_dir():
@@ -37,21 +38,24 @@ def delete_folder(path: Path):
             element.unlink()
     path.rmdir()
 
+
 def clean_build():
     print(f"Unlinking build-files: build/; dist/ *.egg-info; __pycache__;")
     cwd = Path(CWD)
-    [delete_folder(p) for p in cwd.rglob('build')]
-    [delete_folder(p) for p in cwd.rglob('*.egg-info')]
-    [delete_folder(p) for p in cwd.rglob('__pycache__')]
+    [delete_folder(p) for p in cwd.rglob("build")]
+    [delete_folder(p) for p in cwd.rglob("*.egg-info")]
+    [delete_folder(p) for p in cwd.rglob("__pycache__")]
     try:
-        [delete_folder(p) for p in cwd.rglob('dist')]
+        [delete_folder(p) for p in cwd.rglob("dist")]
     except OSError as err:
         print(f"Error deleting dist-folder: {err}")
 
+
 def clean_pyc():
     print(f"Unlinking caches: *.pyc; *pyo; *~;")
-    [p.unlink() for p in Path(CWD).rglob('*.py[co]')]
-    [p.unlink() for p in Path(CWD).rglob('*~')]
+    [p.unlink() for p in Path(CWD).rglob("*.py[co]")]
+    [p.unlink() for p in Path(CWD).rglob("*~")]
+
 
 def create_vital_files_and_directories():
     print(f"Creating vital files and directories for dev:")
@@ -65,16 +69,25 @@ def create_vital_files_and_directories():
     [path.mkdir(parents=True, exist_ok=True) for path in (logs, media, assets)]
     [path.touch(exist_ok=True) for path in (production_dotenv,)]
 
-def run_command(command, debug=False, cwd=CWD, env=env_with_pythonpath(), shell=False):
+
+def run_command(command, debug=False, cwd=CWD, env=env_with_pythonpath(), shell=True):
+    """
+    Run a command in a subprocess.
+
+    If debug is True, print the command before running it.
+    cwd is the working directory for the command.
+    env is the os environment for the command.
+    If shell is True it will run the command with the venv.
+    """
     if debug:
         print(f">>> Running command: {command}")
     try:
         subprocess.run(command.split(), cwd=cwd, env=env, shell=shell)
     except FileNotFoundError:
-        print(f'The command {command} threw a FileNotFoundError')
+        print(f"The command {command} threw a FileNotFoundError")
 
 
-#----------GENERAL COMMANDS----------------------------------------------------
+# ----------GENERAL COMMANDS----------------------------------------------------
 @cli.command()
 def clean():
     """Cleaning pycache, buildfiles"""
@@ -100,6 +113,7 @@ def makemigrations():
     command = f"{MANAGE} makemigrations"
     run_command(command, debug=DEBUG)
 
+
 @cli.command()
 def migrate():
     """
@@ -108,12 +122,13 @@ def migrate():
     command = f"{MANAGE} makemigrations"
     run_command(command, debug=DEBUG)
 
+
 @cli.command()
 def collectstatic():
     command = f"{MANAGE} collectstatic --noinput --clear --verbosity 0"
-    print(f'Collecting static files and clearing the old clutter.. ')
+    print(f"Collecting static files and clearing the old clutter.. ")
     run_command(command, debug=DEBUG)
-    print(f'Staticfiles collected.')
+    print(f"Staticfiles collected.")
 
 
 # ---------- SERVER -----------------------------------------------------------
@@ -132,7 +147,8 @@ def run():
 # ---------- TESTS ------------------------------------------------------------
 @cli.command()
 def test():
-    subprocess.call(["python", "-m", "pytest"], env=env_with_pythonpath())
+    command = f"python -m pytest"
+    run_command(command, debug=DEBUG)
 
 
 @cli.command()
@@ -157,16 +173,19 @@ def mm():
     """= makemigrations"""
     makemigrations()
 
+
 @cli.command()
 def mig():
     """= migrate"""
     migrate()
+
 
 @cli.command()
 def mmm():
     """= makemigrations + migrate"""
     makemigrations()
     migrate()
+
 
 @cli.command()
 def up():
@@ -187,7 +206,8 @@ def black(path: str = typer.Argument(None)):
 @cli.command()
 def mypy():
     """Run Mypy (configured in pyproject.toml)"""
-    subprocess.call(["mypy", "."])
+    command = "mypy ."
+    run_command(command)
 
 
 if __name__ == "__main__":
