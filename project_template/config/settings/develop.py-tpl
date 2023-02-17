@@ -43,7 +43,7 @@ AUTH_PASSWORD_VALIDATORS = []
 
 # Cors-headers are allowed for development
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_WHITELIST = [
+CORS_ALLOWED_ORIGINS = CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000", # Vue Vite
 ]
 CORS_ALLOW_METHODS = [

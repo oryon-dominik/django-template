@@ -61,12 +61,13 @@ def create_vital_files_and_directories():
     print(f"Creating vital files and directories for dev:")
     # directories
     assets = CWD / "assets"
+    database = CWD / "database"
     logs = CWD / "logs"
     media = CWD / "media"
     # files
     production_dotenv = CWD / "envs" / "production.env"
 
-    [path.mkdir(parents=True, exist_ok=True) for path in (logs, media, assets)]
+    [path.mkdir(parents=True, exist_ok=True) for path in (logs, media, assets, database)]
     [path.touch(exist_ok=True) for path in (production_dotenv,)]
 
 

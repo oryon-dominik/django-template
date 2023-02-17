@@ -17,6 +17,7 @@ import environ
 import django_stubs_ext
 
 from core.pyproject import load_pyproject
+from corsheaders.defaults import default_headers, default_methods
 
 # Monkeypatching Django, so stubs will work for all generics,
 # see: https://github.com/typeddjango/django-stubs
@@ -58,6 +59,13 @@ PROJECT_TITLE = pyproject["tool"]["poetry"]["name"]
 DEBUG = False
 
 ALLOWED_HOSTS = []
+
+# CORS settings
+CORS_ALLOWED_ORIGINS = []
+CORS_ALLOW_METHODS = []  # list(default_methods)
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    # ... custom headers here
+]
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = None
@@ -129,6 +137,7 @@ THIRD_PARTY_APPS = [  # order is important!!
     "django_extensions",
     'widget_tweaks',
     'rest_framework',
+    'corsheaders',
 ]
 # See: https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#installed-apps
 # local apps shall override djangos default, so order is important
@@ -138,6 +147,10 @@ INSTALLED_APPS = MANAGEMENT_COMMANDS + PROJECT_APPS + LOCAL_APPS + DJANGO_APPS +
 MIDDLEWARE = [  # order is important: https://docs.djangoproject.com/en/{{ docs_version }}/ref/middleware/#middleware-ordering
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+
+    # corsheaders middleware
+    "corsheaders.middleware.CorsMiddleware",
+
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
