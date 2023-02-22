@@ -120,7 +120,7 @@ def migrate():
     """
     Django Migrate.
     """
-    command = f"{MANAGE} makemigrations"
+    command = f"{MANAGE} migrate"
     run_command(command, debug=DEBUG)
 
 
