@@ -6,7 +6,7 @@
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-You can use these template by referring to their release files during project/app creation.  
+You can use these templates by referring to their release files during project/app creation.  
 Preinstalled `Django in your local python version is required.`  
 Although this should be pretty self-explanatory, please remember to replace `<project_name>` and `<app_name>` with your project/app name ;-).
 
@@ -15,7 +15,7 @@ Although this should be pretty self-explanatory, please remember to replace `<pr
 
     django-admin startproject --template https://github.com/oryon-dominik/django-template/releases/download/latest/project_template.zip --extension=py,md,toml,. <project_name> <directory>
 
-You can call it with your local python with
+Local python version:
 
     python -c 'import os;import sys;from pathlib import Path;os.system(str((Path(sys.executable).parent / \"Scripts\" / \"django-admin\").resolve()) + \" startproject --template https://github.com/oryon-dominik/django-template/releases/download/latest/project_template.zip --extension=py,md,toml,. <project_name> .\")'
 
@@ -53,9 +53,11 @@ For any subsequent command (creating apps..) *install the dependencies* and *act
 
 - In `config.urls.api` comment `path('', include('apps.authentication.api.urls')),` in.
 
-authentication is checking blacklisted tokens (whitelisting is a BAD idea ;-P) and will have a slow default cache (database access) for production.
+Authentication is checking blacklisted tokens (whitelisting is a BAD idea ;-P) and will have a slow default cache (database access) for production.
 If you only use one worker, you might want to switch to memory for development.
-    python manage.py createcachetable  # for database cache is required before running anything
+
+    # for a database cache backend create the table
+    python manage.py createcachetable
 
 
 ## Credits
