@@ -21,8 +21,8 @@ django-debug-toolbar = "^3.6.0"
 django-rich = "^1.4.0"
 django-environ = "^0.9.0"
 django-extensions = "^3.2.1"
-django-stubs = {extras = ["compatible-mypy"], version = "^1.14.0"}
-djangorestframework-stubs = {extras = ["compatible-mypy"], version = "^1.8.0"}
+django-stubs = {extras = ["compatible-mypy"], version = "^1.15.0"}
+djangorestframework-stubs = {extras = ["compatible-mypy"], version = "^1.9.1"}
 django-stubs-ext = "^0.7.0"
 django-widget-tweaks = "^1.4.12"
 django-crispy-forms = "^1.14.0"
@@ -34,16 +34,15 @@ python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 [tool.poetry.group.develop.dependencies]
 black = "^22.8.0"
 coverage = "^6.4.4"
-django-stubs = "^1.12.0"
 djhtml = "^1.5.2"
 jupyter = "^1.0.0"
-mypy = "^0.971"
+mypy = "1.0.1"
 pyproject-flake8 = "^5.0.4.post1"
 pytest = "^7.1.3"
 pytest-django = "^4.5.2"
 pytest-rich = "^0.1.1"
 typer = "^0.6.1"
-nb-black = "^1.0.7"
+# nb-black = "^1.0.7"  # not compatible right now
 pre-commit = "^2.20.0"
 faker = "^16.6.0"
 freezegun = "^1.2.2"
