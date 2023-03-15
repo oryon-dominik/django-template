@@ -137,11 +137,17 @@ def collectstatic():
 def run():
     """
     Run the dev server.
-
-    Via docker.
-
     """
     command = f"{MANAGE} runserver"
+    run_command(command, debug=DEBUG)
+
+
+@cli.command()
+def notebook():
+    """
+    Run the notebook server.
+    """
+    command = f"{MANAGE} shell_plus --notebook"
     run_command(command, debug=DEBUG)
 
 
@@ -187,6 +193,11 @@ def mmm():
     makemigrations()
     migrate()
 
+
+@cli.command()
+def nb():
+    """= notebook (start the notebook server)"""
+    notebook()
 
 @cli.command()
 def up():
