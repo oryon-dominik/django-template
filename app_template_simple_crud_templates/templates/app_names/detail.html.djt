@@ -1,4 +1,4 @@
-{% extends 'INSERT_APP_NAME_HEREs/base.html' %}
+{% extends 'INSERT_APP_NAME_HEREs/base.html.djt' %}
 
 
 {% block meta %}
