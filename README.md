@@ -62,7 +62,7 @@ If you only use one worker, you might want to switch to memory for development.
 
 ## Basic CRUD Templates Example App
 
-(will be created in the project's `apps` folder)
+(will be created in the project's `apps` folder, please use a singluar name, that will be automatically pluralized - it's a crud app after all ;-] )
 
     python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_simple_crud_templates.zip --extension=py,md,toml,. --replace-html <app_name>
 
