@@ -1,4 +1,4 @@
-{% extends '{{ app_name }}s/base.html' %}
+{% extends 'INSERT_APP_NAME_HEREs/base.html' %}
 
 {% load widget_tweaks %}
 
@@ -16,10 +16,10 @@
 
 <div class="flex flex-col w-2/5">
   <div class="px-8 py-12">
-    <h1 class="text-6xl font-bold text-center text-pink-500">{{ camel_case_app_name }} Update</h1>
+    <h1 class="text-6xl font-bold text-center text-pink-500">INSERT_CAMEL_CASE_APP_NAME_HERE Update</h1>
   </div>
 
-  <a class="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded " href="{% url '{{ app_name }}s:list' %}">back to list</a>
+  <a class="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded " href="{% url 'INSERT_APP_NAME_HEREs:list' %}">back to list</a>
   <form method="post">
     {% csrf_token %}
     <div class="flex flex-col items-center shadow-md rounded px-8 pt-6 pb-8 mb-4 border rounded w-full py-2 px-3">

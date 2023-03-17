@@ -1,4 +1,4 @@
-{% extends '{{ app_name }}s/base.html' %}
+{% extends 'INSERT_APP_NAME_HEREs/base.html' %}
 
 {% block meta %}
   {{ block.super }}
@@ -14,47 +14,47 @@
 
 <div class="flex flex-col w-3/4">
   <div class="px-8 py-12">
-    <h1 class="text-6xl font-bold text-center text-pink-500">{{ camel_case_app_name }}s</h1>
+    <h1 class="text-6xl font-bold text-center text-pink-500">INSERT_CAMEL_CASE_APP_NAME_HEREs</h1>
   </div>
 
-  <a class="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded " href="{% url '{{ app_name }}s:create' %}">Add a New {{ camel_case_app_name }}</a>
+  <a class="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded " href="{% url 'INSERT_APP_NAME_HEREs:create' %}">Add a New INSERT_CAMEL_CASE_APP_NAME_HERE</a>
 
   <div class="bg-white shadow overflow-hidden sm:rounded-md">
     <ul class="divide-y divide-gray-200">
-      {% for {{ app_name }} in {{ app_name }}s %}
+      {% for INSERT_APP_NAME_HERE in INSERT_APP_NAME_HEREs %}
       <li class="px-4 py-4 sm:px-6">
-        <a href="{% url '{{ app_name }}s:detail' {{ app_name }}.id %}" class="block hover:bg-gray-50">
+        <a href="{% url 'INSERT_APP_NAME_HEREs:detail' INSERT_APP_NAME_HERE.id %}" class="block hover:bg-gray-50">
           <div class="flex items-center justify-between">
             <p class="text-m font-medium text-indigo-600 truncate">
-              {{ {{ app_name }}.name }}
+              {{ INSERT_APP_NAME_HERE.name }}
             </p>
             <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-pink-100 text-grey-800">
-              {{ {{ app_name }}.id }}
+              {{ INSERT_APP_NAME_HERE.id }}
             </p>
               
           </div>
         </a>
 
         <div class="mt-1 text-sm">
-          {{ {{ app_name }}.description }}
+          {{ INSERT_APP_NAME_HERE.description }}
         </div>
 
         <div class="mt-2 flex space-x-4 items-center justify-between">
-          <a class="bg-blue-200 hover:bg-blue-300 text-sm text-white font-bold py-1 px-2 rounded" href="{% url '{{ app_name }}s:update' {{ app_name }}.id %}">update</a>
+          <a class="bg-blue-200 hover:bg-blue-300 text-sm text-white font-bold py-1 px-2 rounded" href="{% url 'INSERT_APP_NAME_HEREs:update' INSERT_APP_NAME_HERE.id %}">update</a>
 
-          <div x-data="{ delete{{ camel_case_app_name }}Modal: false }"><!-- delete-modal using alpine.js -->
+          <div x-data="{ deleteINSERT_CAMEL_CASE_APP_NAME_HEREModal: false }"><!-- delete-modal using alpine.js -->
             <a
-              @mouseenter.once="fetch('{% url '{{ app_name }}s:delete' {{ app_name }}.id %}')
+              @mouseenter.once="fetch('{% url 'INSERT_APP_NAME_HEREs:delete' INSERT_APP_NAME_HERE.id %}')
                 .then(response => response.text())
                 .then(html => { $refs.modal.innerHTML = html })
               "
-              @click="delete{{ camel_case_app_name }}Modal = true"
+              @click="deleteINSERT_CAMEL_CASE_APP_NAME_HEREModal = true"
               class="bg-red-200 hover:bg-red-400 text-sm text-white font-bold py-1 px-2 rounded"
               >delete
             </a>
 
             <div class="fixed inset-0 w-full h-full z-20 bg-black bg-opacity-50 duration-300 overflow-y-auto"
-              x-show="delete{{ camel_case_app_name }}Modal"
+              x-show="deleteINSERT_CAMEL_CASE_APP_NAME_HEREModal"
               x-transition:enter="transition duration-300"
               x-transition:enter-start="opacity-0"
               x-transition:enter-end="opacity-100"
@@ -65,8 +65,8 @@
               <div class="relative sm:w-3/4 md:w-1/2 lg:w-1/3 mx-2 sm:mx-auto my-72 opacity-100">
                 <div
                   x-ref="modal"
-                  @click.away="delete{{ camel_case_app_name }}Modal = false"
-                  x-show="delete{{ camel_case_app_name }}Modal"
+                  @click.away="deleteINSERT_CAMEL_CASE_APP_NAME_HEREModal = false"
+                  x-show="deleteINSERT_CAMEL_CASE_APP_NAME_HEREModal"
                   x-transition:enter="transition transform duration-300"
                   x-transition:enter-start="scale-0"
                   x-transition:enter-end="scale-100"

@@ -1,4 +1,4 @@
-{% extends "{{ app_name }}s/base.html" %}
+{% extends "INSERT_APP_NAME_HEREs/base.html" %}
 
 
 {% block meta %}
@@ -14,6 +14,6 @@
 {% block content %}
 
   <h1 class="text-3xl font-bold underline my-8">{{ title }}</h1>
-  <a class="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded " href="{% url '{{ app_name }}s:list' %}">To {{ camel_case_app_name }}s list</a>
+  <a class="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded " href="{% url 'INSERT_APP_NAME_HEREs:list' %}">To INSERT_CAMEL_CASE_APP_NAME_HEREs list</a>
 
 {% endblock content %}
