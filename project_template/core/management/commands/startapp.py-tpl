@@ -8,13 +8,38 @@ from pathlib import Path
 from django.core.management.commands import startapp
 from django.conf import settings
 
+from ...inout import files
+
+
+def camelcase(string: str) -> str:
+    return ''.join([s.capitalize() for s in string.split('_')])
+
+
+def replace_app_name(*, path: Path, suffix: str):
+    """
+    Replace the app_name in the HTML Templates
+    suffix: '.html' or '.djhtml' (Django Template, that uses INSERT_APP_NAME_HERE and INSERT_CAMEL_CASE_APP_NAME_HERE)
+    """
+    templates_directory = path / 'templates' / path.stem
+    _files = [f for f in templates_directory.iterdir() if f.is_file() and f.suffix == suffix]
+    for fp in _files:
+        content = files.read_from_disk(path=fp)
+        content = content.replace('INSERT_APP_NAME_HERE', path.stem)
+        content = content.replace('INSERT_CAMEL_CASE_APP_NAME_HERE', camelcase(path.stem))
+        files.write_to_disk(path=fp, content=content)
+
 
 class Command(startapp.Command):
+
+    def add_arguments(self, parser):
+        parser.add_argument('--replace-html', action='store_true', help='Also replace the app_name in HTML Templates')
+        super().add_arguments(parser=parser)
 
     def handle(self, *args, **options):
         """
         Overwrite the handle method to add the app to the apps directory
         """
+        replace_html = options.get('replace_html', False)
         _directory = options.get('directory') or options.get('name')
         apps = Path(f'{settings.ROOT_DIR}/apps')
         if apps in [Path(p) for p in sys.path]:
@@ -23,3 +48,6 @@ class Command(startapp.Command):
         app.mkdir(exist_ok=True)
         options['directory'] = f"{app.resolve()}"
         super().handle(*args, **options)
+        if replace_html:
+            replace_app_name(path=app, suffix='.html')
+            replace_app_name(path=app, suffix='.djhtml')
