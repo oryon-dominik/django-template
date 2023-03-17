@@ -24,6 +24,10 @@ jobs:
           dest: app_template_authentication.zip
       - uses: vimtor/action-zip@v1
         with:
+          files: app_template_simple_crud_templates/
+          dest: app_template_simple_crud_templates.zip
+      - uses: vimtor/action-zip@v1
+        with:
           files: project_template/
           dest: project_template.zip
       - uses: "marvinpinto/action-automatic-releases@latest"
@@ -35,5 +39,6 @@ jobs:
           files: |
             app_template_default.zip
             app_template_rest.zip
-            project_template.zip
             app_template_authentication.zip
+            app_template_simple_crud_templates.zip
+            project_template.zip
