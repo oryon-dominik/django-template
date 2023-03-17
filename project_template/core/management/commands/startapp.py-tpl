@@ -21,7 +21,7 @@ def replace_app_name(*, path: Path, suffix: str):
     suffix: '.djt' -> == 'html' or '.djhtml'
     (Django Templates, that use INSERT_APP_NAME_HERE and INSERT_CAMEL_CASE_APP_NAME_HERE)
     """
-    templates_directory = path / 'templates' / f"{path.stem}s"
+    templates_directory = path / 'templates' / f"{path.stem}"
     _files = [f for f in templates_directory.iterdir() if f.is_file() and f.suffix == suffix]
     for fp in _files:
         content = files.read_from_disk(path=fp)
@@ -45,7 +45,7 @@ class Command(startapp.Command):
         apps = Path(f'{settings.ROOT_DIR}/apps')
         if apps in [Path(p) for p in sys.path]:
             sys.path = [p for p in sys.path if Path(p) != apps]
-        app = apps / f'{_directory}'
+        app = apps / f'{_directory}s'
         app.mkdir(exist_ok=True)
         options['directory'] = f"{app.resolve()}"
         super().handle(*args, **options)
