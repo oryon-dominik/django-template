@@ -17,6 +17,7 @@
         },
         "files.associations": {
             "*.py-tpl": "python",
+            "*.djt": "html",
         },
         // * python ///////////////////////////////////////////////////////////
         "python.envFile": "${workspaceFolder}/envs/production.env",
