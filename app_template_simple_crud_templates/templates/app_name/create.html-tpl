@@ -1,0 +1,66 @@
+{% extends '{{ app_name }}s/base.html' %}
+
+{% load widget_tweaks %}
+
+{% block meta %}
+  {{ block.super }}
+{% endblock meta %}
+
+
+{% block css %}
+  {{ block.super }}
+{% endblock css %}
+
+
+{% block content %}
+
+<div class="flex flex-col w-2/5">
+  <div class="px-8 py-12">
+    <h1 class="text-6xl font-bold text-center text-pink-500">New {{ camel_case_app_name }}</h1>
+  </div>
+
+  <a
+    class="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded"
+    href="{% url '{{ app_name }}s:list' %}"
+    >back to list</a
+  >
+  <form method="post">
+    {% csrf_token %}
+    <div
+      class="flex flex-col items-center shadow-md rounded px-8 pt-6 pb-8 mb-4 border rounded w-full py-2 px-3"
+    >
+      <div class="flex flex-row shadow align-middle space-x-2 p-1 m-1">
+        <label class="text-gray-400 text-xs mt-1" for="name">
+          {{ form.name.label_tag }}
+        </label>
+        {{ form.name|add_class:"focus:text-blue-500" }}
+      </div>
+      <div class="flex flex-row shadow align-middle space-x-2 p-1 m-1">
+        <label class="text-gray-400 text-xs mt-1" for="name">
+          {{ form.description.label_tag }}
+        </label>
+        {{ form.description|add_class:"focus:text-blue-500" }}
+      </div>
+      <div class="flex flex-row shadow align-middle space-x-2 p-1 m-1">
+        <label class="text-gray-400 text-xs mt-1" for="name">
+          {{ form.state.label_tag }}
+        </label>
+        {{ form.state|add_class:"focus:text-blue-500" }}
+      </div>
+      <button
+        class="bg-green-200 mt-4 max-w-xs content-center hover:bg-green-700 text-pink-700 hover:text-white font-bold py-2 px-4 rounded"
+        type="submit"
+        value=""
+      >
+        Save
+      </button>
+    </div>
+  </form>
+</div>
+
+{% endblock content %}
+
+
+{% block javascript %}
+  {{ block.super }}
+{% endblock javascript %}

@@ -1,0 +1,55 @@
+{% extends '{{ app_name }}s/base.html' %}
+
+
+{% block meta %}
+  {{ block.super }}
+{% endblock meta %}
+
+
+{% block css %}
+  {{ block.super }}
+{% endblock css %}
+
+
+{% block content %}
+
+<div class="flex flex-col w-2/5">
+
+  <div class="px-8 py-12">
+    <h1 class="text-6xl font-bold text-center text-pink-500">{{ camel_case_app_name }} Detail</h1>
+  </div>
+
+  <a class="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded " href="{% url '{{ app_name }}s:list' %}">back to list</a>
+
+  <div class="flex flex-col items-center shadow-md rounded px-8 pt-6 pb-8 mb-4 border rounded w-full py-2 px-3">
+  
+    <div class="flex shadow min-w-full space-x-4 m-2 p-2">
+      <label class="flex-1 text-gray-400 text-xs mt-1" for="name">ID</label>
+      <span>{{ {{ app_name }}.id }}</span>
+    </div>
+
+    <div class="flex shadow min-w-full space-x-4 m-2 p-2">
+      <label class="flex-1 text-gray-400 text-xs mt-1" for="name">Name</label>
+      <span>{{ {{ app_name }}.name }}</span>
+    </div>
+
+    <div class="flex shadow min-w-full space-x-4 m-2 p-2">
+      <label class="flex-1 text-gray-400 text-xs mt-1" for="name">Description</label>
+      <span>{{ {{ app_name }}.description }}</span>
+    </div>
+
+    <div class="flex shadow min-w-full space-x-4 m-2 p-2">
+      <label class="flex-1 text-gray-400 text-xs mt-1" for="name">State</label>
+      <span>{{ {{ app_name }}.state }}</span>
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock content %}
+
+
+{% block javascript %}
+  {{ block.super }}
+{% endblock javascript %}

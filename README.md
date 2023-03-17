@@ -64,7 +64,7 @@ If you only use one worker, you might want to switch to memory for development.
 
 (will be created in the project's `apps` folder)
 
-    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_simple_crud_templates.zip --extension=py,md,toml,. <app_name>
+    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_simple_crud_templates.zip --extension=py,html,md,toml,. <app_name>
 
 - Add `'apps.<app_name>.apps.<app_name.capitalize()>Config'` to `LOCAL_APPS` or `PROJECT_APPS` in `config.settings.base.py`.  
 - Add the apps routes to `urlpatterns` in `config.urls.py` like this: `path('', include('apps.<app_name>.api.urls', namespace="<app_name>")),`.  

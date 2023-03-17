@@ -1,0 +1,19 @@
+{% extends "{{ app_name }}s/base.html" %}
+
+
+{% block meta %}
+  {{ block.super }}
+{% endblock meta %}
+
+
+{% block css %}
+  {{ block.super }}
+{% endblock css %}
+
+
+{% block content %}
+
+  <h1 class="text-3xl font-bold underline my-8">{{ title }}</h1>
+  <a class="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded " href="{% url '{{ app_name }}s:list' %}">To {{ camel_case_app_name }}s list</a>
+
+{% endblock content %}
