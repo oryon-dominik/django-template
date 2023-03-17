@@ -18,7 +18,8 @@ def camelcase(string: str) -> str:
 def replace_app_name(*, path: Path, suffix: str):
     """
     Replace the app_name in the HTML Templates
-    suffix: '.html' or '.djhtml' (Django Template, that uses INSERT_APP_NAME_HERE and INSERT_CAMEL_CASE_APP_NAME_HERE)
+    suffix: '.djt' -> == 'html' or '.djhtml'
+    (Django Templates, that use INSERT_APP_NAME_HERE and INSERT_CAMEL_CASE_APP_NAME_HERE)
     """
     templates_directory = path / 'templates' / path.stem
     _files = [f for f in templates_directory.iterdir() if f.is_file() and f.suffix == suffix]
@@ -49,5 +50,4 @@ class Command(startapp.Command):
         options['directory'] = f"{app.resolve()}"
         super().handle(*args, **options)
         if replace_html:
-            replace_app_name(path=app, suffix='.html')
-            replace_app_name(path=app, suffix='.djhtml')
+            replace_app_name(path=app, suffix='.djt')
