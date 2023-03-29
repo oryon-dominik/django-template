@@ -6,5 +6,8 @@ class CoreConfig(AppConfig):
     name = "core"
 
     def ready(self):
-        # import here to avoid circular imports
+        """
+        ! import here to avoid circular imports
+        """
+        from . import checks  # run system checks on every hot reload
         ...
