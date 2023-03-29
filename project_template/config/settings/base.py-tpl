@@ -137,6 +137,7 @@ THIRD_PARTY_APPS = [  # order is important!!
     "django_extensions",
     'widget_tweaks',
     'rest_framework',
+    "hatchway",
     'corsheaders',
 ]
 # See: https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#installed-apps
