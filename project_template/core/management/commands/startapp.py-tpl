@@ -35,20 +35,27 @@ class Command(startapp.Command):
 
     def add_arguments(self, parser):
         parser.add_argument('--replace-html', action='store_true', help='Also replace the app_name in HTML Templates')
+        parser.add_argument('--pluralize-name', action='store_true', help='Keep the app name without the "s"')
         super().add_arguments(parser=parser)
 
     def handle(self, *args, **options):
         """
         Overwrite the handle method to add the app to the apps directory
         """
+        # options
         replace_html = options.get('replace_html', False)
+        pluralize_name = options.get('pluralize_name', False)
         _directory = options.get('directory') or options.get('name')
-        apps = Path(f'{settings.ROOT_DIR}/apps')
+
+        apps = Path(f'{settings.APPS_DIR}')
+        app = apps / f'{_directory}s' if pluralize_name else apps / f"{_directory}"
+        app.mkdir(exist_ok=True)
+
+        options['directory'] = f"{app.resolve()}"
+
         if apps in [Path(p) for p in sys.path]:
             sys.path = [p for p in sys.path if Path(p) != apps]
-        app = apps / f'{_directory}s'
-        app.mkdir(exist_ok=True)
-        options['directory'] = f"{app.resolve()}"
+
         super().handle(*args, **options)
         if replace_html:
             replace_app_name(path=app, suffix='.djt')
