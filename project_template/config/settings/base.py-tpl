@@ -16,7 +16,7 @@ from pathlib import Path
 import environ
 import django_stubs_ext
 
-from core.pyproject import load_pyproject
+from core.pyproject import load_pyproject, PyProject
 from corsheaders.defaults import (
     default_headers,
     default_methods,  # noqa: F401
@@ -29,10 +29,9 @@ django_stubs_ext.monkeypatch()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
-APPS_DIR = ROOT_DIR / 'apps'
-
-pyproject = load_pyproject(project_path=ROOT_DIR)
-VERSION = pyproject["tool"]["poetry"]["version"]
+# Load pyproject.toml
+pyproject: PyProject = load_pyproject(project_path=ROOT_DIR)
+VERSION = pyproject.tool["poetry"]["version"]
 
 # Read environment from .env
 env = environ.Env()
@@ -46,14 +45,15 @@ if READ_DOT_ENV_FILE:
 
 # make sure our apps & config directories are on the python path
 # This allows easy placement of apps within the interior apps directory.
-sys.path.append(f'{ROOT_DIR / "apps"}')
+APPS_DIR = ROOT_DIR / 'apps'
+sys.path.append(f'{APPS_DIR}')
 sys.path.append(f'{ROOT_DIR / "config"}')
 sys.path.append(f'{ROOT_DIR / "core"}')
 sys.path.append(f'{ROOT_DIR / "test"}')
 
 #======PROJECT-SPECIFIC-SETTINGS===============================================
 # add project specific CONSTANTS here
-PROJECT_TITLE = pyproject["tool"]["poetry"]["name"]
+PROJECT_TITLE = pyproject.tool["poetry"]["name"]
 # Production checklist:
 # See https://docs.djangoproject.com/en/{{ docs_version }}/howto/deployment/checklist/
 #==============================================================================
