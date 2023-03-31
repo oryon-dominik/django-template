@@ -22,6 +22,9 @@ production.env
 # Static files
 staticfiles
 
+# Frontend
+**/node_modules/
+
 # ===================
 ## Python
 # ===================
@@ -34,3 +37,4 @@ __pycache__
 # Jupyter
 .ipynb_checkpoints/
 .ipython/
+

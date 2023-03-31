@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "{{ project_name }}"
-version = "0.1.0"
+version = "0.0.1"
 description = ""
 authors = ["oryon-dominik <oryon@cyberise.de>"]
 readme = "README.md"
@@ -33,6 +33,7 @@ crispy-tailwind = "^0.5.0"
 toml = "^0.10.2"
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 msgspec = "^0.13.1"
+ruff = "^0.0.260"
 
 [tool.poetry.group.develop.dependencies]
 black = "^22.8.0"

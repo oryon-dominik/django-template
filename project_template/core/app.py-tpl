@@ -9,5 +9,6 @@ class CoreConfig(AppConfig):
         """
         ! import here to avoid circular imports
         """
-        from . import checks  # run system checks on every hot reload
+        # run system checks on every hot reload
+        from . import checks  # noqa: F401
         ...

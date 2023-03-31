@@ -8,12 +8,16 @@ See `base.py` for basic settings.
 
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
+
+! django-environ uses a confusing NOTYPE, so we are ignoring all env. call type-hints here
 """
 
 
-from .base import *  # NOSONAR, noqa
+from .base import *  # noqa: F403 NOSONAR
+# ignore linting errors for undefined names (e.g. env after base * import)
+# ruff: noqa: F405
 
-READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=True)  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
+READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=True)  # type: ignore[no-untyped-call]
 if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
     dotenvpath = ROOT_DIR / "envs" / "develop.env"
@@ -22,10 +26,10 @@ if READ_DOT_ENV_FILE:
     env.read_env(str(dotenvpath), override=True)
 
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#debug
-DEBUG = env.bool("DJANGO_DEBUG", True)  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE  # ! in development only!
+DEBUG = env.bool("DJANGO_DEBUG", True)  # type: ignore[no-untyped-call]  # ! in development only!
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.str("DJANGO_SECRET_KEY", default='{{ secret_key }}')  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
+SECRET_KEY = env.str("DJANGO_SECRET_KEY", default='{{ secret_key }}')  # type: ignore[no-untyped-call]
 
 #======PROJECT-SPECIFIC-SETTINGS===============================================
 # add project specific production settings here
@@ -63,7 +67,7 @@ CACHES['jwt-blacklist']['BACKEND'] = 'django.core.cache.backends.locmem.LocMemCa
 LOG_DATABASE = False
 
 # Django Admin URL.
-ADMIN_URL = env.str("DJANGO_ADMIN_URL", default="admin/")  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
+ADMIN_URL = env.str("DJANGO_ADMIN_URL", default="admin/")  # type: ignore[no-untyped-call]
 
 # for development emails are send to console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

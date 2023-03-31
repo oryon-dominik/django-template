@@ -9,7 +9,9 @@ https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 """
 
 
-from .base import *  # NOSONAR, noqa
+from .base import *  # noqa: F403 NOSONAR
+# ignore linting errors for undefined names (e.g. env after base * import)
+# ruff: noqa: F405
 
 # Read environment from .env
 env = environ.Env()

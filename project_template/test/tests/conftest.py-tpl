@@ -1,3 +1,7 @@
+# test fixtures are imported here to make them available to the tests
+# so, ignore linting errors for unused imports
+# ruff: noqa: F401
+
 from test.fixtures.users import (
     user,
     verified_user,

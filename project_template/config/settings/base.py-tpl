@@ -17,7 +17,10 @@ import environ
 import django_stubs_ext
 
 from core.pyproject import load_pyproject
-from corsheaders.defaults import default_headers, default_methods
+from corsheaders.defaults import (
+    default_headers,
+    default_methods,  # noqa: F401
+)
 
 # Monkeypatching Django, so stubs will work for all generics,
 # see: https://github.com/typeddjango/django-stubs
