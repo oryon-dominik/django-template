@@ -1,0 +1,25 @@
+# Settings are imported here to make them available for django.conf.settings
+# so, ignore linting errors for unused imports
+# ruff: noqa: F401
+
+try:
+    from .drf import REST_FRAMEWORK  # noqa # pylint: disable=unused-import
+except ImportError:
+    pass
+
+try:
+    from .crispy import (
+        CRISPY_ALLOWED_TEMPLATE_PACKS,  # noqa # pylint: disable=unused-import
+        CRISPY_TEMPLATE_PACK,  # noqa # pylint: disable=unused-import
+    )
+except ImportError:
+    pass
+
+try:
+    from .vite import (
+        DJANGO_VITE_ASSETS_PATH,  # noqa # pylint: disable=unused-import
+        DJANGO_VITE_DEV_SERVER_PORT,  # noqa # pylint: disable=unused-import
+        DJANGO_VITE_DEV_MODE,  # noqa # pylint: disable=unused-import
+    )
+except ImportError:
+    pass

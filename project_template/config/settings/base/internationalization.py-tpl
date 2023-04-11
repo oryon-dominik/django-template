@@ -1,0 +1,15 @@
+# -- Modular settings ---------------------------------------------------------
+# These settings are imported in the __init__.py of the base directory explicitly.
+# To add a new setting, also edit the __init__.py
+# -----------------------------------------------------------------------------
+
+# Internationalization
+# -----------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/{{ docs_version }}/topics/i18n/
+LANGUAGE_CODE = "en-us"
+# german localization: LANGUAGE_CODE = 'de-de'
+TIME_ZONE = "UTC"
+# german localization: TIME_ZONE = "Europe/Berlin"
+USE_I18N = True
+USE_L10N = True
+USE_TZ = True

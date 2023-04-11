@@ -1,0 +1,13 @@
+import environ
+
+from . import paths
+
+# Read environment from .env
+env = environ.Env()
+READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
+if READ_DOT_ENV_FILE:
+    # OS environment variables take precedence over variables from .env
+    dotenvpath = paths.ROOT_DIR / "envs" / "production.env"
+    if not dotenvpath.exists():
+        raise ValueError("Production dotenv file does not exist (create envs/production.env)")
+    env.read_env(str(dotenvpath), override=True)

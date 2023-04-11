@@ -1,0 +1,15 @@
+# -- Modular settings ---------------------------------------------------------
+# These settings are imported in the __init__.py of the base directory explicitly.
+# To add a new setting, also edit the __init__.py
+# -----------------------------------------------------------------------------
+from ._pyproject import pyproject
+
+
+VERSION = pyproject["tool"]["poetry"]["version"]
+
+#======PROJECT-SPECIFIC-SETTINGS===============================================
+# add project specific CONSTANTS here
+PROJECT_TITLE = pyproject["tool"]["poetry"]["name"]
+# Production checklist:
+# See https://docs.djangoproject.com/en/{{ docs_version }}/howto/deployment/checklist/
+#==============================================================================

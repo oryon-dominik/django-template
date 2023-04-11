@@ -1,0 +1,43 @@
+# -- Modular settings ---------------------------------------------------------
+# These settings are imported in the __init__.py of the base directory explicitly.
+# To add a new setting, also edit the __init__.py
+# -----------------------------------------------------------------------------
+
+# APPS definition
+# -----------------------------------------------------------------------------
+# project specific apps
+MANAGEMENT_COMMANDS = [
+    "core.app.CoreConfig"
+]
+PROJECT_APPS = [
+    
+    # "apps.things.apps.ThingsConfig",
+    
+]
+# custom apps for all projects
+LOCAL_APPS = [
+    # custom apps
+    # "apps.users.apps.UsersConfig",
+    "apps.vueindjango.apps.VueindjangoConfig",
+]
+DJANGO_APPS = [
+    # default django-apps
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+]
+THIRD_PARTY_APPS = [  # order is important!!
+    "crispy_forms",
+    "crispy_tailwind",
+    "django_extensions",
+    'widget_tweaks',
+    'rest_framework',
+    'corsheaders',
+    'django_vite',
+]
+# See: https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#installed-apps
+# local apps shall override djangos default, so order is important
+INSTALLED_APPS = MANAGEMENT_COMMANDS + PROJECT_APPS + LOCAL_APPS + DJANGO_APPS + THIRD_PARTY_APPS
