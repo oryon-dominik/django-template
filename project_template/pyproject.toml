@@ -60,6 +60,9 @@ python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 djangorestframework = "^3.13.1"
 djangorestframework-stubs = {extras = ["compatible-mypy"], version = "^1.9.1"}
 
+[tool.poetry.group.vite.dependencies]
+django-vite = "^2.0.2"
+
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "config.settings.test"
 addopts = "-p no:warnings"
