@@ -71,7 +71,7 @@ If you only use one worker, you might want to switch to memory for development.
 - Edit your `models.py` accordingly and `makemigrations` and `migrate`.  
 
 
-## incoming soon: Basic vuejs Templates Example App
+## Basic vuejs Templates Example App
 
 (will be created in the project's `apps` folder, please use a singluar name, that will be automatically pluralized - it's a crud app after all ;-] )
 

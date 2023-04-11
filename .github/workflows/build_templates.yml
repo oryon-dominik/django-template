@@ -28,6 +28,10 @@ jobs:
           dest: app_template_simple_crud_templates.zip
       - uses: vimtor/action-zip@v1
         with:
+          files: app_template_vuejs_templates/
+          dest: app_template_vuejs_templates.zip
+      - uses: vimtor/action-zip@v1
+        with:
           files: project_template/
           dest: project_template.zip
       - uses: "marvinpinto/action-automatic-releases@latest"
@@ -41,4 +45,5 @@ jobs:
             app_template_rest.zip
             app_template_authentication.zip
             app_template_simple_crud_templates.zip
+            app_template_vuejs_templates.zip
             project_template.zip
