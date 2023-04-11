@@ -2,7 +2,10 @@
 # from rest_framework.response import Response
 # from rest_framework.reverse import reverse
 
-from django.urls import include, path  # noqa: F401
+from django.urls import (
+    # include,
+    path,
+)
 from django.views.generic import RedirectView
 from django.conf import settings
 

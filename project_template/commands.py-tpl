@@ -17,7 +17,7 @@ from rich.markdown import Markdown
 cli = typer.Typer()
 DEBUG = True
 CWD = Path(__file__).parent
-MANAGE = f"python manage.py"
+MANAGE = "python manage.py"
 
 
 # --------- HELPERS -----------------------------------------------------------
@@ -40,7 +40,7 @@ def delete_folder(path: Path):
 
 
 def clean_build():
-    print(f"Unlinking build-files: build/; dist/ *.egg-info; __pycache__;")
+    print("Unlinking build-files: build/; dist/ *.egg-info; __pycache__;")
     cwd = Path(CWD)
     [delete_folder(p) for p in cwd.rglob("build")]
     [delete_folder(p) for p in cwd.rglob("*.egg-info")]
@@ -52,13 +52,13 @@ def clean_build():
 
 
 def clean_pyc():
-    print(f"Unlinking caches: *.pyc; *pyo; *~;")
+    print("Unlinking caches: *.pyc; *pyo; *~;")
     [p.unlink() for p in Path(CWD).rglob("*.py[co]")]
     [p.unlink() for p in Path(CWD).rglob("*~")]
 
 
 def create_vital_files_and_directories():
-    print(f"Creating vital files and directories for dev:")
+    print("Creating vital files and directories for dev:")
     # directories
     assets = CWD / "assets"
     database = CWD / "database"
@@ -127,9 +127,9 @@ def migrate():
 @cli.command()
 def collectstatic():
     command = f"{MANAGE} collectstatic --noinput --clear --verbosity 0"
-    print(f"Collecting static files and clearing the old clutter.. ")
+    print("Collecting static files and clearing the old clutter.. ")
     run_command(command, debug=DEBUG)
-    print(f"Staticfiles collected.")
+    print("Staticfiles collected.")
 
 
 # ---------- SERVER -----------------------------------------------------------
@@ -154,7 +154,7 @@ def notebook():
 # ---------- TESTS ------------------------------------------------------------
 @cli.command()
 def test():
-    command = f"python -m pytest"
+    command = "python -m pytest"
     run_command(command, debug=DEBUG)
 
 
