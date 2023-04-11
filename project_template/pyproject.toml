@@ -17,31 +17,6 @@ django-stubs = {extras = ["compatible-mypy"], version = "^1.15.0"}
 django-stubs-ext = "^0.7.0"
 msgspec = "^0.13.1"
 
-[tool.poetry.group.postgres.dependencies]
-psycopg2 = "^2.9.3"
-
-[tool.poetry.group.paragons.dependencies]
-rich = "^12.5.1"  # also used in commands.py for pretty rendering
-humanize = "^4.3.0"
-pendulum = "^2.1.2"
-dill = "^0.3.5.1"
-passlib = "^1.7.4"
-httpx = "^0.23.0"  # also used in some jupyter dev-notebooks
-
-[tool.poetry.group.django.dependencies]
-django-readers = "^2.1.1"
-django-hatchway = "^0.5.1"
-django-widget-tweaks = "^1.4.12"
-django-crispy-forms = "^1.14.0"
-crispy-tailwind = "^0.5.0"
-
-[tool.poetry.group.restframework.dependencies]
-djangorestframework = "^3.13.1"
-djangorestframework-stubs = {extras = ["compatible-mypy"], version = "^1.9.1"}
-
-[tool.poetry.group.authentication.dependencies]
-python-jose = {extras = ["cryptography"], version = "^3.3.0"}
-
 [tool.poetry.group.develop.dependencies]
 django-debug-toolbar = "^3.6.0"
 black = "^22.8.0"
@@ -59,6 +34,32 @@ pre-commit = "^2.20.0"
 faker = "^16.6.0"
 freezegun = "^1.2.2"
 ruff = "^0.0.260"
+
+[tool.poetry.group.paragons.dependencies]
+rich = "^12.5.1"  # also used in commands.py for pretty rendering
+humanize = "^4.3.0"
+pendulum = "^2.1.2"
+dill = "^0.3.5.1"
+passlib = "^1.7.4"
+httpx = "^0.23.0"  # also used in some jupyter dev-notebooks
+
+[tool.poetry.group.django.dependencies]
+django-readers = "^2.1.1"
+django-hatchway = "^0.5.1"
+django-widget-tweaks = "^1.4.12"
+django-crispy-forms = "^1.14.0"
+crispy-tailwind = "^0.5.0"
+
+[tool.poetry.group.postgres.dependencies]
+psycopg2 = "^2.9.3"
+
+[tool.poetry.group.authentication.dependencies]
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+
+[tool.poetry.group.restframework.dependencies]
+djangorestframework = "^3.13.1"
+djangorestframework-stubs = {extras = ["compatible-mypy"], version = "^1.9.1"}
+
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "config.settings.test"
