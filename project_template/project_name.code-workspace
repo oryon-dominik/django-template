@@ -12,6 +12,7 @@
             "**/__pycache__": true,
             "**/.pytest_cache": true,
             "**/.ipynb_checkpoints/": true,
+            "**/.ruff_cache": true,
             ".vscode/": true,
         },
         // * python ///////////////////////////////////////////////////////////

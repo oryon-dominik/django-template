@@ -33,6 +33,7 @@ __pycache__
 # Keep keep.pyc to allow empty Django-template directories to be committed to git.
 !**/keep.pyc
 .pytest_cache
+.ruff_cache
 
 # Jupyter
 .ipynb_checkpoints/
