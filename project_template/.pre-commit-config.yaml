@@ -42,12 +42,30 @@ repos:
     hooks:
       - id: djhtml
         args: [--tabwidth, "2"]
+        files: ^.*\/templates\/.*.html.djt$
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: 'v0.0.261'
+    rev: v0.0.261
     hooks:
       - id: ruff
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: 'v1.2.0'
+    rev: v1.2.0
     hooks:
     - id: mypy
+      entry: python -m mypy
+      language: python
       args: [--no-warn-unused-ignores, --ignore-missing-imports]
+      additional_dependencies: [
+        django-stubs,
+        djangorestframework-stubs,
+        django-environ,
+        django-cors-headers,
+        msgspec,
+        django-crispy-forms,
+        crispy-tailwind,
+        django-extensions,
+        django-widget-tweaks,
+        djangorestframework,
+        djangorestframework-stubs,
+        django-vite,
+        django-debug-toolbar,
+      ]
