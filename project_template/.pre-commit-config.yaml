@@ -33,11 +33,15 @@ repos:
     rev: 6.0.0
     hooks:
       - id: flake8
-        entry: pflake8
+        entry: flake8p
         language_version: python3
-        additional_dependencies: [pyproject-flake8]
+        additional_dependencies: [Flake8-pyproject]
   - repo: https://github.com/rtts/djhtml
     rev: "v1.5.2"
     hooks:
       - id: djhtml
         args: [--tabwidth, "2"]
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: 'v0.0.261'
+    hooks:
+      - id: ruff
