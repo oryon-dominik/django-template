@@ -79,7 +79,7 @@ def load_pyproject(project_path: Path) -> PyProject:
     """
     try:
         with open(project_path / "pyproject.toml") as file:
-            content  = file.read()
+            content = file.read()
     except FileNotFoundError:
         raise PyProjectTomlLoadException(f"pyproject.toml not found in {project_path}")
     except OSError as e:

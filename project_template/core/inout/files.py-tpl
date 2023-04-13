@@ -18,6 +18,7 @@ def read_from_disk(path: Path) -> str:
         print(f"An unexpected error occurred: {e}")
     return ''
 
+
 def write_to_disk(path: Path, content: str):
     """Write to a file."""
     try:

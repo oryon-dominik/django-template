@@ -23,7 +23,7 @@ def middleware_on_class(middleware):
             ]
 
         ... this leads to:
-        
+
         from core.middlewares import middleware_on_class
         from django.middleware.csrf import CsrfViewMiddleware
         middleware_on_class(CsrfViewMiddleware)

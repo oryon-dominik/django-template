@@ -23,7 +23,7 @@ def generic_user_factory(
         password: str = "",
         is_staff: bool = False,
         is_active: bool = False,
-    ) -> User:
+        ) -> User:
     """
     User factory.
     Produces a generic the user fixture
@@ -46,6 +46,7 @@ def generic_user_factory(
     user.save()
     return user
 
+
 def admin_user_factory(
         first_name: str = "",
         last_name: str = "",
@@ -54,7 +55,7 @@ def admin_user_factory(
         password: str = "",
         is_staff: bool = False,
         is_active: bool = False,
-    ) -> AdminUser:
+        ) -> AdminUser:
     """
     AdminUser factory.
     Produces an adminuser fixture

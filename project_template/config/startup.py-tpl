@@ -1,6 +1,7 @@
 from django.conf import settings
 import environ
 
+
 def run():
     """things that should run on django startup"""
     env = environ.Env()

@@ -9,6 +9,7 @@ from django.urls import (
 from django.views.generic import RedirectView
 from django.conf import settings
 
+
 app_name = 'api'
 
 # Configure the api root view here

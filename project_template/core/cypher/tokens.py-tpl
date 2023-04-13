@@ -68,7 +68,7 @@ def jwt_token(
         The value of the "scope" claim is a JSON string containing a
         space-separated list of scopes associated with the token...
         https://datatracker.ietf.org/doc/html/rfc8693#name-scope-scopes-claim
-    
+
     audience:
         The logical name of the target service where the client intends to use
         the requested security token.

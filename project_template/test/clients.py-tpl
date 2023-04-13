@@ -17,8 +17,9 @@ class RestClient(Client):
             kwargs['data'] = json.dumps(json_data)
 
         kwargs.update(**headers)
-        
+
         response = super().post(*args, **kwargs)
+
         def _json():
             return json.loads(response.content)
 
@@ -31,6 +32,6 @@ class RestClient(Client):
             headers = {}
 
         kwargs.update(**headers)
-        
+
         response = super().get(*args, **kwargs)
         return response
