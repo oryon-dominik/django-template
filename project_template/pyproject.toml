@@ -121,7 +121,7 @@ command_line = "-m pytest"
 line-length = 199
 
 [tool.black]
-line-length = 199
+line-length = 119
 exclude = '''
 (
   /(

@@ -14,6 +14,7 @@ https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 
 
 from .base import *  # noqa: F403 NOSONAR
+
 # ignore linting errors for undefined names (e.g. env after base * import)
 # ruff: noqa: F405
 
@@ -40,7 +41,7 @@ PROJECT_FQDN = env.url("PROJECT_FQDN")
 
 
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 
 # for development, we don't need password validation
 AUTH_PASSWORD_VALIDATORS = []
@@ -51,8 +52,8 @@ CORS_ALLOWED_ORIGINS = CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",  # Vue Vite
 ]
 CORS_ALLOW_METHODS = [
-    'GET',
-    'POST',
+    "GET",
+    "POST",
     # de-actived methods:
     # 'DELETE',
     # 'OPTIONS',
@@ -60,7 +61,7 @@ CORS_ALLOW_METHODS = [
     # 'PUT',
 ]
 
-CACHES['jwt-blacklist']['BACKEND'] = 'django.core.cache.backends.locmem.LocMemCache'
+CACHES["jwt-blacklist"]["BACKEND"] = "django.core.cache.backends.locmem.LocMemCache"
 
 # The logging-filter 'log_database_queries' will log to the file, if LOG_DATABASE is True
 # Turn it only on in develop
@@ -70,10 +71,11 @@ LOG_DATABASE = False
 ADMIN_URL = env.str("DJANGO_ADMIN_URL", default="admin/")  # type: ignore[no-untyped-call]
 
 # for development emails are send to console
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 # alternatively, deactivate email-verification with ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 IPYTHON_ARGUMENTS = ["--debug", "--settings=config.settings.develop"]
+# fmt: off
 NOTEBOOK_ARGUMENTS = [  # to run the notebook with django 3 async set env DJANGO_ALLOW_ASYNC_UNSAFE=true
     "--port", "8888",
     "--ip", "0.0.0.0",
@@ -82,6 +84,7 @@ NOTEBOOK_ARGUMENTS = [  # to run the notebook with django 3 async set env DJANGO
     "--no-browser",
     "--pythonpath", str(ROOT_DIR.resolve()),
 ]
+# fmt: on
 
 
 # django-extensions------------------------------------------------------------
@@ -93,10 +96,10 @@ def show_toolbar(request):
 if DEBUG:
     DEBUG_TOOLBAR_PATCH_SETTINGS = False
     INSTALLED_APPS += [
-        'debug_toolbar',
+        "debug_toolbar",
     ]
     MIDDLEWARE.insert(4, "debug_toolbar.middleware.DebugToolbarMiddleware")
     # trick to have debug toolbar when developing with docker
     DEBUG_TOOLBAR_CONFIG = {
-        'SHOW_TOOLBAR_CALLBACK': show_toolbar,
+        "SHOW_TOOLBAR_CALLBACK": show_toolbar,
     }
