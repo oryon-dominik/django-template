@@ -9,13 +9,16 @@ from test.factories import generic_user_factory, admin_user_factory
 def valid_password() -> str:
     return "secretpasswordthatpassesvalidation1!"
 
+
 @pytest.fixture
 def wrong_password() -> str:
     return "wrongpasswordthatpassesvalidation1!"
 
+
 @pytest.fixture
 def invalid_password() -> str:
     return "invalid"
+
 
 @pytest.fixture
 def user(valid_password):
@@ -25,6 +28,7 @@ def user(valid_password):
     yield user
     get_user_model().objects.get(email=user.email).delete()  # type: ignore[no-untyped-call]
 
+
 @pytest.fixture
 def verified_user(valid_password):
     """Explicitly create a user from the factory or the original fixture will
@@ -33,6 +37,7 @@ def verified_user(valid_password):
     yield user
     get_user_model().objects.get(email=user.email).delete()  # type: ignore[no-untyped-call]
 
+
 @pytest.fixture
 def verified_admin_user(valid_password):
     """Explicitly create a user from the factory or the original fixture will
@@ -40,6 +45,7 @@ def verified_admin_user(valid_password):
     user = admin_user_factory(is_active=True, is_staff=True, password=valid_password)
     yield user
     get_user_model().objects.get(email=user.email).delete()  # type: ignore[no-untyped-call]
+
 
 @pytest.fixture
 def unverified_user(valid_password):

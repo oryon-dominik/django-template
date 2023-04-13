@@ -26,6 +26,7 @@ def invalid_refresh_token(verified_user):
     }
     return tokens.JWTAccessToken(jwt.encode(claims=claims, key='unknown', algorithm=tokens.DEFAULT_JWT_TOKEN_ALGORITHM, headers=headers))
 
+
 @pytest.fixture
 def valid_refresh_token(verified_user):
     # Obtain a new refresh token with a valid secret key
