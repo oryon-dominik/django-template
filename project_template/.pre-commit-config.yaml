@@ -1,9 +1,10 @@
-exclude: "^.*(migrations|fluent_comments).*$"
+exclude: "^.*(migrations|fluent_comments|pyproject.toml).*$"
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
     hooks:
       - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
       - id: end-of-file-fixer
       - id: check-yaml
       - id: check-added-large-files
@@ -13,19 +14,19 @@ repos:
       - id: pyupgrade
         args: [--py311-plus]
   - repo: https://github.com/adamchainz/django-upgrade
-    rev: 1.12.0
+    rev: 1.13.0
     hooks:
       - id: django-upgrade
         args: [--target-version, "4.1"]
   - repo: https://github.com/psf/black
-    rev: 22.12.0
+    rev: 23.3.0
     hooks:
       - id: black
         language_version: python3.11
         args:
           - --force-exclude='pyproject.toml'
   - repo: https://github.com/timothycrosley/isort
-    rev: 5.11.4
+    rev: 5.12.0
     hooks:
       - id: isort
         language_version: python3
@@ -37,7 +38,7 @@ repos:
         language_version: python3
         additional_dependencies: [Flake8-pyproject]
   - repo: https://github.com/rtts/djhtml
-    rev: "v1.5.2"
+    rev: 3.0.6
     hooks:
       - id: djhtml
         args: [--tabwidth, "2"]
@@ -45,3 +46,8 @@ repos:
     rev: 'v0.0.261'
     hooks:
       - id: ruff
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: 'v1.2.0'
+    hooks:
+    - id: mypy
+      args: [--no-warn-unused-ignores, --ignore-missing-imports]
