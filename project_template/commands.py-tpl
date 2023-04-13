@@ -209,6 +209,7 @@ def nb():
     """= notebook (start the notebook server)"""
     notebook()
 
+
 @cli.command()
 def up():
     """= run (start the devserver)"""
