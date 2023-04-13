@@ -36,7 +36,7 @@ CORS_ALLOW_METHODS = [
     "POST",
 ]
 
-# Custom Admin URL, use {% verbatim %} {% url 'admin:index' %} {% endverbatim %}
+# Custom Admin URL, use {% verbatim %}{% url 'admin:index' %}{% endverbatim %}
 ADMIN_URL = env("DJANGO_ADMIN_URL")
 
 # Static files
