@@ -9,14 +9,14 @@ from corsheaders.defaults import (
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG: bool = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS: list[str] = []
 
 # CORS settings
-CORS_ALLOWED_ORIGINS = []
-CORS_ALLOW_METHODS = []  # list(default_methods)
-CORS_ALLOW_HEADERS = list(default_headers) + [
+CORS_ALLOWED_ORIGINS: list[str] = []
+CORS_ALLOW_METHODS: list[str] = []  # list(default_methods)
+CORS_ALLOW_HEADERS: list[str] = list(default_headers) + [
     # ... custom headers here
 ]
 
