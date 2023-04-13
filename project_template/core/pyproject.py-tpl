@@ -75,7 +75,7 @@ class PyProject(Base):
 def load_pyproject(project_path: Path) -> PyProject:
     """
     loading pyproject.toml with [msgspec](https://jcristharif.com/msgspec/)
-    -> https://jcristharif.com/msgspec/examples/pyproject-toml.html  
+    -> https://jcristharif.com/msgspec/examples/pyproject-toml.html
     """
     try:
         with open(project_path / "pyproject.toml") as file:

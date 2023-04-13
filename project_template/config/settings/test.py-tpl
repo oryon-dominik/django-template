@@ -14,7 +14,7 @@ from .base import *  # noqa: F403 NOSONAR
 # ruff: noqa: F405
 
 # Read environment from .env
-READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
+READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)  # type: ignore[no-untyped-call]
 if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
     dotenvpath = ROOT_DIR / "envs" / "test.env"
@@ -22,11 +22,11 @@ if READ_DOT_ENV_FILE:
         raise ValueError("Test dotenv file does not exist (create envs/test.env)")
     env.read_env(str(dotenvpath), override=True)
 
-SECRET_KEY = env.str("DJANGO_SECRET_KEY", default='{{ secret_key }}')  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
+SECRET_KEY = env.str("DJANGO_SECRET_KEY", default='{{ secret_key }}')  # type: ignore[no-untyped-call]
 
 #======PROJECT-SPECIFIC-SETTINGS===============================================
 # add project specific production settings here
-PROJECT_FQDN = env.url("PROJECT_FQDN", default="http://localhost:8000")  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
+PROJECT_FQDN = env.url("PROJECT_FQDN", default="http://localhost:8000")  # type: ignore[no-untyped-call]
 # Production checklist:
 # See https://docs.djangoproject.com/en/{{ docs_version }}/howto/deployment/checklist/
 #==============================================================================

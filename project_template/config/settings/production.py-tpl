@@ -27,7 +27,7 @@ SECRET_KEY = env.str("DJANGO_SECRET_KEY")
 # Hosts/domain names that are valid for this site
 # Remember to set this to your expected hostnames
 # See https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=[])  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=[])  # type: ignore[no-untyped-call]
 
 CORS_ALLOWED_ORIGINS = [f"https://{host}" for host in ALLOWED_HOSTS]
 CORS_ALLOW_METHODS = [
@@ -51,12 +51,12 @@ INSTALLED_APPS += (
 # See https://docs.djangoproject.com/en/{{ docs_version }}/ref/middleware/#module-django.middleware.security
 # and https://docs.djangoproject.com/en/{{ docs_version }}/howto/deployment/checklist/#run-manage-py-check-deploy
 SECURE_HSTS_SECONDS = 60 * 60 * 24 * 365  # one year man-in-the-middle-protection - this might be much too long for development and rapid prototyping
-SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool("DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True)  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
-SECURE_CONTENT_TYPE_NOSNIFF = env.bool("DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", default=True)  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool("DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True)  # type: ignore[no-untyped-call]
+SECURE_CONTENT_TYPE_NOSNIFF = env.bool("DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", default=True)  # type: ignore[no-untyped-call]
 SECURE_BROWSER_XSS_FILTER = True
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
-SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)  # type: ignore[no-untyped-call] - django-environ uses a confusing NOTYPE
+SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)  # type: ignore[no-untyped-call]
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
 X_FRAME_OPTIONS = "DENY"

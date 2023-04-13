@@ -10,6 +10,16 @@ from . import security
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#logging
 
+# The following loglevels are available:
+# - CRITICAL    (50)
+# - ERROR       (40)
+# - WARNING     (30)
+# - INFO        (20)
+# - DEBUG       (10)
+# - NOTSET      (0)
+# The default level shall be WARNING.
+# The default level for the console can be INFO.
+
 # The logging-filter 'log_database_queries' will log to the file, if LOG_DATABASE is True
 # Turn it only on in develop
 LOG_DATABASE = False
