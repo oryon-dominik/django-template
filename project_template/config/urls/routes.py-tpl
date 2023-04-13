@@ -13,19 +13,27 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-# from django.contrib import admin
-from django.urls import path, include, register_converter
+from typing import TypeAlias
 
 from django.conf import settings
-
+# from django.contrib import admin
+from django.urls import (
+    path,
+    include,
+    register_converter,
+    URLResolver,
+    URLPattern,
+)
 # from django.views.generic import TemplateView
+
 from . import converters
 
 
 register_converter(converters.FourDigitYearConverter, 'year')
 
+URL: TypeAlias = URLResolver | URLPattern
 
-urlpatterns = [
+urlpatterns: list[URL] = [
     # ! attention: use this patterns only for general paths
     # that are used by all forks from the base-skeleton
 

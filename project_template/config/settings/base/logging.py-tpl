@@ -28,7 +28,7 @@ LOG_DATABASE = False
 # more details on how to customize your logging configuration.
 LOGGING_FILE_HANDLER = 'logging.FileHandler'
 
-LOGGING = {
+LOGGING: dict = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
