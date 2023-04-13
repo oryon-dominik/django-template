@@ -9,8 +9,10 @@ import webbrowser
 from pathlib import Path
 import typer
 
-from rich import print  # noqa
-from rich.markdown import Markdown
+try:
+    from rich import print  # noqa
+except ImportError:
+    pass
 
 
 # --------- CONFIG -------------------------------------------------------------
@@ -101,9 +103,16 @@ def clean():
 @cli.command()
 def readme():
     """README"""
-    with open("README.md") as readme:
-        markdown = Markdown(readme.read())
-    print(markdown)
+    with open("README.md") as file:
+        content = file.read()
+    try:
+        from rich.markdown import Markdown
+    except ImportError:
+        print("Install rich to render README.md as markdown.")
+        print(content)
+    else:
+        markdown = Markdown(content)
+        print(markdown)
 
 
 # ---------- MANAGE THE DATABASE AND OTHER COMMANDS ---------------------------
