@@ -1,16 +1,20 @@
-from typing import Type, Iterable
+from collections.abc import Iterable
+from typing import TypeAlias
 
-from django.contrib import admin
 from django.conf import settings
-from django.db.models.base import ModelBase
+from django.contrib import admin
 from django.db.models import Model
+from django.db.models.base import ModelBase
 
 from . import models
+
+
+ModelType: TypeAlias = type[Model] | Iterable[type[Model]]
 
 # register all models when debugging
 if settings.DEBUG:
     for model_name in dir(models):
-        model: Type[Model] | Iterable[Type[Model]] = getattr(models, model_name)
+        model: ModelType = getattr(models, model_name)
 
-        if isinstance(model, ModelBase) and model_name != 'Model':
+        if isinstance(model, ModelBase) and model_name != "Model":
             admin.site.register(model)
