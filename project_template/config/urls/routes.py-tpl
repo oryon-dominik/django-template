@@ -36,6 +36,7 @@ register_converter(converters.FourDigitYearConverter, "year")
 
 URL: TypeAlias = URLResolver | URLPattern
 
+# ignore the type error for an empty list, because of a union bug in mypy -> https://github.com/python/mypy/issues/6463
 urlpatterns: list[URL] = [
     # ! attention: use this patterns only for general paths
     # that are used by all forks from the base-skeleton
@@ -45,7 +46,7 @@ urlpatterns: list[URL] = [
     # path('', include('apps.users.urls', namespace="users")),
 ] + [  # the project-specific urlpatterns
     # path('', include('apps.things.urls', namespace="things")),
-]
+]  # type: ignore[assignment]
 
 # the project-specific api-interfaces live in 'config/urls/apis.py'
 # namespaces may be accessed in templates with: {% verbatim %}{% url 'api:appname-modelname-crudmethod' %}{% endverbatim %}

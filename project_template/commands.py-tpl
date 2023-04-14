@@ -93,7 +93,7 @@ def run_command(command, debug=False, cwd=CWD, env=env_with_pythonpath(), shell=
 
 
 def rename_file_suffix(path: Path, new_suffix: str):
-    path.rename(path.with_suffix(new_suffix))
+    return path.rename(path.with_suffix(new_suffix))
 
 
 def walk_rename(source: str = "", target: str = "", directory: Path = CWD):
@@ -107,8 +107,8 @@ def walk_rename(source: str = "", target: str = "", directory: Path = CWD):
 
     for path in directory.iterdir():
         if path.is_dir():
-            walk_rename(source=source, target=target, directory=path)
-        elif path.is_file() and path.suffix == source:
+            renamed += walk_rename(source=source, target=target, directory=path)
+        elif path.is_file() and path.suffix == source and path != Path(__file__):
             renamed.append(rename_file_suffix(path=path, new_suffix=target))
 
     return renamed
