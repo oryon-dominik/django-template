@@ -31,8 +31,8 @@ def test_obtain_token_with_valid_credentials_succeeds_and_token_is_valid(client,
     access_token: tokens.JWTAccessToken = tokens.JWTAccessToken(auth_cookie.value.removeprefix(f'{tokens.DEFAULT_JWT_TOKEN_PREFIX} '))
 
     assert auth_cookie.value == f'Bearer {access_token}'
-    assert auth_cookie['secure'] == True
-    assert auth_cookie['httponly'] == True
+    assert auth_cookie['secure'] is True
+    assert auth_cookie['httponly'] is True
     assert auth_cookie['domain'].netloc == settings.PROJECT_FQDN.netloc
     assert auth_cookie['expires'] in [http_date((now + timedelta(seconds=1)).timestamp()), http_date(now.timestamp()), http_date((now - timedelta(seconds=1)).timestamp())]
     assert auth_cookie['max-age'] == tokens.DEFAULT_JWT_TOKEN_ACCESS_EXPIRATION_MINUTES * 60
@@ -203,8 +203,8 @@ def test_obtain_a_fresh_access_token_with_valid_refresh_token_succeeds(client, v
     access_token: tokens.JWTAccessToken = tokens.JWTAccessToken(auth_cookie.value.removeprefix(f'{tokens.DEFAULT_JWT_TOKEN_PREFIX} '))
 
     assert auth_cookie.value == f'Bearer {access_token}'
-    assert auth_cookie['secure'] == True
-    assert auth_cookie['httponly'] == True
+    assert auth_cookie['secure'] is True
+    assert auth_cookie['httponly'] is True
     assert auth_cookie['domain'].netloc == settings.PROJECT_FQDN.netloc
     assert auth_cookie['expires'] in [http_date((now + timedelta(seconds=1)).timestamp()), http_date(now.timestamp()), http_date((now - timedelta(seconds=1)).timestamp())]
     assert auth_cookie['max-age'] == tokens.DEFAULT_JWT_TOKEN_ACCESS_EXPIRATION_MINUTES * 60

@@ -117,7 +117,7 @@ class AuthTokenRefresh(APIView):
         csrf = get_csrf_token(request)
         # ensuring csrf cookie is set
         request.COOKIES.update(cookies.SimpleCookie({'CSRF': f'{csrf}'}))
-        return JsonResponse({'detail': f'post your refresh-token to get a new access token.'})
+        return JsonResponse({'detail': 'post your refresh-token to get a new access token.'})
 
     def post(self, request):
         """
