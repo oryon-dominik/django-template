@@ -148,7 +148,7 @@ combine_star = true
 lines_between_types = 0
 lines_after_imports = 2
 lines_between_sections = 1
-skip=[
+skip = [
   '.eggs',
   '.git',
   '.mypy_cache',
