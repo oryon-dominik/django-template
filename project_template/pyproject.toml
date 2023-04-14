@@ -58,8 +58,10 @@ flake8-pyproject = "^1.2.3"
 [tool.poetry.group.formatter]
 optional = false
 # run black with: poetry run black check .
+# run isort with: poetry run isort .
 [tool.poetry.group.formatter.dependencies]
 black = {extras = ["jupyter"], version = "^23.3.0"}
+isort = "^5.12.0"
 
 [tool.poetry.group.typechecker]
 optional = false
