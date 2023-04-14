@@ -1,5 +1,6 @@
-from django.conf import settings
 import environ
+
+from django.conf import settings
 
 
 def run():

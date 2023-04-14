@@ -1,6 +1,6 @@
+import secrets
 from datetime import timedelta, datetime
 from typing import Literal, TypeAlias
-import secrets
 
 from jose import jwt
 

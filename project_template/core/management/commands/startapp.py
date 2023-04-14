@@ -5,8 +5,8 @@ Overwriting Djangos builtin Management Commands.
 import sys
 from pathlib import Path
 
-from django.core.management.commands import startapp
 from django.conf import settings
+from django.core.management.commands import startapp
 
 from ...inout import files
 

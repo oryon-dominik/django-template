@@ -7,7 +7,9 @@ import os
 import subprocess
 import webbrowser
 from pathlib import Path
+
 import typer
+
 
 try:
     from rich import print  # noqa

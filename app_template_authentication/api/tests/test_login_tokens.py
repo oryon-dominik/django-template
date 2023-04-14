@@ -1,17 +1,16 @@
-from http import cookies
 from datetime import timedelta
+from http import cookies
 
 import pytest
+from freezegun import freeze_time
 from jose import jwt
 
 from django.conf import settings
 from django.utils import timezone
 from django.utils.http import http_date
 
-from freezegun import freeze_time
-
-from core.cypher import tokens
 from apps.authentication.api.backends import MSG_AUTHENTICATION_FAILED
+from core.cypher import tokens
 
 
 def test_token_prefix_is_bearer():

@@ -1,5 +1,6 @@
-from django.utils.decorators import method_decorator, decorator_from_middleware
 from functools import wraps
+
+from django.utils.decorators import method_decorator, decorator_from_middleware
 
 
 def middleware_on_class(middleware):

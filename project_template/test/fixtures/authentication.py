@@ -3,8 +3,8 @@ from datetime import timedelta
 import pytest
 from jose import jwt
 
-from django.utils import timezone
 from django.conf import settings
+from django.utils import timezone
 
 from core.cypher import tokens
 

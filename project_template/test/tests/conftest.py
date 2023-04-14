@@ -6,5 +6,5 @@ from test.fixtures.users import (  # noqa # pylint: disable=unused-import
     user,
     verified_user,
     unverified_user,
-    valid_password
+    valid_password,
 )

@@ -1,3 +1,7 @@
+from test.fixtures.authentication import (
+    valid_refresh_token,
+    invalid_refresh_token,
+)
 from test.fixtures.clients import rest_client as client
 from test.fixtures.users import (
     valid_password,
@@ -6,8 +10,4 @@ from test.fixtures.users import (
     verified_user,
     unverified_user,
     verified_admin_user,
-)
-from test.fixtures.authentication import (
-    valid_refresh_token,
-    invalid_refresh_token,
 )

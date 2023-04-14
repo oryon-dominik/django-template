@@ -1,27 +1,27 @@
 import logging
-from typing import TypeAlias
 from http import cookies
+from typing import TypeAlias
 
 from jose import jwt, JWTError
-
-from django.utils import timezone
-from django.utils.http import http_date
-from django.conf import settings
-from django.http import JsonResponse
-from django.core.cache import caches
-from django.dispatch import Signal
-from django.urls import reverse
-from django.middleware.csrf import get_token as get_csrf_token
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import NotAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from core.cypher import tokens
-from core.middlewares.decorators import middleware_on_class
-from core.middlewares.csrf import EnsureCsrfCookie
+from django.conf import settings
+from django.core.cache import caches
+from django.dispatch import Signal
+from django.http import JsonResponse
+from django.middleware.csrf import get_token as get_csrf_token
+from django.urls import reverse
+from django.utils import timezone
+from django.utils.http import http_date
+
 from core.crud.users import get_user_by_email, UserModel
+from core.cypher import tokens
+from core.middlewares.csrf import EnsureCsrfCookie
+from core.middlewares.decorators import middleware_on_class
+
 from .backends import MSG_AUTHENTICATION_FAILED, MSG_VERIFICATION_FAILED, JWTAuthentication
 
 

@@ -2,12 +2,11 @@
 # from rest_framework.response import Response
 # from rest_framework.reverse import reverse
 
-from django.urls import (
-    # include,
+from django.conf import settings
+from django.urls import (  # include,
     path,
 )
 from django.views.generic import RedirectView
-from django.conf import settings
 
 
 app_name = 'api'

@@ -2,6 +2,7 @@ from rest_framework import routers
 
 from . import views
 
+
 # automatic URL routing
 {{ app_name }}_router = routers.DefaultRouter()
 {{ app_name }}_router.get_api_root_view().cls.__name__ = "{{ camel_case_app_name }} Router"

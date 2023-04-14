@@ -144,7 +144,7 @@ no_inline_sort = true
 no_lines_before = ["future", "stdlib"]
 combine_star = true
 lines_between_types = 0
-lines_after_imports = 3
+lines_after_imports = 2
 lines_between_sections = 1
 skip=[
   '.eggs',

@@ -1,5 +1,5 @@
-from django.urls import path
 from django.conf import settings
+from django.urls import path
 
 from . import views
 
@@ -17,9 +17,10 @@ if hasattr(settings, 'IS_TESTING'):
     EXAMPLE PROTECTED VIEW below
     """
 
-    from django.http import JsonResponse
-    from rest_framework.views import APIView
     from rest_framework.permissions import IsAuthenticated, BasePermission
+    from rest_framework.views import APIView
+
+    from django.http import JsonResponse
 
     from .backends import JWTAuthentication
 

@@ -1,15 +1,14 @@
 from typing import TypeAlias
+
 from jose import jwt, JWTError
+from rest_framework import authentication, status
+from rest_framework.exceptions import NotAuthenticated
 
 from django.conf import settings
 from django.core.cache import caches
 
-from rest_framework import authentication
-from rest_framework.exceptions import NotAuthenticated
-from rest_framework import status
-
-from core.cypher import tokens
 from core.crud.users import get_user_by_email, UserModel
+from core.cypher import tokens
 
 
 MSG_AUTHENTICATION_FAILED = "Authentication failed"

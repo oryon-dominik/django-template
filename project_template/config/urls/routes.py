@@ -16,6 +16,7 @@ Including another URLconf
 from typing import TypeAlias
 
 from django.conf import settings
+
 # from django.contrib import admin
 from django.urls import (
     path,
@@ -24,9 +25,12 @@ from django.urls import (
     URLResolver,
     URLPattern,
 )
-# from django.views.generic import TemplateView
 
 from . import converters
+
+
+# from django.views.generic import TemplateView
+
 
 
 register_converter(converters.FourDigitYearConverter, 'year')
