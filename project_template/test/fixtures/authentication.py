@@ -24,7 +24,9 @@ def invalid_refresh_token(verified_user):
         "alg": tokens.DEFAULT_JWT_TOKEN_ALGORITHM,
         "typ": tokens.DEFAULT_JWT_TOKEN_TYPE,
     }
-    return tokens.JWTAccessToken(jwt.encode(claims=claims, key='unknown', algorithm=tokens.DEFAULT_JWT_TOKEN_ALGORITHM, headers=headers))
+    return tokens.JWTAccessToken(
+        jwt.encode(claims=claims, key="unknown", algorithm=tokens.DEFAULT_JWT_TOKEN_ALGORITHM, headers=headers)
+    )
 
 
 @pytest.fixture
@@ -42,4 +44,8 @@ def valid_refresh_token(verified_user):
         "alg": tokens.DEFAULT_JWT_TOKEN_ALGORITHM,
         "typ": tokens.DEFAULT_JWT_TOKEN_TYPE,
     }
-    return tokens.JWTAccessToken(jwt.encode(claims=claims, key=settings.SECRET_KEY, algorithm=tokens.DEFAULT_JWT_TOKEN_ALGORITHM, headers=headers))
+    return tokens.JWTAccessToken(
+        jwt.encode(
+            claims=claims, key=settings.SECRET_KEY, algorithm=tokens.DEFAULT_JWT_TOKEN_ALGORITHM, headers=headers
+        )
+    )

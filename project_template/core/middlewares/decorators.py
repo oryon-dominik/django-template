@@ -5,31 +5,32 @@ from django.utils.decorators import method_decorator, decorator_from_middleware
 
 def middleware_on_class(middleware):
     """
-        A class decorator to attach the designated middleware to a class-based view.
+    A class decorator to attach the designated middleware to a class-based view.
 
-        Use as
-        @middleware_on_class(MiddlewareClass)
-        class View:
+    Use as
+    @middleware_on_class(MiddlewareClass)
+    class View:
+        ...
+
+    Takes a single parameter, ``MiddlewareClass'', which must
+    be a django middleware class (not an instance).
+
+    The decorated class is modified in place.
+    e.g.: from django.middleware.csrf import CsrfViewMiddleware
+        if CsrfViewMiddleware is not in settings.MIDDLEWARE = [
             ...
+            'django.middleware.csrf.CsrfViewMiddleware',
+            ...
+        ]
 
-        Takes a single parameter, ``MiddlewareClass'', which must
-        be a django middleware class (not an instance).
+    ... this leads to:
 
-        The decorated class is modified in place.
-        e.g.: from django.middleware.csrf import CsrfViewMiddleware
-            if CsrfViewMiddleware is not in settings.MIDDLEWARE = [
-                ...
-                'django.middleware.csrf.CsrfViewMiddleware',
-                ...
-            ]
-
-        ... this leads to:
-
-        from core.middlewares import middleware_on_class
-        from django.middleware.csrf import CsrfViewMiddleware
-        middleware_on_class(CsrfViewMiddleware)
+    from core.middlewares import middleware_on_class
+    from django.middleware.csrf import CsrfViewMiddleware
+    middleware_on_class(CsrfViewMiddleware)
 
     """
+
     def decorator(cls):
         dispatch = cls.dispatch
 
@@ -40,4 +41,5 @@ def middleware_on_class(middleware):
 
         cls.dispatch = wrapper
         return cls
+
     return decorator

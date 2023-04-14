@@ -20,21 +20,21 @@ from . import paths
 # DATABASE_URL = env.str("DATABASE_URL", default=POSTGRES_CONNECTION_STRING)
 # DATABASES = {"default": env.db("DATABASE_URL", default=DATABASE_URL)}
 # SQLite:
-DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': paths.ROOT_DIR / 'database' / 'sqlite3.db'}}
+DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": paths.ROOT_DIR / "database" / "sqlite3.db"}}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#default-auto-field
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake-{{ project_name }}-cache',
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "unique-snowflake-{{ project_name }}-cache",
     },
-    'jwt-blacklist': {
+    "jwt-blacklist": {
         # 'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # ! this is not thread-safe and not recommended, if you use multiple workers
-        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',  # ! this is slow in production. Maybe use redis or memcached
-        'LOCATION': 'blacklisted_jwts_cache',
-    }
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",  # ! this is slow in production. Maybe use redis or memcached
+        "LOCATION": "blacklisted_jwts_cache",
+    },
 }

@@ -11,4 +11,5 @@ class CoreConfig(AppConfig):
         """
         # run system checks on every hot reload
         from . import checks  # noqa: F401
+
         ...

@@ -11,10 +11,10 @@ class RestClient(Client):
         if headers is None:
             headers = {}
 
-        json_data = kwargs.pop('json', "")
+        json_data = kwargs.pop("json", "")
         if json_data:
-            kwargs['content_type'] = 'application/json'
-            kwargs['data'] = json.dumps(json_data)
+            kwargs["content_type"] = "application/json"
+            kwargs["data"] = json.dumps(json_data)
 
         kwargs.update(**headers)
 
@@ -23,8 +23,8 @@ class RestClient(Client):
         def _json():
             return json.loads(response.content)
 
-        if response.headers['Content-Type'] == 'application/json':  # type: ignore
-            setattr(response, 'json', _json)
+        if response.headers["Content-Type"] == "application/json":  # type: ignore
+            setattr(response, "json", _json)
         return response
 
     def get(self, *args, headers=None, **kwargs):

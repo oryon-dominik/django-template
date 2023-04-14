@@ -26,72 +26,72 @@ LOG_DATABASE = False
 
 # See https://docs.djangoproject.com/en/{{ docs_version }}/topics/logging for
 # more details on how to customize your logging configuration.
-LOGGING_FILE_HANDLER = 'logging.FileHandler'
+LOGGING_FILE_HANDLER = "logging.FileHandler"
 
 LOGGING: dict = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
         "verbose": {
-            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
-            'style': '{',
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
         },
-        'simple': {
-            'format': '{levelname} {message}',
-            'style': '{',
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
         },
     },
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse',
+    "filters": {
+        "require_debug_false": {
+            "()": "django.utils.log.RequireDebugFalse",
         },
-        'require_debug_true': {
-            '()': 'django.utils.log.RequireDebugTrue',
+        "require_debug_true": {
+            "()": "django.utils.log.RequireDebugTrue",
         },
-        'log_database_queries': {
-            '()': 'config.logfilters.LogDatabaseQueriesFilter',
+        "log_database_queries": {
+            "()": "config.logfilters.LogDatabaseQueriesFilter",
         },
     },
     "handlers": {
         "console": {
             "level": "INFO",
-            'filters': ['require_debug_true'],
+            "filters": ["require_debug_true"],
             "class": "logging.StreamHandler",
             "formatter": "simple" if security.DEBUG else "verbose",
         },
-        'requests_file': {
-            'level': 'INFO',
-            'class': LOGGING_FILE_HANDLER,
-            'filename': str(paths.ROOT_DIR / "logs" / "requests.log"),
+        "requests_file": {
+            "level": "INFO",
+            "class": LOGGING_FILE_HANDLER,
+            "filename": str(paths.ROOT_DIR / "logs" / "requests.log"),
         },
-        'database_queries_file': {
-            'level': 'DEBUG',
-            'filters': ['log_database_queries'],
-            'class': LOGGING_FILE_HANDLER,
-            'filename': str(paths.ROOT_DIR / "logs" / "queries.log"),
+        "database_queries_file": {
+            "level": "DEBUG",
+            "filters": ["log_database_queries"],
+            "class": LOGGING_FILE_HANDLER,
+            "filename": str(paths.ROOT_DIR / "logs" / "queries.log"),
         },
-        'server_log_file': {
-            'level': 'INFO',
-            'class': LOGGING_FILE_HANDLER,
-            'filename': str(paths.ROOT_DIR / "logs" / "server.log"),
+        "server_log_file": {
+            "level": "INFO",
+            "class": LOGGING_FILE_HANDLER,
+            "filename": str(paths.ROOT_DIR / "logs" / "server.log"),
             "formatter": "verbose",
         },
     },
-    'loggers': {
-        'django': {
-            'handlers': ['console', "server_log_file"],
-            'level': 'INFO',
-            'propagate': True,
-            },
-        'django.db.backends': {
-            'level': 'DEBUG',
-            'handlers': ['database_queries_file'],
-            'propagate': True,
+    "loggers": {
+        "django": {
+            "handlers": ["console", "server_log_file"],
+            "level": "INFO",
+            "propagate": True,
+        },
+        "django.db.backends": {
+            "level": "DEBUG",
+            "handlers": ["database_queries_file"],
+            "propagate": True,
         },
         "django.security.DisallowedHost": {
             "level": "ERROR",
-            "handlers": ["console", 'server_log_file'],
+            "handlers": ["console", "server_log_file"],
             "propagate": False,
         },
-    }
+    },
 }

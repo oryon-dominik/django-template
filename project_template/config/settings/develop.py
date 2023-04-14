@@ -30,7 +30,7 @@ if READ_DOT_ENV_FILE:
 DEBUG = env.bool("DJANGO_DEBUG", True)  # type: ignore[no-untyped-call]  # ! in development only!
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.str("DJANGO_SECRET_KEY", default='{{ secret_key }}')  # type: ignore[no-untyped-call]
+SECRET_KEY = env.str("DJANGO_SECRET_KEY", default="{{ secret_key }}")  # type: ignore[no-untyped-call]
 
 # =====PROJECT-SPECIFIC-SETTINGS===============================================
 # add project specific production settings here

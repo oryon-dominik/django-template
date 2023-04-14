@@ -5,14 +5,13 @@ from . import views
 
 
 urlpatterns = [
-    path('auth/token/', views.AuthTokenLogin.as_view(), name='login'),
-    path('auth/token/verify/', views.AuthTokenVerify.as_view(), name='verify'),
-    path('auth/token/refresh/', views.AuthTokenRefresh.as_view(), name='refresh'),
-    path('auth/token/logout/', views.AuthTokenLogout.as_view(), name='logout'),
+    path("auth/token/", views.AuthTokenLogin.as_view(), name="login"),
+    path("auth/token/verify/", views.AuthTokenVerify.as_view(), name="verify"),
+    path("auth/token/refresh/", views.AuthTokenRefresh.as_view(), name="refresh"),
+    path("auth/token/logout/", views.AuthTokenLogout.as_view(), name="logout"),
 ]
 
-if hasattr(settings, 'IS_TESTING'):
-    
+if hasattr(settings, "IS_TESTING"):
     """
     EXAMPLE PROTECTED VIEW below
     """
@@ -26,8 +25,12 @@ if hasattr(settings, 'IS_TESTING'):
 
     class CustomAdminPermission(BasePermission):
         """Return `True` if permission is granted, `False` otherwise."""
-        def has_permission(self, request, view): return request.user.is_superuser
-        def has_object_permission(self, request, view, obj): return True
+
+        def has_permission(self, request, view):
+            return request.user.is_superuser
+
+        def has_object_permission(self, request, view, obj):
+            return True
 
     class ProtectionTestView(APIView):
         """
@@ -35,6 +38,7 @@ if hasattr(settings, 'IS_TESTING'):
 
         * Requires token authentication.
         """
+
         authentication_classes = [JWTAuthentication]
         permission_classes = [IsAuthenticated]  # default permission is "is authenticated"
 
@@ -42,8 +46,8 @@ if hasattr(settings, 'IS_TESTING'):
             """
             Return a list of all users.
             """
-            foo = ['foo', 'bar', 'baz']
-            return JsonResponse({'foo': foo})
+            foo = ["foo", "bar", "baz"]
+            return JsonResponse({"foo": foo})
 
     class AdminProtectionTestView(APIView):
         """
@@ -52,6 +56,7 @@ if hasattr(settings, 'IS_TESTING'):
         * Requires token authentication.
         * Only admin users are able to access this view.
         """
+
         authentication_classes = [JWTAuthentication]
         permission_classes = [IsAuthenticated, CustomAdminPermission]  # default permission is "is authenticated"
 
@@ -59,11 +64,10 @@ if hasattr(settings, 'IS_TESTING'):
             """
             Return a list of all users.
             """
-            foo = ['foo', 'bar', 'baz']
-            return JsonResponse({'foo': foo})
-
+            foo = ["foo", "bar", "baz"]
+            return JsonResponse({"foo": foo})
 
     urlpatterns += [
-        path('protectiontest/', ProtectionTestView.as_view(), name='test-protected'),
-        path('adminprotectiontest/', AdminProtectionTestView.as_view(), name='test-protected'),
+        path("protectiontest/", ProtectionTestView.as_view(), name="test-protected"),
+        path("adminprotectiontest/", AdminProtectionTestView.as_view(), name="test-protected"),
     ]

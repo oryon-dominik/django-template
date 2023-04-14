@@ -10,9 +10,9 @@ from django.conf import settings
 DEFAULT_JWT_TOKEN_ALGORITHM = "HS512"
 DEFAULT_JWT_TOKEN_ACCESS_EXPIRATION_MINUTES = 5  # 5 minutes
 DEFAULT_JWT_TOKEN_REFRESH_EXPIRATION_MINUTES = 60 * 24 * 7  # 7 days
-DEFAULT_JWT_TOKEN_PREFIX = 'Bearer'
-DEFAULT_JWT_TOKEN_TYPE = 'jwt'
-DEFAULT_JWT_TOKEN_COOKIE_KEY = 'Authentication'
+DEFAULT_JWT_TOKEN_PREFIX = "Bearer"
+DEFAULT_JWT_TOKEN_TYPE = "jwt"
+DEFAULT_JWT_TOKEN_COOKIE_KEY = "Authentication"
 
 
 JWTTokenType: TypeAlias = Literal["access", "refresh", "unique"]
@@ -23,6 +23,7 @@ class JWTAccessToken(str):
     String representation of the header, claims, and signature.
     Signed with DEFAULT_JWT_TOKEN_ALGORITHM.
     """
+
     @classmethod
     def __get_validators__(cls):
         yield cls.validate
@@ -44,14 +45,14 @@ def urlsafe_token(nbytes: int = 66):
 
 
 def jwt_token(
-        email: str,
-        now: datetime,
-        expires_in: int,
-        scope: str = "",
-        audience: str = "",
-        signature: str = "",
-        tokentype: JWTTokenType = "unique",
-    ) -> JWTAccessToken:
+    email: str,
+    now: datetime,
+    expires_in: int,
+    scope: str = "",
+    audience: str = "",
+    signature: str = "",
+    tokentype: JWTTokenType = "unique",
+) -> JWTAccessToken:
     """
     Generate a random jwt token.
 
@@ -93,7 +94,9 @@ def jwt_token(
         "alg": DEFAULT_JWT_TOKEN_ALGORITHM,
         "typ": DEFAULT_JWT_TOKEN_TYPE,
     }
-    return JWTAccessToken(jwt.encode(claims=claims, key=settings.SECRET_KEY, algorithm=DEFAULT_JWT_TOKEN_ALGORITHM, headers=headers))
+    return JWTAccessToken(
+        jwt.encode(claims=claims, key=settings.SECRET_KEY, algorithm=DEFAULT_JWT_TOKEN_ALGORITHM, headers=headers)
+    )
 
 
 def insecure_decode_jwt_token(token: str, force: bool = False) -> dict:
@@ -102,5 +105,7 @@ def insecure_decode_jwt_token(token: str, force: bool = False) -> dict:
     """
     if not force:
         raise ValueError("A call to this function shall be forced explicitly!")
-    payload = jwt.decode(token, key=settings.SECRET_KEY, algorithms=[DEFAULT_JWT_TOKEN_ALGORITHM], options={"verify_signature": False})
+    payload = jwt.decode(
+        token, key=settings.SECRET_KEY, algorithms=[DEFAULT_JWT_TOKEN_ALGORITHM], options={"verify_signature": False}
+    )
     return payload

@@ -5,12 +5,11 @@ from django.db import models
 
 
 class {{ camel_case_app_name }}(models.Model):
-
-    # could be translated: EXCELLENT = 'A', _('Excellent')
+    # could be translated: EXCELLENT = "A", _("Excellent")
     # -> from django.utils.translation import gettext_lazy as _
     class States(models.TextChoices):
-        EXCELLENT = 'A', 'Excellent'
-        FAILED = 'F', 'Failed'
+        EXCELLENT = "A", "Excellent"
+        FAILED = "F", "Failed"
 
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     name = models.CharField(max_length=255)

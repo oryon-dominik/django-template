@@ -32,10 +32,10 @@ from .internationalization import (
     TIME_ZONE,  # noqa # pylint: disable=unused-import
     USE_I18N,  # noqa # pylint: disable=unused-import
     USE_L10N,  # noqa # pylint: disable=unused-import
-    USE_TZ  # noqa # pylint: disable=unused-import
+    USE_TZ,  # noqa # pylint: disable=unused-import
 )
 from .logging import (
-    LOG_DATABASE,   # noqa # pylint: disable=unused-import
+    LOG_DATABASE,  # noqa # pylint: disable=unused-import
     LOGGING_FILE_HANDLER,  # noqa # pylint: disable=unused-import
     LOGGING,  # noqa # pylint: disable=unused-import
 )
@@ -54,7 +54,7 @@ from .security import (
     CORS_ALLOWED_ORIGINS,  # noqa # pylint: disable=unused-import
     CORS_ALLOW_HEADERS,  # noqa # pylint: disable=unused-import
     CORS_ALLOW_METHODS,  # noqa # pylint: disable=unused-import
-    SECRET_KEY  # noqa # pylint: disable=unused-import
+    SECRET_KEY,  # noqa # pylint: disable=unused-import
 )
 from .static import (
     STATIC_ROOT,  # noqa # pylint: disable=unused-import
@@ -73,7 +73,6 @@ from .urlconf import (
     LOGIN_URL,  # noqa # pylint: disable=unused-import
     ROOT_URLCONF,  # noqa # pylint: disable=unused-import
     API_BASE_URL,  # noqa # pylint: disable=unused-import
-
 )
 from .users import (
     AUTH_USER_MODEL,  # noqa # pylint: disable=unused-import

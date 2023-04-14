@@ -9,7 +9,7 @@ from django.urls import (  # include,
 from django.views.generic import RedirectView
 
 
-app_name = 'api'
+app_name = "api"
 
 # Configure the api root view here
 # @api_view(['GET'])
@@ -22,13 +22,11 @@ app_name = 'api'
 urlpatterns = [
     # default apis, should not be removed
     # path('', api_root),
-
     # JWT-authentication
     # path('', include('apps.authentication.api.urls')),
-
     # this is a fix for the namespace 'api:api-root', that got polluted
     # by the custom apps and has to go last
-    path('', RedirectView.as_view(url=''), name='api-root'),
+    path("", RedirectView.as_view(url=""), name="api-root"),
 ]
 
 if settings.DEBUG:

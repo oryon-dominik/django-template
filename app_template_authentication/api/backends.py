@@ -48,17 +48,23 @@ class JWTAuthentication(authentication.BaseAuthentication):
         if tokens.DEFAULT_JWT_TOKEN_PREFIX.lower() not in authentication.lower():
             raise credentials_exception
 
-        token: tokens.JWTAccessToken = authentication.removeprefix(f'{tokens.DEFAULT_JWT_TOKEN_PREFIX} ')  # ! note that the space is required
-        if caches['jwt-blacklist'].get(token[:247]):  # ! note that the token is truncated to 247 characters, because memcached has a limit of 250 characters
+        token: tokens.JWTAccessToken = authentication.removeprefix(
+            f"{tokens.DEFAULT_JWT_TOKEN_PREFIX} "
+        )  # ! note that the space is required
+        if caches["jwt-blacklist"].get(
+            token[:247]
+        ):  # ! note that the token is truncated to 247 characters, because memcached has a limit of 250 characters
             raise credentials_exception
         try:
-            payload: dict = jwt.decode(token=token, key=settings.SECRET_KEY, algorithms=[tokens.DEFAULT_JWT_TOKEN_ALGORITHM])
+            payload: dict = jwt.decode(
+                token=token, key=settings.SECRET_KEY, algorithms=[tokens.DEFAULT_JWT_TOKEN_ALGORITHM]
+            )
         except JWTError:
             raise credentials_exception
-        if payload['type'] != 'access':
+        if payload["type"] != "access":
             raise credentials_exception
 
-        user = get_user_by_email(email=payload['sub'])
+        user = get_user_by_email(email=payload["sub"])
         try:
             assert user is not None
         except AssertionError:

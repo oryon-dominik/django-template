@@ -32,18 +32,15 @@ from . import converters
 # from django.views.generic import TemplateView
 
 
-
-register_converter(converters.FourDigitYearConverter, 'year')
+register_converter(converters.FourDigitYearConverter, "year")
 
 URL: TypeAlias = URLResolver | URLPattern
 
 urlpatterns: list[URL] = [
     # ! attention: use this patterns only for general paths
     # that are used by all forks from the base-skeleton
-
     # ! defining Views directly in the urls.py (like the line below) is an anti-pattern. We'll keep it here for simplicity for now.
     # path('', TemplateView.as_view(template_name='base.html'), {"TITLE": settings.PROJECT_TITLE}),
-
     # path(settings.ADMIN_URL, admin.site.urls),
     # path('', include('apps.users.urls', namespace="users")),
 ] + [  # the project-specific urlpatterns
@@ -53,7 +50,9 @@ urlpatterns: list[URL] = [
 # the project-specific api-interfaces live in 'config/urls/apis.py'
 # namespaces may be accessed in templates with: {% verbatim %}{% url 'api:appname-modelname-crudmethod' %}{% endverbatim %}
 # e.g.: {% verbatim %}{% url 'api:users-user-list' %}{% endverbatim %}
-urlpatterns += [path(f"{settings.API_BASE_URL}/", include('config.urls.apis', namespace='api')), ]
+urlpatterns += [
+    path(f"{settings.API_BASE_URL}/", include("config.urls.apis", namespace="api")),
+]
 
 
 if settings.DEBUG:
@@ -66,4 +65,7 @@ if settings.DEBUG:
 
     # debug toolbar
     import debug_toolbar
-    urlpatterns += [path('__debug__/', include(debug_toolbar.urls)), ]
+
+    urlpatterns += [
+        path("__debug__/", include(debug_toolbar.urls)),
+    ]

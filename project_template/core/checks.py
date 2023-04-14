@@ -22,6 +22,7 @@ class Tags(django_core_checks.Tags):
     """
     Extended custom tags for system checks
     """
+
     email = "email"
 
 

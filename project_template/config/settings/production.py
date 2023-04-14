@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 
 
 from .base import *  # noqa: F403 NOSONAR
+
 # ignore linting errors for undefined names (e.g. env after base * import)
 # ruff: noqa: F405
 
@@ -50,7 +51,9 @@ INSTALLED_APPS += (
 # ------------------------------------------------------------------------------
 # See https://docs.djangoproject.com/en/{{ docs_version }}/ref/middleware/#module-django.middleware.security
 # and https://docs.djangoproject.com/en/{{ docs_version }}/howto/deployment/checklist/#run-manage-py-check-deploy
-SECURE_HSTS_SECONDS = 60 * 60 * 24 * 365  # one year man-in-the-middle-protection - this might be much too long for development and rapid prototyping
+SECURE_HSTS_SECONDS = (
+    60 * 60 * 24 * 365
+)  # one year man-in-the-middle-protection - this might be much too long for development and rapid prototyping
 SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool("DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True)  # type: ignore[no-untyped-call]
 SECURE_CONTENT_TYPE_NOSNIFF = env.bool("DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", default=True)  # type: ignore[no-untyped-call]
 SECURE_BROWSER_XSS_FILTER = True

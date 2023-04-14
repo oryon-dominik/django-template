@@ -11,15 +11,16 @@ class PyProjectTomlLoadException(Exception):
 
 class Base(msgspec.Struct, omit_defaults=True, forbid_unknown_fields=True, rename="kebab"):
     """A base class holding some common settings.
-        We set ``omit_defaults = True`` to omit any fields containing only their
-        default value from the output when encoding.
-        - We set ``forbid_unknown_fields = True`` to error nicely if an unknown
-        field is present in the input TOML. This helps catch typo errors early,
-        and is also required per PEP 621.
-        - We set ``rename = "kebab"`` to rename all fields to use kebab case when
-        encoding/decoding, as this is the convention used in pyproject.toml. For
-        example, this will rename ``requires_python`` to ``requires-python``.
+    We set ``omit_defaults = True`` to omit any fields containing only their
+    default value from the output when encoding.
+    - We set ``forbid_unknown_fields = True`` to error nicely if an unknown
+    field is present in the input TOML. This helps catch typo errors early,
+    and is also required per PEP 621.
+    - We set ``rename = "kebab"`` to rename all fields to use kebab case when
+    encoding/decoding, as this is the convention used in pyproject.toml. For
+    example, this will rename ``requires_python`` to ``requires-python``.
     """
+
     pass
 
 

@@ -17,5 +17,5 @@ LOGOUT_REDIRECT_URL = "api:api-root"  # "users:login"
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#login-url
 LOGIN_URL = "api:api-root"  # "users:login"
 
-ROOT_URLCONF = 'config.urls.routes'
+ROOT_URLCONF = "config.urls.routes"
 API_BASE_URL: str = env.str("API_BASE_URL", default="api")  # type: ignore[no-untyped-call]

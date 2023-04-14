@@ -8,7 +8,7 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent.parent
-APPS_DIR = ROOT_DIR / 'apps'
+APPS_DIR = ROOT_DIR / "apps"
 
 # make sure our apps & config directories are on the python path
 # This allows easy placement of apps within the interior apps directory.

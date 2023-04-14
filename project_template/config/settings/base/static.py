@@ -10,16 +10,14 @@ from . import paths
 # https://docs.djangoproject.com/en/{{ docs_version }}/howto/static-files/
 STATIC_ROOT = str(paths.ROOT_DIR / "staticfiles")
 # To use a CDN (e.g.: for whitenoise), SET a statichost, (preferably as env):
-STATIC_HOST = ''
+STATIC_HOST = ""
 # https://docs.djangoproject.com/en/{{ docs_version }}/howto/static-files/
 STATIC_URL = f"{STATIC_HOST}/assets/"
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
-STATICFILES_DIRS = [
-    str(paths.ROOT_DIR / "assets")
-]
+STATICFILES_DIRS = [str(paths.ROOT_DIR / "assets")]
 # See: https://docs.djangoproject.com/en/{{ docs_version }}/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = [
-    'django.contrib.staticfiles.finders.FileSystemFinder',
+    "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
     "config.finders.AssetsAppDirectoriesFinder",
 ]

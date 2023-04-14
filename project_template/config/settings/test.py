@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 from corsheaders.defaults import default_methods
 
 from .base import *  # noqa: F403 NOSONAR
+
 # ignore linting errors for undefined names (e.g. env after base * import)
 # ruff: noqa: F405
 
@@ -22,7 +23,7 @@ if READ_DOT_ENV_FILE:
         raise ValueError("Test dotenv file does not exist (create envs/test.env)")
     env.read_env(str(dotenvpath), override=True)
 
-SECRET_KEY = env.str("DJANGO_SECRET_KEY", default='{{ secret_key }}')  # type: ignore[no-untyped-call]
+SECRET_KEY = env.str("DJANGO_SECRET_KEY", default="{{ secret_key }}")  # type: ignore[no-untyped-call]
 
 # =====PROJECT-SPECIFIC-SETTINGS===============================================
 # add project specific production settings here
@@ -39,15 +40,15 @@ DEBUG = False
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#test-runner
 IS_TESTING = True
 
-ALLOWED_HOSTS = ['testserver']
+ALLOWED_HOSTS = ["testserver"]
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_METHODS = list(default_methods)
 
 INSTALLED_APPS += []
 
-CACHES['jwt-blacklist']['BACKEND'] = 'django.core.cache.backends.locmem.LocMemCache'
+CACHES["jwt-blacklist"]["BACKEND"] = "django.core.cache.backends.locmem.LocMemCache"
 
-TEST_RUNNER = 'test.runners.PytestTestRunner'
+TEST_RUNNER = "test.runners.PytestTestRunner"
 TEST_FAKER_SEED = 1337
 
 # EMAIL
@@ -62,4 +63,4 @@ EMAIL_PORT = 1025
 # Make tests faster by using a noop hasher
 PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
 
-LOGGING['loggers']['django.db.backends']['level'] = 'INFO'
+LOGGING["loggers"]["django.db.backends"]["level"] = "INFO"

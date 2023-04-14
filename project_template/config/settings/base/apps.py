@@ -7,9 +7,7 @@
 # -----------------------------------------------------------------------------
 # ! order is important
 # project specific apps
-CORE_APPS: list[str] = [
-    "core.app.CoreConfig"
-]
+CORE_APPS: list[str] = ["core.app.CoreConfig"]
 PROJECT_APPS: list[str] = [
     # "apps.things.apps.ThingsConfig",
 ]
@@ -20,20 +18,20 @@ LOCAL_APPS: list[str] = [
 ]
 DJANGO_APPS: list[str] = [
     # default django-apps
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
 ]
 THIRD_PARTY_APPS: list[str] = [
     "crispy_forms",
     "crispy_tailwind",
     "django_extensions",
-    'widget_tweaks',
+    "widget_tweaks",
     # 'rest_framework',
-    'corsheaders',
+    "corsheaders",
     # 'django_vite',
 ]
 # See: https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#installed-apps

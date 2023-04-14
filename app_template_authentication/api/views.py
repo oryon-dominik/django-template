@@ -42,38 +42,38 @@ class AuthTokenLogin(APIView):
 
         Return JWT-Authentication access-token in the header and refrseh token in the json response.
         """
-        email = request.data.get('email')
-        password = request.data.get('password')
+        email = request.data.get("email")
+        password = request.data.get("password")
 
         user: User | None = get_user_by_email(email=email)
         if user is None:
-            return Response({'error': MSG_AUTHENTICATION_FAILED}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": MSG_AUTHENTICATION_FAILED}, status=status.HTTP_401_UNAUTHORIZED)
         if user.is_active is False:
-            return Response({'error': MSG_AUTHENTICATION_FAILED}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": MSG_AUTHENTICATION_FAILED}, status=status.HTTP_401_UNAUTHORIZED)
         if user.check_password(password) is False:
-            return Response({'error': MSG_AUTHENTICATION_FAILED}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": MSG_AUTHENTICATION_FAILED}, status=status.HTTP_401_UNAUTHORIZED)
 
-        assert hasattr(user, 'email')  # Should be enforced by the user model.
+        assert hasattr(user, "email")  # Should be enforced by the user model.
         assert user.email  # Should be enforced by the user model.
 
         now = timezone.now()
 
         signature = tokens.urlsafe_token(8)
         access_token: tokens.JWTAccessToken = tokens.jwt_token(
-            tokentype='access',
+            tokentype="access",
             signature=signature,
             email=user.email,
             now=now,
             expires_in=tokens.DEFAULT_JWT_TOKEN_ACCESS_EXPIRATION_MINUTES,
         )
         refresh_token: tokens.JWTAccessToken = tokens.jwt_token(
-            tokentype='refresh',
+            tokentype="refresh",
             signature=signature,
             email=user.email,
             now=now,
-            expires_in=tokens.DEFAULT_JWT_TOKEN_REFRESH_EXPIRATION_MINUTES
+            expires_in=tokens.DEFAULT_JWT_TOKEN_REFRESH_EXPIRATION_MINUTES,
         )
-        response = JsonResponse({'refresh': f'{refresh_token}'})
+        response = JsonResponse({"refresh": f"{refresh_token}"})
         response.set_cookie(
             key=tokens.DEFAULT_JWT_TOKEN_COOKIE_KEY,
             value=f"Bearer {access_token}",
@@ -100,10 +100,10 @@ class AuthTokenVerify(APIView):
         try:
             user, token = JWTAuthentication().authenticate(request=request)
         except NotAuthenticated:
-            return Response({'error': MSG_VERIFICATION_FAILED}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": MSG_VERIFICATION_FAILED}, status=status.HTTP_401_UNAUTHORIZED)
         if user is None or token is None:
-            return Response({'error': MSG_VERIFICATION_FAILED}, status=status.HTTP_401_UNAUTHORIZED)
-        return Response({'detail': "Token is valid."}, status=status.HTTP_200_OK)
+            return Response({"error": MSG_VERIFICATION_FAILED}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response({"detail": "Token is valid."}, status=status.HTTP_200_OK)
 
 
 @middleware_on_class(EnsureCsrfCookie)
@@ -116,25 +116,29 @@ class AuthTokenRefresh(APIView):
     def get(self, request):
         csrf = get_csrf_token(request)
         # ensuring csrf cookie is set
-        request.COOKIES.update(cookies.SimpleCookie({'CSRF': f'{csrf}'}))
-        return JsonResponse({'detail': 'post your refresh-token to get a new access token.'})
+        request.COOKIES.update(cookies.SimpleCookie({"CSRF": f"{csrf}"}))
+        return JsonResponse({"detail": "post your refresh-token to get a new access token."})
 
     def post(self, request):
         """
         Refresh a token.
         """
-        authentication_failed_repsonse = Response({'error': MSG_AUTHENTICATION_FAILED}, status=status.HTTP_401_UNAUTHORIZED)
+        authentication_failed_repsonse = Response(
+            {"error": MSG_AUTHENTICATION_FAILED}, status=status.HTTP_401_UNAUTHORIZED
+        )
 
-        refresh_token = request.data.get('refresh')
+        refresh_token = request.data.get("refresh")
         if refresh_token is None:
             return authentication_failed_repsonse
-        if caches['jwt-blacklist'].get(refresh_token[:247]):
+        if caches["jwt-blacklist"].get(refresh_token[:247]):
             return authentication_failed_repsonse
         try:
-            payload: dict = jwt.decode(token=refresh_token, key=settings.SECRET_KEY, algorithms=[tokens.DEFAULT_JWT_TOKEN_ALGORITHM])
+            payload: dict = jwt.decode(
+                token=refresh_token, key=settings.SECRET_KEY, algorithms=[tokens.DEFAULT_JWT_TOKEN_ALGORITHM]
+            )
         except JWTError:
             return authentication_failed_repsonse
-        if payload['type'] != 'refresh':
+        if payload["type"] != "refresh":
             return authentication_failed_repsonse
 
         # the access token shall still be included in the cookie
@@ -144,38 +148,40 @@ class AuthTokenRefresh(APIView):
         if tokens.DEFAULT_JWT_TOKEN_PREFIX.lower() not in authentication.lower():
             return authentication_failed_repsonse
 
-        access_token: tokens.JWTAccessToken = authentication.removeprefix(f'{tokens.DEFAULT_JWT_TOKEN_PREFIX} ')  # ! note that the space is required
+        access_token: tokens.JWTAccessToken = authentication.removeprefix(
+            f"{tokens.DEFAULT_JWT_TOKEN_PREFIX} "
+        )  # ! note that the space is required
 
         # now we validate the random signature included upon creation
         acccess_payload = tokens.insecure_decode_jwt_token(access_token, force=True)
-        if payload['signature'] != acccess_payload['signature']:
+        if payload["signature"] != acccess_payload["signature"]:
             return authentication_failed_repsonse
 
-        user = get_user_by_email(email=payload['sub'])
+        user = get_user_by_email(email=payload["sub"])
         if user is None:
             return authentication_failed_repsonse
         if user.is_active is False:
             return authentication_failed_repsonse
-        assert hasattr(user, 'email')  # Should be enforced by the user model.
+        assert hasattr(user, "email")  # Should be enforced by the user model.
         assert user.email  # Should be enforced by the user model.
         now = timezone.now()
 
         signature = tokens.urlsafe_token(8)
         access_token: tokens.JWTAccessToken = tokens.jwt_token(
-            tokentype='access',
+            tokentype="access",
             signature=signature,
             email=user.email,
             now=now,
             expires_in=tokens.DEFAULT_JWT_TOKEN_ACCESS_EXPIRATION_MINUTES,
         )
         refresh_token: tokens.JWTAccessToken = tokens.jwt_token(
-            tokentype='refresh',
+            tokentype="refresh",
             signature=signature,
             email=user.email,
             now=now,
-            expires_in=tokens.DEFAULT_JWT_TOKEN_REFRESH_EXPIRATION_MINUTES
+            expires_in=tokens.DEFAULT_JWT_TOKEN_REFRESH_EXPIRATION_MINUTES,
         )
-        response = JsonResponse({'refresh': f'{refresh_token}'})
+        response = JsonResponse({"refresh": f"{refresh_token}"})
         response.set_cookie(
             key=tokens.DEFAULT_JWT_TOKEN_COOKIE_KEY,
             value=f"Bearer {access_token}",
@@ -199,23 +205,37 @@ class AuthTokenLogout(APIView):
         Logout a user by removing the access token from the cookie.
         The refresh token is also blacklisted, and should be provided by the client.
         """
-        access_token = request.COOKIES.get(tokens.DEFAULT_JWT_TOKEN_COOKIE_KEY).removeprefix(f'{tokens.DEFAULT_JWT_TOKEN_PREFIX} ')
-        refresh_token = request.data.get('refresh')
-        caches['jwt-blacklist'].set(access_token[:247], True, timeout=tokens.DEFAULT_JWT_TOKEN_ACCESS_EXPIRATION_MINUTES)
+        access_token = request.COOKIES.get(tokens.DEFAULT_JWT_TOKEN_COOKIE_KEY).removeprefix(
+            f"{tokens.DEFAULT_JWT_TOKEN_PREFIX} "
+        )
+        refresh_token = request.data.get("refresh")
+        caches["jwt-blacklist"].set(
+            access_token[:247], True, timeout=tokens.DEFAULT_JWT_TOKEN_ACCESS_EXPIRATION_MINUTES
+        )
         if refresh_token is not None:
-            caches['jwt-blacklist'].set(refresh_token[:247], True, timeout=tokens.DEFAULT_JWT_TOKEN_REFRESH_EXPIRATION_MINUTES)
+            caches["jwt-blacklist"].set(
+                refresh_token[:247], True, timeout=tokens.DEFAULT_JWT_TOKEN_REFRESH_EXPIRATION_MINUTES
+            )
 
         try:
-            payload: dict = jwt.decode(token=access_token, key=settings.SECRET_KEY, algorithms=[tokens.DEFAULT_JWT_TOKEN_ALGORITHM])
-            user = get_user_by_email(email=payload['sub'])
+            payload: dict = jwt.decode(
+                token=access_token, key=settings.SECRET_KEY, algorithms=[tokens.DEFAULT_JWT_TOKEN_ALGORITHM]
+            )
+            user = get_user_by_email(email=payload["sub"])
         except JWTError:
             user = None
 
         if refresh_token is None:
-            response = JsonResponse({'error': "Logout failed. Provide the users refresh token for a proper logout."}, status=status.HTTP_400_BAD_REQUEST)
+            response = JsonResponse(
+                {"error": "Logout failed. Provide the users refresh token for a proper logout."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
             # logout anyway
         else:
-            response = JsonResponse({'detail': "Successfully logged out.", "redirect": reverse(settings.LOGOUT_REDIRECT_URL)}, status=status.HTTP_200_OK)
+            response = JsonResponse(
+                {"detail": "Successfully logged out.", "redirect": reverse(settings.LOGOUT_REDIRECT_URL)},
+                status=status.HTTP_200_OK,
+            )
 
         response.delete_cookie(
             key=tokens.DEFAULT_JWT_TOKEN_COOKIE_KEY,
@@ -232,6 +252,7 @@ class AuthTokenLogout(APIView):
             request.session.flush()
         if hasattr(request, "user"):
             from django.contrib.auth.models import AnonymousUser
+
             request.user = AnonymousUser()
 
         return response
