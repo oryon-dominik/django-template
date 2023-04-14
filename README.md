@@ -79,8 +79,16 @@ If you only use one worker, you might want to switch to memory for development.
 
 - Add `'apps.<app_name>.apps.<app_name.capitalize()>Config'` to `LOCAL_APPS` or `PROJECT_APPS` in `config.settings.base.py`.  
 - Add the apps routes to `urlpatterns` in `config.urls.py` like this: `path('', include('apps.<app_name>.api.urls', namespace="<app_name>")),`.  
+- Create a frontend
+    yarn add vite
+    yarn add @vitejs/plugin-vue
+    yarn add vue
 
 
+## Caveats
+
+The .pre-commit-config.yaml mypy hook needs a lot of dependencies, so you might
+want to clean it up a bit if your just using the minimal template.
 
 ## Credits
 
