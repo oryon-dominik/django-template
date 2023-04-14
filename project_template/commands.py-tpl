@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# coding: utf-8
 
 """Typer cli interface to manage the dev-environment"""
 
@@ -93,12 +92,65 @@ def run_command(command, debug=False, cwd=CWD, env=env_with_pythonpath(), shell=
         print(f"The command {command} threw a FileNotFoundError")
 
 
+def rename_file_suffix(path: Path, new_suffix: str):
+    path.rename(path.with_suffix(new_suffix))
+
+
+def walk_rename(source: str = "", target: str = "", directory: Path = CWD):
+    """
+    Walks through a directory recursively and renames all files with a given
+    extension to another extension.
+    """
+    renamed = []
+    source = ".py" if source == "" else source
+    target = ".py-tpl" if target == "" else target
+
+    for path in directory.iterdir():
+        if path.is_dir():
+            walk_rename(source=source, target=target, directory=path)
+        elif path.is_file() and path.suffix == source:
+            renamed.append(rename_file_suffix(path=path, new_suffix=target))
+
+    return renamed
+
+
+def formatcode(templates: bool = False):
+    """
+    # rename step 1: all py-tpl to py to format them, remember their path
+    # rename step 2: all py to py-tpl to commit them again
+    """
+    renamed = []
+    if templates:
+        renamed = walk_rename(source=".py-tpl", target=".py", directory=CWD)
+
+    command = "black ."
+    run_command(command, debug=DEBUG)
+    command = "isort ."
+    run_command(command, debug=DEBUG)
+    command = "flake8"
+    run_command(command, debug=DEBUG)
+    command = "mypy ."
+    run_command(command, debug=DEBUG)
+    command = "ruff check ."
+    run_command(command, debug=DEBUG)
+
+    if templates:
+        for path in renamed:
+            rename_file_suffix(path=path, new_suffix=".py-tpl")
+
+
 # ----------GENERAL COMMANDS----------------------------------------------------
 @cli.command()
 def clean():
     """Cleaning pycache, buildfiles"""
     clean_build()
     clean_pyc()
+
+
+@cli.command()
+def check(templates: bool = False):
+    """Format & check the code"""
+    formatcode(templates=templates)
 
 
 # ---------- INTROSPECTION ----------------------------------------------------
