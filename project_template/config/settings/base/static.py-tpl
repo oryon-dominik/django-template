@@ -34,3 +34,4 @@ MEDIA_URL = f"{STATIC_HOST}/media/"
 
 if vite is not None:
     STATICFILES_DIRS += [f"{vite.DJANGO_VITE_ASSETS_PATH}"]
+    STATICFILES_FINDERS += ["config.settings.base.thirdparty.vite.ViteFrontendFinder"]
