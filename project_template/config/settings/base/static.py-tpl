@@ -2,8 +2,16 @@
 # These settings are imported in the __init__.py of the base directory explicitly.
 # To add a new setting, also edit the __init__.py
 # -----------------------------------------------------------------------------
+from importlib import import_module
+from types import ModuleType
+
 from . import paths
 
+vite: ModuleType | None
+try:
+    vite = import_module("config.settings.base.thirdparty.vite")
+except ImportError:
+    vite = None
 
 # STATIC files (CSS, JavaScript, Images)
 # -----------------------------------------------------------------------------
@@ -23,3 +31,6 @@ STATICFILES_FINDERS = [
 ]
 MEDIA_ROOT = str(paths.ROOT_DIR / "media")
 MEDIA_URL = f"{STATIC_HOST}/media/"
+
+if vite is not None:
+    STATICFILES_DIRS += [f"{vite.DJANGO_VITE_ASSETS_PATH}"]

@@ -79,11 +79,9 @@ If you only use one worker, you might want to switch to memory for development.
 
 - Add `'apps.<app_name>.apps.<app_name.capitalize()>Config'` to `LOCAL_APPS` or `PROJECT_APPS` in `config.settings.base.py`.  
 - Add the apps routes to `urlpatterns` in `config.urls.py` like this: `path('', include('apps.<app_name>.api.urls', namespace="<app_name>")),`.  
-- Create a frontend
-    yarn add vite
-    yarn add @vitejs/plugin-vue
-    yarn add vue
-
+- Create a frontend in `./frontend`, compiling to `./frontend/dist`.
+- You might clone the [vuejs-template](https://github.com/oryon-dominik/vuejs-in-django-template/) for a quick start.
+    git clone https://github.com/oryon-dominik/skeleton-vuejs-djangoexample/ ./frontend
 
 ## Caveats
 

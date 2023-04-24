@@ -1,0 +1,21 @@
+{% extends 'vueindjango/base.html.djt' %}
+{% load django_vite %}
+
+{% block header %}
+  {% vite_hmr_client %}
+  {% vite_asset '/src/main.ts' %}
+{% endblock %}
+
+{% block content %}
+
+{{ vue_message|json_script:"vue-message"}}
+
+<h1 class="text-3xl font-bold text-cyan-500">{{ django_message }}</h1>
+
+<p>This page has been generated from a Django template.</p>
+<p>The CSS was loaded by Vite.</p>
+<p>Everything inside the box was rendered by Vue.</p>
+<br>
+<div id="app"></div>
+
+{% endblock %}

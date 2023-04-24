@@ -1,1 +1,11 @@
-# Create your views here.
+from django.views.generic import TemplateView
+
+
+class VueInDjangoView(TemplateView):
+    template_name = "{{ app_name }}/vue-integration.html.djt"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["django_message"] = "Hello from Django!"
+        context["vue_message"] = "This message has been passed to a Vue component from a Django view."
+        return context
