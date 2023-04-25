@@ -27,6 +27,9 @@ For any subsequent command (creating apps..) *install the dependencies* and *act
 
 ### CLI Project
 
+    django-admin startproject --template https://github.com/oryon-dominik/django-template/releases/download/latest/project_template_cli.zip --extension=py,md,toml,. <project_name> <directory>
+
+
 ## Django Apps
 
 ### Default App

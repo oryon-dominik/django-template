@@ -1,0 +1,48 @@
+# -- GIT is ignoring --
+
+# Git itself
+.git/
+
+# Logs
+**/logs/*.log
+
+# Editor settings
+.vscode/
+
+# Database
+database/sqlite3.db
+# don't ignore migrations
+!**/migrations/__init__.py
+
+# Environment
+.env
+.secretkey
+production.env
+
+# Static files
+staticfiles
+
+# ===================
+## Python
+# ===================
+__pycache__
+*.py[cod]
+# Keep keep.pyc to allow empty Django-template directories to be committed to git.
+!**/keep.pyc
+.pytest_cache
+.ruff_cache
+.mypy_cache
+
+# Jupyter
+.ipynb_checkpoints/
+.ipython/
+
+# ===================
+## Tyepscript Frontend
+# ===================
+# TBD: You might want to gitignore the frontend explicitly
+# (e.g. cloning from a different origin)
+# frontend/
+**/node_modules/
+frontend/dist/
+.env.production

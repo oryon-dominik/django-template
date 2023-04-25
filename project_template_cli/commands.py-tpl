@@ -1,0 +1,291 @@
+#!/usr/bin/env python3
+
+"""Typer cli interface to manage the dev-environment"""
+
+import os
+import subprocess
+import webbrowser
+from pathlib import Path
+
+import typer
+
+
+try:
+    from rich import print  # noqa
+except ImportError:
+    pass
+
+
+# --------- CONFIG -------------------------------------------------------------
+cli = typer.Typer()
+DEBUG = True
+CWD = Path(__file__).parent
+MANAGE = "python manage.py"
+
+
+# --------- HELPERS -----------------------------------------------------------
+def env_with_pythonpath():
+    """Get en environment dict with includes PYTHONPATH"""
+    env = os.environ.copy()
+    wd = str(CWD.resolve())
+    if wd not in env["PATH"]:
+        env["PATH"] += wd
+    return env
+
+
+def delete_folder(path: Path):
+    for element in path.iterdir():
+        if element.is_dir():
+            delete_folder(element)
+        else:
+            element.unlink()
+    path.rmdir()
+
+
+def clean_build():
+    print("Unlinking build-files: build/; dist/ *.egg-info; __pycache__;")
+    cwd = Path(CWD)
+    [delete_folder(p) for p in cwd.rglob("build")]
+    [delete_folder(p) for p in cwd.rglob("*.egg-info")]
+    [delete_folder(p) for p in cwd.rglob("__pycache__")]
+    [delete_folder(p) for p in cwd.rglob(".ruff_cache")]
+    try:
+        [delete_folder(p) for p in cwd.rglob("dist")]
+    except OSError as err:
+        print(f"Error deleting dist-folder: {err}")
+
+
+def clean_pyc():
+    print("Unlinking caches: *.pyc; *pyo; *~;")
+    [p.unlink() for p in Path(CWD).rglob("*.py[co]")]
+    [p.unlink() for p in Path(CWD).rglob("*~")]
+
+
+def create_vital_files_and_directories():
+    print("Creating vital files and directories for dev:")
+    # directories
+    assets = CWD / "assets"
+    database = CWD / "database"
+    logs = CWD / "logs"
+    media = CWD / "media"
+    # files
+    production_dotenv = CWD / "envs" / "production.env"
+
+    [path.mkdir(parents=True, exist_ok=True) for path in (logs, media, assets, database)]
+    [path.touch(exist_ok=True) for path in (production_dotenv,)]
+
+
+def run_command(command, debug=False, cwd=CWD, env=env_with_pythonpath(), shell=True):
+    """
+    Run a command in a subprocess.
+
+    If debug is True, print the command before running it.
+    cwd is the working directory for the command.
+    env is the os environment for the command.
+    If shell is True it will run the command with the venv.
+    """
+    if debug:
+        print(f">>> Running command: {command}")
+    try:
+        subprocess.run(command.split(), cwd=cwd, env=env, shell=shell)
+    except FileNotFoundError:
+        print(f"The command {command} threw a FileNotFoundError")
+
+
+def rename_file_suffix(path: Path, new_suffix: str):
+    return path.rename(path.with_suffix(new_suffix))
+
+
+def walk_rename(source: str = "", target: str = "", directory: Path = CWD):
+    """
+    Walks through a directory recursively and renames all files with a given
+    extension to another extension.
+    """
+    renamed = []
+    source = ".py" if source == "" else source
+    target = ".py-tpl" if target == "" else target
+
+    for path in directory.iterdir():
+        if path.is_dir():
+            renamed += walk_rename(source=source, target=target, directory=path)
+        elif path.is_file() and path.suffix == source and path != Path(__file__):
+            renamed.append(rename_file_suffix(path=path, new_suffix=target))
+
+    return renamed
+
+
+def formatcode(templates: bool = False):
+    """
+    # rename step 1: all py-tpl to py to format them, remember their path
+    # rename step 2: all py to py-tpl to commit them again
+    """
+    renamed = []
+    if templates:
+        renamed = walk_rename(source=".py-tpl", target=".py", directory=CWD)
+
+    command = "black ."
+    run_command(command, debug=DEBUG)
+    command = "isort ."
+    run_command(command, debug=DEBUG)
+    command = "flake8"
+    run_command(command, debug=DEBUG)
+    command = "mypy ."
+    run_command(command, debug=DEBUG)
+    command = "ruff check ."
+    run_command(command, debug=DEBUG)
+
+    if templates:
+        for path in renamed:
+            rename_file_suffix(path=path, new_suffix=".py-tpl")
+
+
+# ----------GENERAL COMMANDS----------------------------------------------------
+@cli.command()
+def clean():
+    """Cleaning pycache, buildfiles"""
+    clean_build()
+    clean_pyc()
+
+
+@cli.command()
+def check(templates: bool = False):
+    """Format & check the code"""
+    formatcode(templates=templates)
+
+
+# ---------- INTROSPECTION ----------------------------------------------------
+@cli.command()
+def readme():
+    """README"""
+    with open("README.md") as file:
+        content = file.read()
+    try:
+        from rich.markdown import Markdown
+    except ImportError:
+        print("Install rich to render README.md as markdown.")
+        print(content)
+    else:
+        markdown = Markdown(content)
+        print(markdown)
+
+
+# ---------- MANAGE THE DATABASE AND OTHER COMMANDS ---------------------------
+@cli.command()
+def makemigrations():
+    """
+    Django Makemigrations .
+    """
+    command = f"{MANAGE} makemigrations"
+    run_command(command, debug=DEBUG)
+
+
+@cli.command()
+def migrate():
+    """
+    Django Migrate.
+    """
+    command = f"{MANAGE} migrate"
+    run_command(command, debug=DEBUG)
+
+
+@cli.command()
+def collectstatic():
+    command = f"{MANAGE} collectstatic --noinput --clear --verbosity 0"
+    print("Collecting static files and clearing the old clutter.. ")
+    run_command(command, debug=DEBUG)
+    print("Staticfiles collected.")
+
+
+# ---------- SERVER -----------------------------------------------------------
+@cli.command()
+def run():
+    """
+    Run the dev server.
+    """
+    command = f"{MANAGE} runserver"
+    run_command(command, debug=DEBUG)
+
+
+@cli.command()
+def notebook():
+    """
+    Run the notebook server.
+    """
+    command = f"{MANAGE} shell_plus --notebook"
+    run_command(command, debug=DEBUG)
+
+
+# ---------- TESTS ------------------------------------------------------------
+@cli.command()
+def test():
+    command = "python -m pytest"
+    run_command(command, debug=DEBUG)
+
+
+@cli.command()
+def coverage():
+    """
+    Run and show coverage.
+    """
+    commands = [
+        "coverage run --module pytest",
+        "coverage report -mi",
+        "coverage html",
+    ]
+    for command in commands:
+        run_command(command, debug=DEBUG)
+    coverage_index_file_url = f'file://{(CWD / "htmlcov" / "index.html").resolve()}'
+    webbrowser.open_new_tab(coverage_index_file_url)
+
+
+# ---------- ABBREVIATIONS ----------------------------------------------------
+@cli.command()
+def mm():
+    """= makemigrations"""
+    makemigrations()
+
+
+@cli.command()
+def mig():
+    """= migrate"""
+    migrate()
+
+
+@cli.command()
+def mmm():
+    """= makemigrations + migrate"""
+    makemigrations()
+    migrate()
+
+
+@cli.command()
+def nb():
+    """= notebook (start the notebook server)"""
+    notebook()
+
+
+@cli.command()
+def up():
+    """= run (start the devserver)"""
+    run()
+
+
+# ---------- LINTING ----------------------------------------------------------
+@cli.command()
+def black(path: str = typer.Argument(None)):
+    """black <path>"""
+    command = "black"
+    if path is not None:
+        command = f"{command} {path}"
+    run_command(command, debug=DEBUG)
+
+
+@cli.command()
+def mypy():
+    """Run Mypy (configured in pyproject.toml)"""
+    command = "mypy ."
+    run_command(command)
+
+
+if __name__ == "__main__":
+    cli()
