@@ -50,4 +50,5 @@ jobs:
             app_template_authentication.zip
             app_template_simple_crud_templates.zip
             app_template_vuejs_templates.zip
-            project_template.zip
+            project_template_django.zip
+            project_template_cli.zip
