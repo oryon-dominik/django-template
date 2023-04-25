@@ -10,16 +10,8 @@ class AbstractBaseUserWithPermissionsType(PermissionsMixin, AbstractBaseUser):  
     - and neccessary permissions.
     """
 
-    email: str
+    ...
 
 
-class AbstractBaseUserType(AbstractBaseUser):  # type: ignore[misc]
-    """
-    The user is atleast an AbstractBaseUser and has an email field.
-    """
-
-    email: str
-
-
-UserType: TypeAlias = AbstractBaseUserType
+UserType: TypeAlias = AbstractBaseUser
 AdminUserType: TypeAlias = AbstractBaseUserWithPermissionsType
