@@ -5,7 +5,7 @@ from faker import Factory as FakerFactory
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
-from core.typehints import User, AdminUser
+from core.typehints import UserType, AdminUserType
 
 
 # for all providers see: https://faker.readthedocs.io/en/master/providers.html
@@ -23,7 +23,7 @@ def generic_user_factory(
     password: str = "",
     is_staff: bool = False,
     is_active: bool = False,
-) -> User:
+) -> UserType:
     """
     User factory.
     Produces a generic the user fixture
@@ -59,12 +59,12 @@ def admin_user_factory(
     password: str = "",
     is_staff: bool = False,
     is_active: bool = False,
-) -> AdminUser:
+) -> AdminUserType:
     """
     AdminUser factory.
     Produces an adminuser fixture
     """
-    user: AdminUser = generic_user_factory(
+    user: AdminUserType = generic_user_factory(
         first_name=first_name,
         last_name=last_name,
         username=username,

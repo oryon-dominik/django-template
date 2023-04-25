@@ -17,16 +17,16 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.http import http_date
 
-from core.crud.users import get_user_by_email, UserModel
+from core.crud.users import get_user_by_email
 from core.cypher import tokens
 from core.middlewares.csrf import EnsureCsrfCookie
 from core.middlewares.decorators import middleware_on_class
+from core.typehints import UserType
 
 from .backends import MSG_AUTHENTICATION_FAILED, MSG_VERIFICATION_FAILED, JWTAuthentication
 
 
 log = logging.getLogger("django")
-User: TypeAlias = UserModel
 
 
 class AuthTokenLogin(APIView):
@@ -45,7 +45,7 @@ class AuthTokenLogin(APIView):
         email = request.data.get("email")
         password = request.data.get("password")
 
-        user: User | None = get_user_by_email(email=email)
+        user: UserType | None = get_user_by_email(email=email)
         if user is None:
             return Response({"error": MSG_AUTHENTICATION_FAILED}, status=status.HTTP_401_UNAUTHORIZED)
         if user.is_active is False:

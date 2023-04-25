@@ -7,13 +7,14 @@ from rest_framework.exceptions import NotAuthenticated
 from django.conf import settings
 from django.core.cache import caches
 
-from core.crud.users import get_user_by_email, UserModel
+from core.crud.users import get_user_by_email
 from core.cypher import tokens
+from core.typehints import UserType
 
 
 MSG_AUTHENTICATION_FAILED = "Authentication failed"
 MSG_VERIFICATION_FAILED = "Verification failed"
-User: TypeAlias = UserModel
+
 
 
 class JWTAuthentication(authentication.BaseAuthentication):
@@ -32,7 +33,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
 
     """
 
-    def authenticate(self, request) -> tuple[User, tokens.JWTAccessToken]:
+    def authenticate(self, request) -> tuple[UserType, tokens.JWTAccessToken]:
         """
         Authenticate the request and return a two-tuple of (user, None).
         """
