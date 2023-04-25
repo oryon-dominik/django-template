@@ -1,0 +1,8 @@
+# Settings are imported here to make them available for django.conf.settings
+# so, ignore linting errors for unused imports
+# ruff: noqa: F401
+
+# try:
+#     from .foo import BAR  # noqa # pylint: disable=unused-import
+# except ImportError:
+#     pass

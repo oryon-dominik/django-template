@@ -178,6 +178,7 @@ extend-ignore = [
 per-file-ignores = [
   "config/settings/base/__init__.py:F401",
   "config/settings/base/thirdparty/__init__.py:F401",
+  "config/settings/base/{{ projectname }}/__init__.py:F401",
   "config/settings/develop.py:F405",
   "config/settings/production.py:F405",
   "config/settings/test.py:F405",
