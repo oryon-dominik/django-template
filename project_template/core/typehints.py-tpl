@@ -8,6 +8,6 @@ class AbstractBaseUserWithPermissions(PermissionsMixin, AbstractBaseUser):  # ty
 
 
 # The user is atleast an AbstractBaseUser
-User: TypeAlias = AbstractBaseUser
+UserType: TypeAlias = AbstractBaseUser
 # The adminuser is atleast an AbstractBaseUserWithPermissions
-AdminUser: TypeAlias = AbstractBaseUserWithPermissions
+AdminUserType: TypeAlias = AbstractBaseUserWithPermissions
