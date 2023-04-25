@@ -1,5 +1,3 @@
-from typing import TypeAlias
-
 from jose import jwt, JWTError
 from rest_framework import authentication, status
 from rest_framework.exceptions import NotAuthenticated

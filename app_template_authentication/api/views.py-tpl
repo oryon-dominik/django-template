@@ -1,6 +1,5 @@
 import logging
 from http import cookies
-from typing import TypeAlias
 
 from jose import jwt, JWTError
 from rest_framework import status
