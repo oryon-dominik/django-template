@@ -49,6 +49,7 @@ def clean_build():
     [delete_folder(p) for p in cwd.rglob("*.egg-info")]
     [delete_folder(p) for p in cwd.rglob("__pycache__")]
     [delete_folder(p) for p in cwd.rglob(".ruff_cache")]
+    [delete_folder(p) for p in cwd.rglob(".mypy_cache")]
     try:
         [delete_folder(p) for p in cwd.rglob("dist")]
     except OSError as err:
