@@ -90,12 +90,15 @@ If you only use one worker, you might want to switch to memory for development.
 - Add the apps routes to `urlpatterns` in `config.urls.py` like this: `path('', include('apps.<app_name>.api.urls', namespace="<app_name>")),`.  
 - Create a frontend in `./frontend`, compiling to `./frontend/dist`.
 - You might clone the [vuejs-template](https://github.com/oryon-dominik/vuejs-in-django-template/) for a quick start.
+
     git clone https://github.com/oryon-dominik/skeleton-vuejs-djangoexample/ ./frontend
+
 
 ## Caveats
 
 The .pre-commit-config.yaml mypy hook needs a lot of dependencies, so you might
 want to clean it up a bit if your just using the minimal template.
+
 
 ## Credits
 
