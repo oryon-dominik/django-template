@@ -36,7 +36,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
         Authenticate the request and return a two-tuple of (user, None).
         """
         credentials_exception = NotAuthenticated(
-            code=status.HTTP_401_UNAUTHORIZED,
+            code=f"{status.HTTP_401_UNAUTHORIZED}",
             detail=MSG_AUTHENTICATION_FAILED,
         )
 
