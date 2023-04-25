@@ -1,10 +1,12 @@
-from django.urls import path
+# from django.urls import path
+from core.typehints import URLType
 
-from . import views
+
+# from . import views
 
 
 app_name = "{{ app_name }}"
 
-urlpatterns = [
+urlpatterns: list[URLType] = [
     # path("example/", views.Example.as_view(), name="example")
 ]

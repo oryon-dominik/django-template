@@ -1,6 +1,6 @@
 from rest_framework import routers
 
-from . import views
+# from . import views
 
 
 # automatic URL routing

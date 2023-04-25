@@ -1,6 +1,10 @@
 from typing import TypeAlias
 
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.urls import (
+    URLResolver,
+    URLPattern,
+)
 
 
 class AbstractBaseUserWithPermissionsType(PermissionsMixin, AbstractBaseUser):  # type: ignore[misc]
@@ -15,3 +19,5 @@ class AbstractBaseUserWithPermissionsType(PermissionsMixin, AbstractBaseUser):  
 
 UserType: TypeAlias = AbstractBaseUser
 AdminUserType: TypeAlias = AbstractBaseUserWithPermissionsType
+
+URLType: TypeAlias = URLResolver | URLPattern
