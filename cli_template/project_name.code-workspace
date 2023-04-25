@@ -1,0 +1,51 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        // * files ////////////////////////////////////////////////////////////
+        "files.autoSave": "onFocusChange",
+        "files.eol": "\n",
+        "files.exclude": {
+            "**/__pycache__": true,
+            "**/.pytest_cache": true,
+            "**/.ipynb_checkpoints/": true,
+            "**/.ruff_cache": true,
+            "**/.mypy_cache": true,
+            ".vscode/": true,
+        },
+        // * python ///////////////////////////////////////////////////////////
+        "python.envFile": "${workspaceFolder}/envs/production.env",
+        "python.terminal.activateEnvironment": true,
+        // black-settings
+        "python.formatting.provider": "black",
+        "python.formatting.blackArgs": ["--diff", "--isort", "--line-length", "119"],
+        // testing-settings
+        "python.testing.cwd": "${workspaceFolder}/",
+        "python.testing.unittestEnabled": false,
+        "python.testing.nosetestsEnabled": false,
+        "python.testing.pytestEnabled": true,
+        // "python.testing.pytestArgs": [
+        // ],
+        "python.testing.autoTestDiscoverOnSaveEnabled": false,
+        // to support fast loading in the editor
+        "python.analysis.extraPaths": ["."],
+    },
+    "launch": {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "Python: pytest",
+                "type": "python",
+                "request": "launch",
+                "module": "pytest",
+                "console": "integratedTerminal",
+                "args": [
+                    // "test",
+                ],
+            },
+        ]
+    }
+}

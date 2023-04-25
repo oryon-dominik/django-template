@@ -32,8 +32,12 @@ jobs:
           dest: app_template_vuejs_templates.zip
       - uses: vimtor/action-zip@v1
         with:
-          files: project_template/
-          dest: project_template.zip
+          files: project_template_django/
+          dest: project_template_django.zip
+      - uses: vimtor/action-zip@v1
+        with:
+          files: project_template_cli/
+          dest: project_template_cli.zip
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"

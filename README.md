@@ -11,19 +11,25 @@ Preinstalled `Django in your local python version is required.`
 Although this should be pretty self-explanatory, please remember to replace `<project_name>` and `<app_name>` with your project/app name ;-).
 
 
-## Project:
+## Projects
 
-    django-admin startproject --template https://github.com/oryon-dominik/django-template/releases/download/latest/project_template.zip --extension=py,md,toml,. <project_name> <directory>
+### Django Project
+
+    django-admin startproject --template https://github.com/oryon-dominik/django-template/releases/download/latest/project_template_django.zip --extension=py,md,toml,. <project_name> <directory>
 
 Local python version:
 
-    python -c 'import os;import sys;from pathlib import Path;os.system(str((Path(sys.executable).parent / \"Scripts\" / \"django-admin\").resolve()) + \" startproject --template https://github.com/oryon-dominik/django-template/releases/download/latest/project_template.zip --extension=py,md,toml,. <project_name> .\")'
+    python -c 'import os;import sys;from pathlib import Path;os.system(str((Path(sys.executable).parent / \"Scripts\" / \"django-admin\").resolve()) + \" startproject --template https://github.com/oryon-dominik/django-template/releases/download/latest/project_template_django.zip --extension=py,md,toml,. <project_name> .\")'
 
 
 For any subsequent command (creating apps..) *install the dependencies* and *activate your virtual environment*.
 
 
-## Default App
+### CLI Project
+
+## Django Apps
+
+### Default App
 
 (will be created in the project's `apps` folder)
 
@@ -34,7 +40,7 @@ For any subsequent command (creating apps..) *install the dependencies* and *act
 - Add the apps routes to `urlpatterns` in `config.urls.py` like this: `path('', include('apps.<app_name>.urls', namespace="<app_name>")),`.  
 
 
-## Rest App
+### Rest App
 
 (will be created in the project's `apps` folder)
 
@@ -45,7 +51,7 @@ For any subsequent command (creating apps..) *install the dependencies* and *act
 - Add the apps routes to `urlpatterns` in `config.urls.py` like this: `path('', include('apps.<app_name>.api.urls', namespace="<app_name>")),`.  
 
 
-## Authentication App for JWT
+### Authentication App for JWT
 
 (will be created in the project's `apps` folder)
 
@@ -60,7 +66,7 @@ If you only use one worker, you might want to switch to memory for development.
     python manage.py createcachetable
 
 
-## Basic CRUD Templates Example App
+### Basic CRUD Templates Example App
 
 (will be created in the project's `apps` folder, please use a singluar name, that will be automatically pluralized - it's a crud app after all ;-] )
 
@@ -71,7 +77,7 @@ If you only use one worker, you might want to switch to memory for development.
 - Edit your `models.py` accordingly and `makemigrations` and `migrate`.  
 
 
-## Basic vuejs Templates Example App
+### Basic vuejs Templates Example App
 
 (will be created in the project's `apps` folder, please use a singluar name, that will be automatically pluralized - it's a crud app after all ;-] )
 
