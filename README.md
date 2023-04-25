@@ -13,6 +13,11 @@ Although this should be pretty self-explanatory, please remember to replace `<pr
 
 ## Projects
 
+In a new directory (or in an existing one) using a python environment, that has `Django` installed.
+
+    git init
+
+
 ### Django Project
 
     django-admin startproject --template https://github.com/oryon-dominik/django-template/releases/download/latest/project_template_django.zip --extension=py,md,toml,. <project_name> <directory>
@@ -22,7 +27,7 @@ Local python version:
     python -c 'import os;import sys;from pathlib import Path;os.system(str((Path(sys.executable).parent / \"Scripts\" / \"django-admin\").resolve()) + \" startproject --template https://github.com/oryon-dominik/django-template/releases/download/latest/project_template_django.zip --extension=py,md,toml,. <project_name> .\")'
 
 
-For any subsequent command (creating apps..) *install the dependencies* and *activate your virtual environment*.
+For any subsequent command (creating apps..) *install the dependencies* (`poetry install`) and *activate your virtual environment*.
 
 
 ### CLI Project
