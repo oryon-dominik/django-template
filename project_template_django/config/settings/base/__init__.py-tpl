@@ -31,7 +31,6 @@ from .internationalization import (
     LANGUAGE_CODE,  # noqa # pylint: disable=unused-import
     TIME_ZONE,  # noqa # pylint: disable=unused-import
     USE_I18N,  # noqa # pylint: disable=unused-import
-    USE_L10N,  # noqa # pylint: disable=unused-import
     USE_TZ,  # noqa # pylint: disable=unused-import
 )
 from .logging import (

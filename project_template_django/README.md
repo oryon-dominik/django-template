@@ -33,7 +33,7 @@ Project dependencies are managed by [poetry](https://python-poetry.org/).
     poetry run black check .
 
 ## Type checker
-    
+
     poetry run mypy --config-file pyproject.toml .
 
 
