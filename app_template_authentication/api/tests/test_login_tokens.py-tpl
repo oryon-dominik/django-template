@@ -122,7 +122,9 @@ def test_login_with_valid_credentials_and_correct_permissions_succeeds(
     headers = {"Authorization": f"Bearer {token}"}
     response = client.get(f"/{settings.API_BASE_URL}/adminprotectiontest/", headers=headers)
     assert response.status_code == 200
-    assert response.json() == {"foo": ["foo", "bar", "baz"]}
+    assert response.json() == {
+        "planets": ["mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune"]
+    }
 
 
 @pytest.mark.django_db

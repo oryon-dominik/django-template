@@ -37,8 +37,8 @@ PROJECT_FQDN = env.url("PROJECT_FQDN", default="http://localhost:8000")  # type:
 # ------------------------------------------------------------------------------
 # Turn debug off so tests run faster
 DEBUG = False
-# https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#test-runner
-IS_TESTING = True
+
+DJANGO_RUNS_IN_TESTMODE = True
 
 ALLOWED_HOSTS = ["testserver"]
 CORS_ALLOW_ALL_ORIGINS = True
@@ -48,6 +48,7 @@ INSTALLED_APPS += []
 
 CACHES["jwt-blacklist"]["BACKEND"] = "django.core.cache.backends.locmem.LocMemCache"
 
+# https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#test-runner
 TEST_RUNNER = "test.runners.PytestTestRunner"
 TEST_FAKER_SEED = 1337
 

@@ -47,8 +47,8 @@ class JWTAuthentication(authentication.BaseAuthentication):
         if tokens.DEFAULT_JWT_TOKEN_PREFIX.lower() not in authentication.lower():
             raise credentials_exception
 
-        token: tokens.JWTAccessToken = authentication.removeprefix(
-            f"{tokens.DEFAULT_JWT_TOKEN_PREFIX} "
+        token: tokens.JWTAccessToken = tokens.JWTAccessToken(
+            authentication.removeprefix(f"{tokens.DEFAULT_JWT_TOKEN_PREFIX} ")
         )  # ! note that the space is required
         if caches["jwt-blacklist"].get(
             token[:247]
