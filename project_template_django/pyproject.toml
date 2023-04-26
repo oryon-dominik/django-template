@@ -192,6 +192,8 @@ max-line-length = 199
 [tool.mypy]
 ignore_missing_imports = true
 warn_unused_ignores = false
+namespace_packages = true
+explicit_package_bases = true
 plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
 
 [tool.django-stubs]
