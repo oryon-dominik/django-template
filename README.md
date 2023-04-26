@@ -8,14 +8,13 @@
 
 You can use these templates by referring to their release files during project/app creation.  
 Preinstalled `Django in your local python version is required.`  
-Although this should be pretty self-explanatory, please remember to replace `<project_name>` and `<app_name>` with your project/app name ;-).
-
+Although this should be pretty self-explanatory, please remember to replace
+`<project_name>` and `<app_name>` with your project/app name ;-) and (of
+course, dear mrkf 😎) `git init`ialize it.
 
 ## Projects
 
-In a new directory (or in an existing one) using a python environment, that has `Django` installed.
 
-    git init
 
 
 ### Django Project
