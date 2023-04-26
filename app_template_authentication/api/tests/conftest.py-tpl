@@ -2,12 +2,12 @@
 # so, ignore linting errors for unused imports
 # ruff: noqa: F401
 
-from test.fixtures.authentication import (
+from test.fixtures.authentication import (  # noqa # pylint: disable=unused-import
     valid_refresh_token,
     invalid_refresh_token,
 )
-from test.fixtures.clients import rest_client as client
-from test.fixtures.users import (
+from test.fixtures.clients import rest_client as client  # noqa # pylint: disable=unused-import
+from test.fixtures.users import (  # noqa # pylint: disable=unused-import
     valid_password,
     wrong_password,
     invalid_password,
