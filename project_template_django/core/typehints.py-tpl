@@ -16,6 +16,9 @@ class AbstractBaseUserWithPermissionsType(PermissionsMixin, AbstractBaseUser):  
 
     ...
 
+    class Meta:
+        abstract = True
+
 
 UserType: TypeAlias = AbstractBaseUser
 AdminUserType: TypeAlias = AbstractBaseUserWithPermissionsType
