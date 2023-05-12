@@ -91,7 +91,9 @@ If you only use one worker, you might want to switch to memory for development.
     python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_vuejs_templates.zip --extension=py,md,toml,. --replace-html <app_name>
 
 - Add `'apps.<app_name>.apps.<app_name.capitalize()>Config'` to `LOCAL_APPS` or `PROJECT_APPS` in `config.settings.base.apps.py`.  
-- Add the apps routes to `urlpatterns` in `config.urls.routes.py` like this: `path('', include('apps.<app_name>.api.urls', namespace="<app_name>")),`.  
+- Comment-In `'django_vite',` in `THIRD_PARTY_APPS` of `config.settings.base.apps.py`.  
+- In your `pyproject.toml` set `[tool.poetry.group.vite][optional] = false` and `poetry install` the dependeciey `django-vite`.  
+- Add the apps routes to `urlpatterns` in `config.urls.routes.py` like this: `path('', include('apps.<app_name>.urls', namespace="<app_name>")),`.  
 - Create a frontend in `./frontend`, compiling to `./frontend/dist`.
 - You might clone the [vuejs-template](https://github.com/oryon-dominik/vuejs-in-django-template/) for a quick start.
 
