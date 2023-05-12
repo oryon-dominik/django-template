@@ -1,4 +1,4 @@
-{% extends 'vueindjango/base.html.djt' %}
+{% extends 'INSERT_APP_NAME_HERE/base.html.djt' %}
 {% load django_vite %}
 
 {% block header %}
