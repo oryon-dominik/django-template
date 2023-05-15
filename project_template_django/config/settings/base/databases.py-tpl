@@ -3,7 +3,8 @@
 # To add a new setting, also edit the __init__.py
 # -----------------------------------------------------------------------------
 from . import paths
-
+# from ._environ import env
+# from . import _secrets
 
 # DATABASES
 # -----------------------------------------------------------------------------
@@ -11,7 +12,7 @@ from . import paths
 # Postgres:
 # POSTGRES_DB = env.str("POSTGRES_DB", default="{{ project_name }}")
 # POSTGRES_USER = env.str("POSTGRES_USER")
-# POSTGRES_PASSWORD = env.str("POSTGRES_PASSWORD")
+# POSTGRES_PASSWORD = _secrets.POSTGRES_PASSWORD
 # POSTGRES_HOST = env.str("POSTGRES_HOST")
 # POSTGRES_PORT = env.int("POSTGRES_PORT")
 # POSTGRES_OPTIONS = ""
