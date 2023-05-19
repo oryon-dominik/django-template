@@ -16,8 +16,9 @@ except ImportError:
     pass
 
 
-# --------- CONFIG -------------------------------------------------------------
 cli = typer.Typer()
+
+# --------- CONFIG -------------------------------------------------------------
 DEBUG = True
 CWD = Path(__file__).parent
 MANAGE = "python manage.py"
@@ -152,6 +153,13 @@ def clean():
 def check(templates: bool = False):
     """Format & check the code"""
     formatcode(templates=templates)
+
+
+@cli.command()
+def setup():
+    """Setup the project for development"""
+    create_vital_files_and_directories()
+    clean()
 
 
 # ---------- INTROSPECTION ----------------------------------------------------
