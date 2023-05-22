@@ -17,7 +17,9 @@
             ".vscode/": true,
         },
         // * python ///////////////////////////////////////////////////////////
-        "python.envFile": "${workspaceFolder}/envs/production.env",
+        // In most cases the django-env should be read explicitly and NOT via the editorconfig.
+        // you might use this python.envFile for your developer tools API keys (or whatever..) though.
+        // "python.envFile": "${workspaceFolder}/some.env",
         "python.terminal.activateEnvironment": true,
         // black-settings
         "python.formatting.provider": "black",
