@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Literal
 
 import environ
+from rich import print
 
 from config.settings.base import ROOT_DIR
 
@@ -38,4 +39,5 @@ def setup_django_settings(*, mode: Literal["test", "develop", "production"], env
     # now this works as excpeted and django apps are loaded..
     import django
 
+    print(f">>> MANUAL SETUP FOR {DJANGO_SETTINGS_MODULE=}")
     django.setup()
