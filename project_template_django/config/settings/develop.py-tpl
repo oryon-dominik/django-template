@@ -11,20 +11,13 @@ https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 
 ! django-environ uses a confusing NOTYPE, so we are ignoring all env. call type-hints here
 """
+from . import read_environment  # noqa: F403 NOSONAR
+env = read_environment("develop")  # noqa: F403 NOSONAR
 
-
-from .base import *  # noqa: F403 NOSONAR
+from .base import *  # noqa: E402 F403 NOSONAR
 
 # ignore linting errors for undefined names (e.g. env after base * import)
 # ruff: noqa: F405
-
-READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=True)  # type: ignore[no-untyped-call]
-if READ_DOT_ENV_FILE:
-    # OS environment variables take precedence over variables from .env
-    dotenvpath = ROOT_DIR / "envs" / "develop.env"
-    if not dotenvpath.exists():
-        raise ValueError("Develop dotenv file does not exist (create envs/develop.env)")
-    env.read_env(str(dotenvpath), override=True)
 
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#debug
 DEBUG = env.bool("DJANGO_DEBUG", True)  # type: ignore[no-untyped-call]  # ! in development only!

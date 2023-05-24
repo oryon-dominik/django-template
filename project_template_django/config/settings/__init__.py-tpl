@@ -1,0 +1,17 @@
+from typing import Literal
+
+
+def read_environment(mode: Literal["test", "develop", "production"]):
+    # Providing access to the projects environment variables.
+    from .base._environ import env  # noqa # pylint: disable=unused-import
+    from .base.paths import ROOT_DIR  # noqa # pylint: disable=unused-import
+
+    # Read environment from .env
+    READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)  # type: ignore[no-untyped-call]
+    if READ_DOT_ENV_FILE:
+        # OS environment variables take precedence over variables from .env
+        dotenvpath = ROOT_DIR / "envs" / f"{mode}.env"
+        if not dotenvpath.exists():
+            raise ValueError(f"Develop dotenv file does not exist (create envs/{mode}.env)")
+        env.read_env(str(dotenvpath), override=True)
+    return env

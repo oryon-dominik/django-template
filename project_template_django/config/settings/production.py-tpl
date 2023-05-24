@@ -7,8 +7,6 @@ See `base.py` for basic settings.
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 """
-
-
 from .base import *  # noqa: F403 NOSONAR
 
 # ignore linting errors for undefined names (e.g. env after base * import)
