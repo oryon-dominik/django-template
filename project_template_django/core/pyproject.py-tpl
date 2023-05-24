@@ -193,11 +193,12 @@ def cherry_pick_changes(*, pyproject_path):
     latest = get_latest_commit_hash(repository_url=url)
     current_repo = git.Repo(pyproject_path)  # type: ignore
 
-    with TemporaryDirectory() as temporary_directory:
-        template_repo = git.Repo.clone_from(url, temporary_directory)  # type: ignore
-        relevant_changes = list(template_repo.iter_commits(f"{old}..{latest}"))
+    # with TemporaryDirectory() as temporary_directory:
+        # template_repo = git.Repo.clone_from(url, temporary_directory)  # type: ignore
+        # relevant_changes = list(template_repo.iter_commits(f"{old}..{latest}"))
 
-        for commit in relevant_changes:
-            merge_result = current_repo.git.merge(commit)
+        # for commit in relevant_changes:
+        #     merge_result = current_repo.git.merge(commit)
 
-        template_repo.close()
+        # template_repo.close()
+    current_repo.close()
