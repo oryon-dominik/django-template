@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 """
 from corsheaders.defaults import default_methods
 from . import read_environment  # noqa: F403 NOSONAR
-env = read_environment("test")  # noqa: F403 NOSONAR
+env = read_environment("test", force=True)  # noqa: F403 NOSONAR
 
 from .base import *  # noqa: E402 F403 NOSONAR
 
