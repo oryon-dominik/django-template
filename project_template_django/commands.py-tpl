@@ -17,11 +17,11 @@ except ImportError:
 
 
 cli = typer.Typer()
-
 # --------- CONFIG -------------------------------------------------------------
 DEBUG = True
 CWD = Path(__file__).parent
 MANAGE = "python manage.py"
+TEMPLATE = "https://github.com/oryon-dominik/django-template"
 
 
 # --------- HELPERS -----------------------------------------------------------
@@ -34,16 +34,9 @@ def env_with_pythonpath():
     return env
 
 
-def delete_folder(path: Path):
-    for element in path.iterdir():
-        if element.is_dir():
-            delete_folder(element)
-        else:
-            element.unlink()
-    path.rmdir()
-
-
 def clean_build():
+    from core.inout.directories import delete_folder
+
     print("Unlinking build-files: build/; dist/ *.egg-info; __pycache__;")
     cwd = Path(CWD)
     [delete_folder(p) for p in cwd.rglob("build")]
@@ -51,6 +44,12 @@ def clean_build():
     [delete_folder(p) for p in cwd.rglob("__pycache__")]
     [delete_folder(p) for p in cwd.rglob(".ruff_cache")]
     [delete_folder(p) for p in cwd.rglob(".mypy_cache")]
+
+    try:
+        print("Unlinking temp-files: temp/")
+        delete_folder(cwd / "temp")
+    except OSError as err:
+        print(f"Error deleting temp-folder: {err}")
     try:
         [delete_folder(p) for p in cwd.rglob("dist")]
     except OSError as err:
@@ -64,16 +63,17 @@ def clean_pyc():
 
 
 def create_vital_files_and_directories():
-    print("Creating vital files and directories for dev:")
+    print("Creating vital files and directories for dev.")
     # directories
     assets = CWD / "assets"
     database = CWD / "database"
     logs = CWD / "logs"
     media = CWD / "media"
+    temp = CWD / "temp"
     # files
     production_dotenv = CWD / "envs" / "production.env"
 
-    [path.mkdir(parents=True, exist_ok=True) for path in (logs, media, assets, database)]
+    [path.mkdir(parents=True, exist_ok=True) for path in (logs, media, assets, database, temp)]
     [path.touch(exist_ok=True) for path in (production_dotenv,)]
 
 
@@ -141,6 +141,23 @@ def formatcode(templates: bool = False):
             rename_file_suffix(path=path, new_suffix=".py-tpl")
 
 
+def get_commithash(*, repository: str) -> str:
+    from core.pyproject import get_latest_commit_hash
+
+    return get_latest_commit_hash(repository_url=repository)
+
+
+def write_info_to_pyproject_toml(path: Path):
+    # lazy import
+    from core.pyproject import initialize_template_section_to_pyproject
+
+    initialize_template_section_to_pyproject(
+        project_root_path=path,
+        template_repository_url=TEMPLATE,
+        template_commit_hash=get_commithash(repository=TEMPLATE),
+    )
+
+
 # ----------GENERAL COMMANDS----------------------------------------------------
 @cli.command()
 def clean():
@@ -157,9 +174,24 @@ def check(templates: bool = False):
 
 @cli.command()
 def setup():
-    """Setup the project for development"""
-    create_vital_files_and_directories()
+    """
+    Setup the project for development.
+    Clean.
+    Create vital files and directories.
+    Write template and commithash info to pyproject.toml.
+    """
     clean()
+    create_vital_files_and_directories()
+    write_info_to_pyproject_toml(path=CWD)
+
+
+@cli.command()
+def cherry():
+    """Cherry pick changes from the template repository."""
+    # lazy import
+    from core.pyproject import cherry_pick_changes
+
+    cherry_pick_changes(pyproject_path=CWD)
 
 
 # ---------- INTROSPECTION ----------------------------------------------------

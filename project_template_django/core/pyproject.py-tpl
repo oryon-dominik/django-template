@@ -2,10 +2,18 @@ from functools import cache
 from pathlib import Path
 from typing import Any
 
+import git
 import msgspec
+import tomlkit
+
+from .inout.directories import TemporaryDirectory
 
 
 class PyProjectTomlLoadException(Exception):
+    pass
+
+
+class PyProjectTomlWriteException(Exception):
     pass
 
 
@@ -66,10 +74,16 @@ class Project(Base):
     dynamic: list[str] = []
 
 
+class Template(Base):
+    repository: str | None = None
+    commithash: str | None = None
+
+
 class PyProject(Base):
     build_system: BuildSystem | None = None
     project: Project | None = None
     tool: dict[str, dict[str, Any]] = {}
+    template: Template | None = None
 
 
 @cache
@@ -78,15 +92,54 @@ def load_pyproject(project_path: Path) -> PyProject:
     loading pyproject.toml with [msgspec](https://jcristharif.com/msgspec/)
     -> https://jcristharif.com/msgspec/examples/pyproject-toml.html
     """
-    try:
-        with open(project_path / "pyproject.toml") as file:
-            content = file.read()
-    except FileNotFoundError:
-        raise PyProjectTomlLoadException(f"pyproject.toml not found in {project_path}")
-    except OSError as e:
-        raise PyProjectTomlLoadException(f"error while reading pyproject.toml from {project_path}: {e}")
+    content: str = read_pyproject(path=project_path)
     project: PyProject = decode(content)
     return project
+
+
+def read_pyproject(*, path: Path) -> str:
+    """
+    Reading the file pyproject.toml
+    """
+    try:
+        with open(path / "pyproject.toml") as file:
+            content = file.read()
+    except FileNotFoundError:
+        raise PyProjectTomlLoadException(f"pyproject.toml not found in {path}")
+    except OSError as e:
+        raise PyProjectTomlLoadException(f"error while reading pyproject.toml from {path}: {e}")
+    return content
+
+
+def write_pyproject(*, path: Path, content: str) -> None:
+    """
+    Writing the file pyproject.toml
+
+    """
+    try:
+        with open(path / "pyproject.toml", "w") as file:
+            file.write(content)
+    except OSError as e:
+        raise PyProjectTomlWriteException(f"error while writing pyproject.toml to {path}: {e}")
+
+
+def modify_pyproject(*, project_path: Path, modification: dict):
+    """
+    modifiying pyproject.toml with
+    [tomlkit](https://github.com/sdispater/tomlkit) to preserve comments,
+    formatting and multiline strings
+
+    """
+    content: str = read_pyproject(path=project_path)
+    pyproject = tomlkit.parse(content)
+    for key, values in modification.items():
+        if key not in pyproject:
+            table = tomlkit.table()
+            pyproject.add(f"{key}", table)
+        for subkey, value in values.items():
+            pyproject[key][subkey] = value  # type: ignore
+
+    return write_pyproject(path=project_path, content=tomlkit.dumps(pyproject))
 
 
 def decode(data: bytes | str) -> PyProject:
@@ -97,3 +150,54 @@ def decode(data: bytes | str) -> PyProject:
 def encode(msg: PyProject) -> bytes:
     """Encode a ``PyProject`` object to TOML"""
     return msgspec.toml.encode(msg)
+
+
+def initialize_template_section_to_pyproject(
+    *, project_root_path: Path, template_repository_url: str, template_commit_hash: str
+):
+    """
+    initialize template section to pyproject.toml
+    """
+    return modify_pyproject(
+        modification={
+            "template": {
+                "repository": template_repository_url,
+                "commithash": template_commit_hash,
+            }
+        },
+        project_path=project_root_path,
+    )
+
+
+def get_latest_commit_hash(*, repository_url: str):
+    with TemporaryDirectory() as temporary_directory:
+        repo = git.Repo.clone_from(repository_url, temporary_directory)  # type: ignore
+        latest_commit = repo.head.commit
+        commit_hash = latest_commit.hexsha
+    return commit_hash
+
+
+def cherry_pick_changes(*, pyproject_path):
+    """
+    cherry pick changes from template repository to the project
+
+    $ git cherry-pick <old_commit_hash>..<latest_commit_hash>
+    $ git cherry-pick --continue
+    """
+    pyproject = load_pyproject(pyproject_path)
+    old = pyproject.template.commithash  # type: ignore
+    url = pyproject.template.repository  # type: ignore
+    if old is None or url is None:
+        raise PyProjectTomlLoadException("Template section is not initialized")
+
+    latest = get_latest_commit_hash(repository_url=url)
+    current_repo = git.Repo(pyproject_path)  # type: ignore
+
+    with TemporaryDirectory() as temporary_directory:
+        template_repo = git.Repo.clone_from(url, temporary_directory)  # type: ignore
+        relevant_changes = list(template_repo.iter_commits(f"{old}..{latest}"))
+
+        for commit in relevant_changes:
+            merge_result = current_repo.git.merge(commit)
+
+        template_repo.close()

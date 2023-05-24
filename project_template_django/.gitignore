@@ -23,6 +23,9 @@ production.env
 # Static files
 staticfiles
 
+# temporary files
+temp/
+
 # ===================
 ## Python
 # ===================
