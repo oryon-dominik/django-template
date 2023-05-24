@@ -204,3 +204,7 @@ django_settings_module = "config.settings.develop"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[template]
+repository = "https://github.com/oryon-dominik/django-template"
+used = "project_template_django"
