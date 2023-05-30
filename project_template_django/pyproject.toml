@@ -91,7 +91,7 @@ httpx = "^0.23.0"  # also used in some jupyter dev-notebooks
 [tool.poetry.group.postgres]
 optional = true
 [tool.poetry.group.postgres.dependencies]
-psycopg2 = "^2.9.3"
+psycopg = "^3.1.9"
 
 [tool.poetry.group.authentication]
 optional = true
