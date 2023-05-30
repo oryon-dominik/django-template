@@ -157,7 +157,8 @@ def write_info_to_pyproject_toml(path: Path):
             template_commit_hash=get_commithash(repository=TEMPLATE),
         )
     except PyProjectHasBeenSetupBeforeException:
-        print("Pyproject.toml has already been setup before.")
+        print("Pyproject.toml template information has already been setup before.")
+
 
 # ----------GENERAL COMMANDS----------------------------------------------------
 @cli.command()
@@ -191,7 +192,6 @@ def cherry():
     """Cherry pick changes from the template repository."""
     # lazy import
     from core.pyproject import cherry_pick_changes
-
     cherry_pick_changes(pyproject_path=CWD)
 
 
