@@ -2,6 +2,14 @@ from typing import Literal
 
 
 def read_environment(mode: Literal["test", "develop", "production"], force: bool = False):
+    """
+    Read environment variables from .env file.
+    return the environment object.
+
+    usage:
+        from ._env import read_environment  # noqa: F403 NOSONAR
+        env = read_environment("develop", force=True)  # noqa: F403 NOSONAR
+    """
     # Providing access to the projects environment variables.
     from .base._environ import env  # noqa # pylint: disable=unused-import
     from .base.paths import ROOT_DIR  # noqa # pylint: disable=unused-import
