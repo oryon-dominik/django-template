@@ -2,27 +2,31 @@
 # These settings are imported in the __init__.py of the base directory explicitly.
 # To add a new setting, also edit the __init__.py
 # -----------------------------------------------------------------------------
-from . import paths
+# DATABASES
+# https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#databases
+
+
+# --- POSTGRES ----------------------------------------------------------------
 # from ._environ import env
 # from . import _secrets
 
-# DATABASES
-# -----------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#databases
-# Postgres:
 # POSTGRES_DB = env.str("POSTGRES_DB", default="{{ project_name }}")
 # POSTGRES_USER = env.str("POSTGRES_USER")
 # POSTGRES_PASSWORD = _secrets.POSTGRES_PASSWORD
 # POSTGRES_HOST = env.str("POSTGRES_HOST")
 # POSTGRES_PORT = env.int("POSTGRES_PORT")
 # POSTGRES_OPTIONS = ""
-# POSTGRES_SSL = "require" if DEBUG else "allow"
-# POSTGRES_CONNECTION_STRING = f"postgres://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}{POSTGRES_OPTIONS}"
+# POSTGRES_CONNECTION_STRING = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}{POSTGRES_OPTIONS}"
 # DATABASE_URL = env.str("DATABASE_URL", default=POSTGRES_CONNECTION_STRING)
 # DATABASES = {"default": env.db("DATABASE_URL", default=DATABASE_URL)}
-# SQLite:
+
+
+# --- SQLite ------------------------------------------------------------------
+from . import paths
 DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": paths.ROOT_DIR / "database" / "sqlite3.db"}}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
+
+# -----------------------------------------------------------------------------
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#default-auto-field
