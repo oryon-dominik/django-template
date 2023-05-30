@@ -149,14 +149,15 @@ def get_commithash(*, repository: str) -> str:
 
 def write_info_to_pyproject_toml(path: Path):
     # lazy import
-    from core.pyproject import initialize_template_section_to_pyproject
-
-    initialize_template_section_to_pyproject(
-        project_root_path=path,
-        template_repository_url=TEMPLATE,
-        template_commit_hash=get_commithash(repository=TEMPLATE),
-    )
-
+    from core.pyproject import initialize_template_section_to_pyproject, PyProjectHasBeenSetupBeforeException
+    try:
+        initialize_template_section_to_pyproject(
+            project_root_path=path,
+            template_repository_url=TEMPLATE,
+            template_commit_hash=get_commithash(repository=TEMPLATE),
+        )
+    except PyProjectHasBeenSetupBeforeException:
+        print("Pyproject.toml has already been setup before.")
 
 # ----------GENERAL COMMANDS----------------------------------------------------
 @cli.command()

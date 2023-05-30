@@ -17,6 +17,10 @@ class PyProjectTomlWriteException(Exception):
     pass
 
 
+class PyProjectHasBeenSetupBeforeException(Exception):
+    pass
+
+
 class Base(msgspec.Struct, omit_defaults=True, forbid_unknown_fields=True, rename="kebab"):
     """A base class holding some common settings.
     We set ``omit_defaults = True`` to omit any fields containing only their
@@ -77,6 +81,8 @@ class Project(Base):
 class Template(Base):
     repository: str | None = None
     commithash: str | None = None
+    latesthash: str | None = None
+    templateused: str | None = None
 
 
 class PyProject(Base):
@@ -158,11 +164,17 @@ def initialize_template_section_to_pyproject(
     """
     initialize template section to pyproject.toml
     """
+    project = load_pyproject(project_path=project_root_path)
+    if project.template is None:
+        raise PyProjectTomlLoadException("Template section is missing.")
+    if project.template.latesthash is not None and project.template.commithash is not None:
+        raise PyProjectHasBeenSetupBeforeException("Template section is already initialized.")
     return modify_pyproject(
         modification={
             "template": {
                 "repository": template_repository_url,
                 "commithash": template_commit_hash,
+                "latesthash": template_commit_hash,
             }
         },
         project_path=project_root_path,
@@ -177,6 +189,17 @@ def get_latest_commit_hash(*, repository_url: str):
     return commit_hash
 
 
+def update_latest_commithash(*, project_root_path: Path, latesthash: str):
+    return modify_pyproject(
+        modification={
+            "template": {
+                "latesthash": latesthash,
+            }
+        },
+        project_path=project_root_path,
+    )
+
+
 def cherry_pick_changes(*, pyproject_path):
     """
     cherry pick changes from template repository to the project
@@ -185,20 +208,60 @@ def cherry_pick_changes(*, pyproject_path):
     $ git cherry-pick --continue
     """
     pyproject = load_pyproject(pyproject_path)
-    old = pyproject.template.commithash  # type: ignore
+    old = pyproject.template.latesthash  # type: ignore
     url = pyproject.template.repository  # type: ignore
+    templateused = pyproject.template.templateused  # type: ignore
+
     if old is None or url is None:
         raise PyProjectTomlLoadException("Template section is not initialized")
 
     latest = get_latest_commit_hash(repository_url=url)
     current_repo = git.Repo(pyproject_path)  # type: ignore
 
-    # with TemporaryDirectory() as temporary_directory:
-        # template_repo = git.Repo.clone_from(url, temporary_directory)  # type: ignore
-        # relevant_changes = list(template_repo.iter_commits(f"{old}..{latest}"))
+    with TemporaryDirectory() as temporary_directory:
+        template_repo = git.Repo.clone_from(url, temporary_directory)  # type: ignore
+        relevant_changes = list(template_repo.iter_commits(f"{old}..{latest}"))
 
-        # for commit in relevant_changes:
-        #     merge_result = current_repo.git.merge(commit)
+        # Get the commit messages of the last commits
+        commit_message = template_repo.git.log("-n", f"{len(relevant_changes)}", "--pretty=format:%s", latest)
+        commit_message = "\n".join(reversed(commit_message.split("\n")))
+        # TODOs:
+        # - squash all commits into one
+        # - throw away all changes except the ones in the template (f"{used_template}") directory
+        # - modify all paths and remove f"{used_template}" from the path
+        # - modify all paths and replace suffix .py-tpl with .py
+        # - replace all occurences of {{ project_name }} with the actual project
+        #   name ? what about the other things, django templating engine does?
+        #   maybe invoke it here?""
 
-        # template_repo.close()
-    current_repo.close()
+        for commit in relevant_changes:
+            ...
+
+            # ideas below:
+            ...
+            # mv = git.MV(old_path, new_path) ???
+
+            # ????
+            # builder = git.TreeBuilder(commit.tree)
+            # builder.insert(new_path, mv.rename(old_path))
+            # new_tree = builder.write()
+            # new_commit = repo.create_commit(
+            #     ref=f"refs/heads/{commit.branch.name}",
+            #     message=commit.message,
+            #     author=commit.author,
+            #     committer=commit.committer,
+            #     tree=new_tree,
+            #     parents=[commit],
+            # )
+
+            # ???
+            # TODO: git filter-branch --tree-filter "git mv <old_path> <new_path>" <commit_hash>..HEAD
+            # filter out everything outside of the project-template directory
+
+        # squashed_commit
+        # merge_result = current_repo.git.merge(squashed_commit)
+        # print(f">>> DEBUG: {merge_result=}")
+
+        template_repo.close()
+        current_repo.close()
+    # update_latest_commithash(project_root_path=pyproject_path, latest=latesthash)

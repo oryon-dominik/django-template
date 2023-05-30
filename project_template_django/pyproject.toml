@@ -207,4 +207,4 @@ build-backend = "poetry.core.masonry.api"
 
 [template]
 repository = "https://github.com/oryon-dominik/django-template"
-used = "project_template_django"
+templateused = "project_template_django"
