@@ -150,6 +150,7 @@ def get_commithash(*, repository: str) -> str:
 def write_info_to_pyproject_toml(path: Path):
     # lazy import
     from core.pyproject import initialize_template_section_to_pyproject, PyProjectHasBeenSetupBeforeException
+
     try:
         initialize_template_section_to_pyproject(
             project_root_path=path,
@@ -192,6 +193,7 @@ def cherry():
     """Cherry pick changes from the template repository."""
     # lazy import
     from core.pyproject import cherry_pick_changes
+
     cherry_pick_changes(pyproject_path=CWD)
 
 
