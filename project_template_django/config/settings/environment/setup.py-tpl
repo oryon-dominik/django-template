@@ -1,43 +1,50 @@
 from typing import Literal
+from pathlib import Path
 
 import environ
 
 
-def read_environment(mode: Literal["test", "develop", "production"], force: bool = False) -> environ.Env:
+def read_environment(
+    *, path: Path, env: environ.Env, skip_missing: bool = False, override: bool = False
+) -> environ.Env:
     """
     Read environment variables from .env file.
     return the environment object.
 
-    usage:
-        from ._env import read_environment  # noqa: F403 NOSONAR
-        env = read_environment("develop", force=True)  # noqa: F403 NOSONAR
     """
+    # OS environment variables take precedence over variables from .env
+    if not path.exists():
+        if skip_missing:
+            return env
+        raise ValueError(f"Tried to read. But dotenv file does not exist (create {path=})")
+    env.read_env(str(path), override=override)
+    return env
 
+
+def prepare(mode: Literal["test", "develop", "production"]) -> tuple[environ.Env, dict]:
     env = environ.Env()
     # ! django-environ uses a confusing NOTYPE
     # Providing access to the projects environment variables.
     from ..base.paths import ROOT_DIR  # noqa # pylint: disable=unused-import
 
-    # Read environment from .env
-    READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)  # type: ignore[no-untyped-call]
-    if READ_DOT_ENV_FILE or force:
-        # OS environment variables take precedence over variables from .env
-        dotenvpath = ROOT_DIR / "envs" / f"{mode}.env"
-        if not dotenvpath.exists():
-            raise ValueError(f"Develop dotenv file does not exist (create envs/{mode}.env)")
-        env.read_env(str(dotenvpath), override=True)
-    return env
+    # Read environment from local.env
+    env = read_environment(path=ROOT_DIR / "envs" / "local.env", env=env, skip_missing=True)
+    # skip missing .env file in production
+    skip_missing = mode == "production"
+    # Read environment from <mode>.env
+    env = read_environment(path=ROOT_DIR / "envs" / f"{mode}.env", env=env, skip_missing=skip_missing, override=True)
+
+    return setup_base_settings_for(env=env)
 
 
-def setup_base_settings_for(env: environ.Env) -> dict:
+def setup_base_settings_for(env: environ.Env) -> tuple[environ.Env, dict]:
     """
     Setup base settings for the project.
     """
     # lazy import to avoid circular imports
-    from ..base._secrets import define_secrets
-    secrets: dict = define_secrets(env=env)
     from ..base.databases import define_databases
-    databases: dict = define_databases(env=env, secrets=secrets)
-    # merge secrets and databases
-    settings = {**secrets, **databases}
-    return settings
+
+    databases: dict = define_databases(env=env)
+    # merge settings that use environment variables
+    settings = {**databases}
+    return env, settings

@@ -182,10 +182,12 @@ def initialize_template_section_to_pyproject(
 
 
 def get_latest_commit_hash(*, repository_url: str):
+
     with TemporaryDirectory() as temporary_directory:
         repo = git.Repo.clone_from(repository_url, temporary_directory)  # type: ignore
         latest_commit = repo.head.commit
         commit_hash = latest_commit.hexsha
+
     return commit_hash
 
 
@@ -210,7 +212,7 @@ def cherry_pick_changes(*, pyproject_path):
     pyproject = load_pyproject(pyproject_path)
     old = pyproject.template.latesthash  # type: ignore
     url = pyproject.template.repository  # type: ignore
-    templateused = pyproject.template.templateused  # type: ignore
+    # templateused = pyproject.template.templateused  # type: ignore
 
     if old is None or url is None:
         raise PyProjectTomlLoadException("Template section is not initialized")

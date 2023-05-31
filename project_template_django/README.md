@@ -37,6 +37,45 @@ Project dependencies are managed by [poetry](https://python-poetry.org/).
     poetry run mypy --config-file pyproject.toml .
 
 
+## gitflow
+
+    To start a new feature, use `git flow feature start <name>`.  
+    To finish a feature, use `git flow feature finish <name>`.  
+
+    `git flow init` produces the following entries in `.git/config`
+
+        [gitflow "branch"]
+            master = production
+            develop = trunk
+        [gitflow "prefix"]
+            feature = feature/
+            bugfix = bugfix/
+            release = release/
+            hotfix = hotfix/
+            support = support/
+            versiontag =
+
+
+## postgresql via docker
+
+You might want to use the postgres docker container insde `compose/postgres.yml`
+Be aware that no other postgres shall be running on the same port.
+
+        # build and run
+        docker compose -f compose/postgres.yml build
+        docker compose -f compose/postgres.yml up
+
+        # bash-shell to container
+        docker exec -it postgres /bin/bash
+        # edit pg_hba.conf
+        apt-get update && apt install -y vim && vim /var/lib/postgresql/data/pg_hba.conf
+
+        # db-shell linux
+        docker compose run postgres psql -h localhost -U developer -d {{ project_name }}
+        # db-shell windows
+        docker compose run postgres psql -h host.docker.internal -U developer -d {{ project_name }}
+
+
 ## Preinstalled third party packages
 
 ### root (default)

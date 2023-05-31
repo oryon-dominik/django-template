@@ -9,7 +9,14 @@ https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 
 ! django-environ uses a confusing NOTYPE, so we are ignoring all env. call type-hints here
 """
-from .base import *  # noqa: F403 NOSONAR
+
+
+from .environment.setup import prepare  # noqa: F403 NOSONAR
+from .base import *  # noqa: E402 F403 NOSONAR
+
+# read environment variables from .env and update the local environment
+env, settings = prepare(mode="production")
+locals().update(settings)
 
 # ignore linting errors for undefined names (e.g. env after base * import)
 # ruff: noqa: F405

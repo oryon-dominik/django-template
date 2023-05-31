@@ -3,47 +3,48 @@
 # To add a new setting, also edit the __init__.py
 # -----------------------------------------------------------------------------
 # DATABASES
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+# https://docs.djangoproject.com/en/{{ doc_version }}/ref/settings/#databases
 import environ
 
 
-def define_databases(*, env: environ.Env, secrets: dict) -> dict:
+def define_databases(env: environ.Env) -> dict:
     """
     Define databases for the project.
     will be read from .env files or the environment provided.
     """
     # --- POSTGRES ----------------------------------------------------------------
-    # POSTGRES_DB = env.str("POSTGRES_DB", default="solutionconfigurator")
+    # POSTGRES_DB = env.str("POSTGRES_DB", default="{{ project_name }}")  # type: ignore[no-untyped-call]
     # POSTGRES_USER = env.str("POSTGRES_USER")
-    # POSTGRES_PASSWORD = secrets["POSTGRES_PASSWORD"]
+    # POSTGRES_PASSWORD = env.str("POSTGRES_PASSWORD")
     # POSTGRES_HOST = env.str("POSTGRES_HOST")
     # POSTGRES_PORT = env.int("POSTGRES_PORT")
     # POSTGRES_OPTIONS = ""
     # POSTGRES_CONNECTION_STRING = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}{POSTGRES_OPTIONS}"
-    # DATABASE_URL = env.str("DATABASE_URL", default=POSTGRES_CONNECTION_STRING)
-    # DATABASES = {"default": env.db("DATABASE_URL", default=DATABASE_URL)}
+    # DATABASE_URL = env.str("DATABASE_URL", default=POSTGRES_CONNECTION_STRING)  # type: ignore[no-untyped-call]
+    # DATABASES = {"default": env.db("DATABASE_URL", default=DATABASE_URL)}  # type: ignore[no-untyped-call]
 
     # --- SQLite ------------------------------------------------------------------
     from . import paths
-    DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": paths.ROOT_DIR / "database" / "sqlite3.db"}}
+    DATABASES = {
+        "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": paths.ROOT_DIR / "database" / "sqlite3.db"}
+    }
     DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
-    # ! we will neither return the env, nor the secrets
+    # ! shall not return the env, we didn't want to modify
     del env
-    del secrets
     return locals()
 
 
 # -----------------------------------------------------------------------------
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+# https://docs.djangoproject.com/en/{{ doc_version }}/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "unique-snowflake-solutionconfigurator-cache",
+        "LOCATION": "unique-snowflake-{{ project_name }}-cache",
     },
     "jwt-blacklist": {
         # 'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # ! this is not thread-safe and not recommended, if you use multiple workers

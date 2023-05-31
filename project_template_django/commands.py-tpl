@@ -72,9 +72,10 @@ def create_vital_files_and_directories():
     temp = CWD / "temp"
     # files
     production_dotenv = CWD / "envs" / "production.env"
+    local_dotenv = CWD / "envs" / "local.env"
 
     [path.mkdir(parents=True, exist_ok=True) for path in (logs, media, assets, database, temp)]
-    [path.touch(exist_ok=True) for path in (production_dotenv,)]
+    [path.touch(exist_ok=True) for path in (production_dotenv, local_dotenv)]
 
 
 def run_command(command, debug=False, cwd=CWD, env=env_with_pythonpath(), shell=True):
