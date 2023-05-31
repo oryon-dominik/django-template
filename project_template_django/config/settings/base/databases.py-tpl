@@ -3,39 +3,47 @@
 # To add a new setting, also edit the __init__.py
 # -----------------------------------------------------------------------------
 # DATABASES
-# https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#databases
+# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+import environ
 
 
-# --- POSTGRES ----------------------------------------------------------------
-# from ._environ import env
-# from . import _secrets
+def define_databases(*, env: environ.Env, secrets: dict) -> dict:
+    """
+    Define databases for the project.
+    will be read from .env files or the environment provided.
+    """
+    # --- POSTGRES ----------------------------------------------------------------
+    # POSTGRES_DB = env.str("POSTGRES_DB", default="solutionconfigurator")
+    # POSTGRES_USER = env.str("POSTGRES_USER")
+    # POSTGRES_PASSWORD = secrets["POSTGRES_PASSWORD"]
+    # POSTGRES_HOST = env.str("POSTGRES_HOST")
+    # POSTGRES_PORT = env.int("POSTGRES_PORT")
+    # POSTGRES_OPTIONS = ""
+    # POSTGRES_CONNECTION_STRING = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}{POSTGRES_OPTIONS}"
+    # DATABASE_URL = env.str("DATABASE_URL", default=POSTGRES_CONNECTION_STRING)
+    # DATABASES = {"default": env.db("DATABASE_URL", default=DATABASE_URL)}
 
-# POSTGRES_DB = env.str("POSTGRES_DB", default="{{ project_name }}")
-# POSTGRES_USER = env.str("POSTGRES_USER")
-# POSTGRES_PASSWORD = _secrets.POSTGRES_PASSWORD
-# POSTGRES_HOST = env.str("POSTGRES_HOST")
-# POSTGRES_PORT = env.int("POSTGRES_PORT")
-# POSTGRES_OPTIONS = ""
-# POSTGRES_CONNECTION_STRING = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}{POSTGRES_OPTIONS}"
-# DATABASE_URL = env.str("DATABASE_URL", default=POSTGRES_CONNECTION_STRING)
-# DATABASES = {"default": env.db("DATABASE_URL", default=DATABASE_URL)}
+    # --- SQLite ------------------------------------------------------------------
+    from . import paths
+    DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": paths.ROOT_DIR / "database" / "sqlite3.db"}}
+    DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
+    # ! we will neither return the env, nor the secrets
+    del env
+    del secrets
+    return locals()
 
-# --- SQLite ------------------------------------------------------------------
-from . import paths
-DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": paths.ROOT_DIR / "database" / "sqlite3.db"}}
-DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 # -----------------------------------------------------------------------------
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#default-auto-field
+# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "unique-snowflake-{{ project_name }}-cache",
+        "LOCATION": "unique-snowflake-solutionconfigurator-cache",
     },
     "jwt-blacklist": {
         # 'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # ! this is not thread-safe and not recommended, if you use multiple workers

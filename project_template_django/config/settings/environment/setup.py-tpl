@@ -3,7 +3,7 @@ from typing import Literal
 import environ
 
 
-def read_environment(mode: Literal["test", "develop", "production"], force: bool = False):
+def read_environment(mode: Literal["test", "develop", "production"], force: bool = False) -> environ.Env:
     """
     Read environment variables from .env file.
     return the environment object.
@@ -27,3 +27,17 @@ def read_environment(mode: Literal["test", "develop", "production"], force: bool
             raise ValueError(f"Develop dotenv file does not exist (create envs/{mode}.env)")
         env.read_env(str(dotenvpath), override=True)
     return env
+
+
+def setup_base_settings_for(env: environ.Env) -> dict:
+    """
+    Setup base settings for the project.
+    """
+    # lazy import to avoid circular imports
+    from ..base._secrets import define_secrets
+    secrets: dict = define_secrets(env=env)
+    from ..base.databases import define_databases
+    databases: dict = define_databases(env=env, secrets=secrets)
+    # merge secrets and databases
+    settings = {**secrets, **databases}
+    return settings

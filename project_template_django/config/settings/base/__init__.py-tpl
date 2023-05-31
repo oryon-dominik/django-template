@@ -13,16 +13,12 @@ https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 # so, ignore linting errors for unused imports
 # ruff: noqa: F401
 
-# Stubs will monkeypatch django to provide type hints. See EOF for details.
-import django_stubs_ext
-
-# Providing access to the projects environment variables.
-from ._environ import env  # noqa # pylint: disable=unused-import
+# Monkeypatching Django, so stubs will work for all generics
+from . import types  # noqa # pylint: disable=unused-import
 
 # --- Explicitly importing all settings from submodules -----------------------
 from .apps import INSTALLED_APPS  # noqa # pylint: disable=unused-import
 from .databases import (
-    DATABASES,  # noqa # pylint: disable=unused-import
     DEFAULT_AUTO_FIELD,  # noqa # pylint: disable=unused-import
     CACHES,  # noqa # pylint: disable=unused-import
 )
@@ -84,7 +80,3 @@ from .thirdparty import *  # noqa # pylint: disable=wildcard-import,unused-wildc
 from .{{ project_name }} import *  # noqa # pylint: disable=wildcard-import,unused-wildcard-import
 
 # -----------------------------------------------------------------------------
-
-# Monkeypatching Django, so stubs will work for all generics,
-# see: https://github.com/typeddjango/django-stubs
-django_stubs_ext.monkeypatch()

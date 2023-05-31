@@ -6,6 +6,8 @@ See `base.py` for basic settings.
 
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
+
+! django-environ uses a confusing NOTYPE, so we are ignoring all env. call type-hints here
 """
 from .base import *  # noqa: F403 NOSONAR
 
@@ -44,6 +46,7 @@ ADMIN_URL = env("DJANGO_ADMIN_URL")
 INSTALLED_APPS += (
     # apps for production
 )
+
 
 # SECURITY CONFIGURATION
 # ------------------------------------------------------------------------------
