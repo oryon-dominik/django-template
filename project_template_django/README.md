@@ -9,6 +9,7 @@ Realised as a django project.
 ## Setup & developing
 
 - [How-to-develop basics](./documentation/how-to-develop.md).
+- [How-to-clone-and-ssh](./documentation/how-to-clone-and-ssh.md).
 - [jupyter notebooks for fast debugging](./documentation/notebooks.md).
 
 
@@ -22,6 +23,12 @@ Realised as a django project.
 
     # or install only the root dependencies (updating the lock file)
     poetry install --only-root --sync
+
+
+### Setup the project
+
+    poetry run python commands.py setup
+    poetry run python manage.py migrate
 
 
 ### Pre-Commit hooks
