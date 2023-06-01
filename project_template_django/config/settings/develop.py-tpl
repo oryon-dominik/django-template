@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 """
 
 
+from urllib.parse import ParseResult
+
 from .environment.setup import prepare  # noqa: F403 NOSONAR
 from .base import *  # noqa: E402 F403 NOSONAR
 
@@ -31,7 +33,7 @@ SECRET_KEY = env.str("DJANGO_SECRET_KEY", default="{{ secret_key }}")  # type: i
 
 # =====PROJECT-SPECIFIC-SETTINGS===============================================
 # add project specific production settings here
-PROJECT_FQDN = env.url("PROJECT_FQDN")
+PROJECT_FQDN: ParseResult = env.url("PROJECT_FQDN")
 # Production checklist:
 # See https://docs.djangoproject.com/en/{{ docs_version }}/howto/deployment/checklist/
 # =============================================================================

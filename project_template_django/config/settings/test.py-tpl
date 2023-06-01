@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 """
 
 
+from urllib.parse import ParseResult
+
 from corsheaders.defaults import default_methods
 
 from .environment.setup import prepare  # noqa: F403 NOSONAR
@@ -28,7 +30,7 @@ SECRET_KEY = env.str("DJANGO_SECRET_KEY", default="{{ secret_key }}")  # type: i
 
 # =====PROJECT-SPECIFIC-SETTINGS===============================================
 # add project specific production settings here
-PROJECT_FQDN = env.url("PROJECT_FQDN", default="http://localhost:8000")  # type: ignore[no-untyped-call]
+PROJECT_FQDN: ParseResult = env.url("PROJECT_FQDN", default="http://localhost:8000")  # type: ignore[no-untyped-call]
 # Production checklist:
 # See https://docs.djangoproject.com/en/{{ docs_version }}/howto/deployment/checklist/
 # =============================================================================
