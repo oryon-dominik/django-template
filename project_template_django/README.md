@@ -8,8 +8,8 @@ Realised as a django project.
 
 ## Setup & developing
 
-- [How-to-develop basics](./documentation/how-to-develop.md).
 - [How-to-clone-and-ssh](./documentation/how-to-clone-and-ssh.md).
+- [How-to-develop basics](./documentation/how-to-develop.md).
 - [jupyter notebooks for fast debugging](./documentation/notebooks.md).
 
 
