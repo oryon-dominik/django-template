@@ -47,8 +47,8 @@ PROJECT_FQDN: ParseResult = env.url("PROJECT_FQDN")
 # Remember to set this to your expected hostnames
 # See https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=[])  # type: ignore[no-untyped-call]
-
-CORS_ALLOWED_ORIGINS = [f"https://{host}" for host in ALLOWED_HOSTS]
+CORS_ALLOWED_ORIGINS = env.list("DJANGO_CORS_ALLOWED_ORIGINS", default=[])  # type: ignore[no-untyped-call]
+CORS_ALLOW_ALL_ORIGINS = env.bool("DJANGO_CORS_ALLOW_ALL_ORIGINS", default=False)  # type: ignore[no-untyped-call]
 CORS_ALLOW_METHODS = [
     "GET",
     "OPTIONS",
