@@ -62,20 +62,23 @@ def clean_pyc():
     [p.unlink() for p in Path(CWD).rglob("*~")]
 
 
-def create_vital_files_and_directories():
-    print("Creating vital files and directories for dev.")
+def create_vital_files_and_directories(production: bool = False):
+    print("Creating vital files and directories.")
+
     # directories
     assets = CWD / "assets"
     database = CWD / "database"
     logs = CWD / "logs"
     media = CWD / "media"
     temp = CWD / "temp"
-    # files
-    production_dotenv = CWD / "envs" / "production.env"
-    local_dotenv = CWD / "envs" / "local.env"
 
-    [path.mkdir(parents=True, exist_ok=True) for path in (logs, media, assets, database, temp)]
-    [path.touch(exist_ok=True) for path in (production_dotenv, local_dotenv)]
+    if not production:
+        # files
+        production_dotenv = CWD / "envs" / "production.env"
+        local_dotenv = CWD / "envs" / "local.env"
+        [path.touch(exist_ok=True) for path in (production_dotenv, local_dotenv)]  # type: ignore[func-returns-value]
+
+    [path.mkdir(parents=True, exist_ok=True) for path in (logs, media, assets, database, temp)]  # type: ignore[func-returns-value]
 
 
 def run_command(command, debug=False, cwd=CWD, env=env_with_pythonpath(), shell=True):
@@ -177,16 +180,17 @@ def check(templates: bool = False):
 
 
 @cli.command()
-def setup():
+def setup(production: bool = False):
     """
-    Setup the project for development.
+    Setup the project.
     Clean.
     Create vital files and directories.
     Write template and commithash info to pyproject.toml.
     """
     clean()
-    create_vital_files_and_directories()
-    write_info_to_pyproject_toml(path=CWD)
+    create_vital_files_and_directories(production=production)
+    if not production:
+        write_info_to_pyproject_toml(path=CWD)
 
 
 @cli.command()
