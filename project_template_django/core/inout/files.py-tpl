@@ -19,10 +19,17 @@ def read_from_disk(path: Path) -> str:
     return ""
 
 
-def write_to_disk(path: Path, content: str):
+def write_to_disk(path: Path, content: str | bytes):
     """Write to a file."""
+    match content:
+        case str(content):
+            mode = "w"
+        case bytes(content):
+            mode = "wb"
+        case _:
+            raise TypeError(f"Content must be a string or bytes, not {type(content)}")
     try:
-        with open(path, "w") as file:
+        with open(path, mode) as file:
             file.write(content)
     except FileNotFoundError:
         print(f"Template {path} does not exist.")
