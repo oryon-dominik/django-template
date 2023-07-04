@@ -60,6 +60,8 @@ repos:
         django-environ,
         django-cors-headers,
         msgspec,
+        gitpython,
+        tomlkit,
         django-crispy-forms,
         crispy-tailwind,
         django-extensions,
