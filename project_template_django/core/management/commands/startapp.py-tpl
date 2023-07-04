@@ -49,7 +49,7 @@ class Command(startapp.Command):
 
         apps = Path(f"{settings.APPS_DIR}")
         app = apps / f"{_directory}s" if pluralize_name else apps / f"{_directory}"
-        app.mkdir(exist_ok=True)
+        app.mkdir(exist_ok=True, parents=True)
 
         options["directory"] = f"{app.resolve()}"
 
