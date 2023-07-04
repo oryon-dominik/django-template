@@ -46,7 +46,7 @@ def urlsafe_token(nbytes: int = 66):
 
 def random_secret(length: int, characters: str) -> str:
     """Generate a random secret."""
-    return ''.join(secrets.choice(characters) for _ in range(length))
+    return "".join(secrets.choice(characters) for _ in range(length))
 
 
 def jwt_token(
