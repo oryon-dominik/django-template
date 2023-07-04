@@ -161,8 +161,8 @@ def write_info_to_pyproject_toml(path: Path):
             template_repository_url=TEMPLATE,
             template_commit_hash=get_commithash(repository=TEMPLATE),
         )
-    except PyProjectHasBeenSetupBeforeException:
-        print("Pyproject.toml template information has already been setup before.")
+    except PyProjectHasBeenSetupBeforeException as e:
+        print(f"Pyproject.toml template information has already been setup before. {e}")
 
 
 # ----------GENERAL COMMANDS----------------------------------------------------
