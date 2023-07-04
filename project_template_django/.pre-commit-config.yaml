@@ -62,6 +62,7 @@ repos:
         msgspec,
         gitpython,
         tomlkit,
+        python-jose,
         django-crispy-forms,
         crispy-tailwind,
         django-extensions,
