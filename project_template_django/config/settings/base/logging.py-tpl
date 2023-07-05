@@ -65,7 +65,7 @@ LOGGING: dict = {
         "rich_console": {
             "class": "rich.logging.RichHandler",
             "formatter": "rich",
-            "level": "INFO",
+            "level": "DEBUG",
         },
         "requests_file": {
             "level": "INFO",
@@ -97,7 +97,7 @@ LOGGING: dict = {
             "propagate": True,
         },
         "core.io": {
-            "level": "INFO",
+            "level": "DEBUG",
             "propagate": True,
             "handlers": ["rich_console", "server_log_file"],
         },
