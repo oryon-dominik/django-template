@@ -40,6 +40,9 @@ LOGGING: dict = {
             "format": "{levelname} {message}",
             "style": "{",
         },
+        "rich": {
+            "datefmt": "[%X]",
+        },
     },
     "filters": {
         "require_debug_false": {
@@ -58,6 +61,11 @@ LOGGING: dict = {
             "filters": ["require_debug_true"],
             "class": "logging.StreamHandler",
             "formatter": "simple" if security.DEBUG else "verbose",
+        },
+        "rich_console": {
+            "class": "rich.logging.RichHandler",
+            "formatter": "rich",
+            "level": "INFO",
         },
         "requests_file": {
             "level": "INFO",
@@ -82,6 +90,16 @@ LOGGING: dict = {
             "handlers": ["console", "server_log_file"],
             "level": "INFO",
             "propagate": True,
+        },
+        "rich": {
+            "handlers": ["rich_console"],
+            "level": "INFO",
+            "propagate": True,
+        },
+        "core.io": {
+            "level": "INFO",
+            "propagate": True,
+            "handlers": ["rich_console", "server_log_file"],
         },
         "django.db.backends": {
             "level": "DEBUG",
