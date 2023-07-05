@@ -84,31 +84,37 @@ LOGGING: dict = {
             "filename": str(paths.ROOT_DIR / "logs" / "server.log"),
             "formatter": "verbose",
         },
+        "error_log_file": {
+            "level": "ERROR",
+            "class": LOGGING_FILE_HANDLER,
+            "filename": str(paths.ROOT_DIR / "logs" / "errors.log"),
+            "formatter": "verbose",
+        },
     },
     "loggers": {
         "django": {
-            "handlers": ["console", "server_log_file"],
+            "handlers": ["console", "server_log_file", "error_log_file"],
             "level": "INFO",
             "propagate": True,
         },
         "rich": {
-            "handlers": ["rich_console"],
+            "handlers": ["rich_console", "error_log_file"],
             "level": "INFO",
             "propagate": True,
         },
         "core.io": {
             "level": "DEBUG",
             "propagate": True,
-            "handlers": ["rich_console", "server_log_file"],
+            "handlers": ["rich_console", "server_log_file", "error_log_file"],
         },
         "django.db.backends": {
             "level": "DEBUG",
-            "handlers": ["database_queries_file"],
+            "handlers": ["database_queries_file", "error_log_file"],
             "propagate": True,
         },
         "django.security.DisallowedHost": {
             "level": "ERROR",
-            "handlers": ["console", "server_log_file"],
+            "handlers": ["console", "server_log_file", "error_log_file"],
             "propagate": False,
         },
     },
