@@ -1,7 +1,9 @@
+import logging
 import os
 from pathlib import Path
 
 
+log = logging.getLogger("django")
 # shall be ROOT_DIR / 'temp'
 TEMPORARY_DIRECTORY = Path(__file__).parent.parent.parent / "temp"
 
@@ -34,4 +36,4 @@ class TemporaryDirectory:
         try:
             delete_folder(self.path)
         except OSError as err:
-            print(f"Error deleting temp-folder: {err}")
+            log.error(f"Error deleting temp-folder: {err}")
