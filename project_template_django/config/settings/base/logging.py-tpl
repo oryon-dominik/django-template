@@ -97,6 +97,11 @@ LOGGING: dict = {
             "level": "INFO",
             "propagate": True,
         },
+        "dev": {
+            "handlers": ["rich_console"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
         "rich": {
             "handlers": ["rich_console", "error_log_file"],
             "level": "INFO",
