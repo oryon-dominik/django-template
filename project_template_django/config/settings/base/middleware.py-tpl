@@ -4,9 +4,12 @@
 # -----------------------------------------------------------------------------
 MIDDLEWARE = [  # order is important: https://docs.djangoproject.com/en/{{ docs_version }}/ref/middleware/#middleware-ordering
     "django.middleware.security.SecurityMiddleware",
+    "django_permissions_policy.PermissionsPolicyMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     # corsheaders middleware
     "corsheaders.middleware.CorsMiddleware",
+    # django-csp content-security-policy middleware
+    "csp.middleware.CSPMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",

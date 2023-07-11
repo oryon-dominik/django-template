@@ -75,10 +75,43 @@ SECURE_HSTS_SECONDS = (
 )  # one year man-in-the-middle-protection - this might be much too long for development and rapid prototyping
 SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool("DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True)  # type: ignore[no-untyped-call]
 SECURE_CONTENT_TYPE_NOSNIFF = env.bool("DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", default=True)  # type: ignore[no-untyped-call]
-SECURE_BROWSER_XSS_FILTER = True
+
+# Modern browsers don’t honor X-XSS-Protection HTTP header anymore. Although
+# the setting offers little practical benefit, you may still want to set the
+# header if you support older browsers.
+SECURE_BROWSER_XSS_FILTER = False
+
+SECURE_REFERRER_POLICY = "same-origin"  #"strict-origin"
+
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
 SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)  # type: ignore[no-untyped-call]
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
 X_FRAME_OPTIONS = "DENY"
+# Content-Security-Policy: https://www.w3.org/TR/CSP/
+# See https://django-csp.readthedocs.io/en/latest/configuration.html
+# Using: https://github.com/mozilla/django-csp
+CSP_SCRIPT_SRC = ("'self'",)
+
+# Permissions-Policy: https://wicg.github.io/feature-policy/
+# https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy
+# Using: https://github.com/adamchainz/django-permissions-policy
+PERMISSIONS_POLICY = {
+    "accelerometer": [],
+    "ambient-light-sensor": [],
+    "autoplay": [],
+    "camera": [],
+    "display-capture": [],
+    "document-domain": [],
+    "encrypted-media": [],
+    "fullscreen": [],
+    "geolocation": [],
+    "gyroscope": [],
+    "interest-cohort": [],
+    "magnetometer": [],
+    "microphone": [],
+    "midi": [],
+    "payment": [],
+    "usb": [],
+}

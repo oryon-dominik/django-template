@@ -59,6 +59,8 @@ repos:
         djangorestframework-stubs,
         django-environ,
         django-cors-headers,
+        django-csp,
+        django-permissions-policy,
         msgspec,
         gitpython,
         tomlkit,
