@@ -37,12 +37,12 @@ LOGGING = {
         },
     },
     "handlers": {
-        "rich_console": {
+        "console.rich": {
             "class": "rich.logging.RichHandler",
             "level": LOG_LEVEL,
             "formatter": "rich",
         },
-        "rich_console_with_loggername": {
+        "console.rich_with_loggername": {
             "class": "rich.logging.RichHandler",
             "level": LOG_LEVEL,
             "formatter": "rich_with_loggername",
@@ -56,9 +56,9 @@ LOGGING = {
     },
     "loggers": {
         "application": {
-            "handlers": ["rich_console", "file"],
+            "handlers": ["console.rich", "file"],
             "level": LOG_LEVEL,
-            "propagate": True,
+            "propagate": False,
         },
     },
 }
