@@ -26,7 +26,7 @@ def generic_user_factory(
 ) -> UserType:
     """
     User factory.
-    Produces a generic the user fixture
+    Produces a generic "the user" fixture.
     """
     first_name = first_name if first_name else faker.first_name()
     last_name = last_name if last_name else faker.last_name()

@@ -116,6 +116,7 @@ DJANGO_SETTINGS_MODULE = "config.settings.test"
 addopts = "-p no:warnings"
 python_files = "tests.py test_*.py *_tests.py"
 norecursedirs = ".git staticfiles docs assets logs media notebooks"
+xfail_strict = true
 
 [tool.coverage.run]
 branch = true
