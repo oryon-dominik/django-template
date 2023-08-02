@@ -62,6 +62,11 @@ def clean_pyc():
     [p.unlink() for p in Path(CWD).rglob("*~")]
 
 
+def clean_logs():
+    print("Unlinking logs: logs/*")
+    [p.unlink() for p in Path(CWD).rglob("logs/*")]
+
+
 def create_vital_files_and_directories(production: bool = False):
     print("Creating vital files and directories.")
 
@@ -168,9 +173,10 @@ def write_info_to_pyproject_toml(path: Path):
 # ----------GENERAL COMMANDS----------------------------------------------------
 @cli.command()
 def clean():
-    """Cleaning pycache, buildfiles"""
+    """Cleaning pycache, buildfiles, logfiles"""
     clean_build()
     clean_pyc()
+    clean_logs()
 
 
 @cli.command()
