@@ -97,7 +97,7 @@ If you only use one worker, you might want to switch to memory for development.
 - Create a frontend in `./frontend`, compiling to `./frontend/dist`.
 - You might clone the [vuejs-template](https://github.com/oryon-dominik/vuejs-in-django-template/) for a quick start.
 
-        git clone https://github.com/oryon-dominik/skeleton-vuejs-djangoexample/ ./frontend
+    git clone https://github.com/oryon-dominik/skeleton-vuejs-djangoexample/ ./frontend
 
 
 ## Caveats
