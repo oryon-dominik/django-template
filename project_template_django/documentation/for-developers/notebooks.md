@@ -23,3 +23,10 @@ You can also attach the debugger to the notebook.
 ## Debug api login
 
 Introduction to debugging, api login, user creation, management commands ...
+
+
+## Common Issues
+
+When running a notebook from an apps directory, *imports* from the same
+module your're running the notebook from, might be messed up (_name mangling_).
+So it's recommended to run notebooks from the dedicated notebooks directory or another specific place.
