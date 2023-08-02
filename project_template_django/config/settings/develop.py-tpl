@@ -39,6 +39,11 @@ PROJECT_FQDN: ParseResult = env.url("PROJECT_FQDN")
 # =============================================================================
 
 
+# --- SECURITY CONFIGURATION --------------------------------------------------
+# Custom Admin URL, use {% verbatim %}{% url 'admin:index' %}{% endverbatim %}
+ADMIN_URL = env.str("DJANGO_ADMIN_URL", default="admin/")  # type: ignore[no-untyped-call]
+
+
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = ["*"]
 
@@ -60,14 +65,23 @@ CORS_ALLOW_METHODS = [
     # 'PUT',
 ]
 
+# Content-Security-Policy: https://www.w3.org/TR/CSP/
+# See https://django-csp.readthedocs.io/en/latest/configuration.html
+# Using: https://github.com/mozilla/django-csp
+CSP_CONNECT_SRC = ("*",)
+CSP_DEFAULT_SRC = ("*",)
+CSP_STYLE_SRC = ("'unsafe-inline'",)
+CSP_IMG_SRC = ("*",)
+CSP_SCRIPT_SRC = ("*",)
+
+# -----------------------------------------------------------------------------
+
+
 CACHES["jwt-blacklist"]["BACKEND"] = "django.core.cache.backends.locmem.LocMemCache"
 
 # The logging-filter 'log_database_queries' will log to the file, if LOG_DATABASE is True
 # Turn it only on in develop
 LOG_DATABASE = False
-
-# Django Admin URL.
-ADMIN_URL = env.str("DJANGO_ADMIN_URL", default="admin/")  # type: ignore[no-untyped-call]
 
 # for development emails are send to console
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
