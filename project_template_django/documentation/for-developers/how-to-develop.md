@@ -29,8 +29,9 @@
 
 4. Install project dependencies
 
+        poetry env use python  # will create the venv and use your current local python
         poetry config virtualenvs.path <global path to your venvs>  # optional
-        poetry install  # will create the venv
+        poetry install  # will install the dependencies to the venv
 
 
 5. Setup the project for development
@@ -41,9 +42,14 @@
 
 6. Install pre-commit hooks
 
-        poetry run pre-commit install
+        poetry run pre-commit install  # repeat everytime you re-create the venv
 
 
 7. Run the devserver
 
         poetry run python manage.py runserver
+
+
+8. Run the tests
+        
+        poetry run pytest
