@@ -60,6 +60,14 @@
                 ],
                 "django": true
             },
+            {
+                "name": "Python: commands.py",
+                "type": "python",
+                "request": "launch",
+                "program": "${workspaceFolder}/commands.py",
+                "console": "integratedTerminal",
+                "args": ["--help"],
+            },
         ]
     }
 }
