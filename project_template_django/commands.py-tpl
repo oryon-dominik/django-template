@@ -6,6 +6,7 @@ import os
 import subprocess
 import webbrowser
 from pathlib import Path
+from typing import Optional
 
 import typer
 
@@ -17,6 +18,8 @@ except ImportError:
 
 
 cli = typer.Typer()
+
+
 # --------- CONFIG -------------------------------------------------------------
 DEBUG = True
 CWD = Path(__file__).parent
@@ -151,9 +154,9 @@ def formatcode(templates: bool = False):
 
 
 def get_commithash(*, repository: str) -> str:
-    from core.pyproject import get_latest_commit_hash
+    from core.pyproject import clone_and_get_latest_commit_hash
 
-    return get_latest_commit_hash(repository_url=repository)
+    return clone_and_get_latest_commit_hash(repository_url=repository)
 
 
 def write_info_to_pyproject_toml(path: Path):
@@ -170,7 +173,32 @@ def write_info_to_pyproject_toml(path: Path):
         print(f"Pyproject.toml template information has already been setup before. {e}")
 
 
+def _version_callback(value: bool) -> None:
+    if value:
+        from core.pyproject import load_pyproject
+
+        pyproject = load_pyproject(project_path=CWD)
+        title = pyproject.tool["poetry"]["name"]
+        version = pyproject.tool["poetry"]["version"]
+        print(f"{title} version={version}")
+        raise typer.Exit()
+
+
 # ----------GENERAL COMMANDS----------------------------------------------------
+@cli.callback(no_args_is_help=True)
+def default(
+    version: Optional[bool] = typer.Option(
+        None,
+        "--version",
+        "-v",
+        help="Show the application's version and exit.",
+        callback=_version_callback,
+        is_eager=True,
+    )
+) -> None:
+    return
+
+
 @cli.command()
 def clean():
     """Cleaning pycache, buildfiles, logfiles"""
@@ -206,6 +234,7 @@ def cherry():
     from core.pyproject import cherry_pick_changes
 
     cherry_pick_changes(pyproject_path=CWD)
+
 
 
 # ---------- INTROSPECTION ----------------------------------------------------
