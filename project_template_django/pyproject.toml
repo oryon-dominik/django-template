@@ -11,6 +11,8 @@ gunicorn = "^20.1.0"
 Django = "^4.1.1"
 django-environ = "^0.9.0"
 django-cors-headers = "^3.13.0"
+django-csp = "^3.7"
+django-permissions-policy = "^4.16.0"
 django-extensions = "^3.2.1"
 django-rich = "^1.4.0"
 django-stubs = {extras = ["compatible-mypy"], version = "^1.15.0"}
@@ -31,7 +33,7 @@ crispy-tailwind = "^0.5.0"
 [tool.poetry.group.cli]
 optional = false
 [tool.poetry.group.cli.dependencies]
-typer = "^0.6.1"
+typer = "^0.9.0"
 
 [tool.poetry.group.test]
 optional = false
@@ -114,6 +116,7 @@ DJANGO_SETTINGS_MODULE = "config.settings.test"
 addopts = "-p no:warnings"
 python_files = "tests.py test_*.py *_tests.py"
 norecursedirs = ".git staticfiles docs assets logs media notebooks"
+xfail_strict = true
 
 [tool.coverage.run]
 branch = true

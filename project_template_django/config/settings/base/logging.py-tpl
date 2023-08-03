@@ -11,14 +11,24 @@ from . import security
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#logging
 
 # The following loglevels are available:
-# - CRITICAL    (50)
-# - ERROR       (40)
-# - WARNING     (30)
-# - INFO        (20)
-# - DEBUG       (10)
-# - NOTSET      (0)
+# - CRITICAL    (50)    ...
+# - FATAL       (50)    CRASH, data loss imminent, shutdown to prevent further damage
+# - ERROR       (40)    exceptions, runtime errors, forces user intervention
+# - WARNING     (30)    something went wrong, the application can recover
+# - INFO        (20)    service information that should always be available
+# - DEBUG       (10)    diagnostics
+# - NOTSET       (0)    -
 # The default level shall be WARNING.
 # The default level for the console can be INFO.
+
+# The following levels are not implemented in python's logging module by default
+# - EMERGENCY  (100)    CRASH, forces user intervention and alerts immediately
+# - NOTICE      (25)    something more important happened
+# - TRACE        (5)    trace and find specific parts
+# import logging
+# setattr(logging, "EMERGENCY", 100)
+# setattr(logging, "NOTICE", 25)
+# setattr(logging, "TRACE", 5)
 
 # The logging-filter 'log_database_queries' will log to the file, if LOG_DATABASE is True
 # Turn it only on in develop
@@ -40,6 +50,9 @@ LOGGING: dict = {
             "format": "{levelname} {message}",
             "style": "{",
         },
+        "rich": {
+            "datefmt": "[%X]",
+        },
     },
     "filters": {
         "require_debug_false": {
@@ -59,6 +72,12 @@ LOGGING: dict = {
             "class": "logging.StreamHandler",
             "formatter": "simple" if security.DEBUG else "verbose",
         },
+        "console.rich": {
+            "class": "rich.logging.RichHandler",
+            "formatter": "rich",
+            "level": "DEBUG",
+            "propagate": False,  # do not propagate to the parent logger (console)
+        },
         "requests_file": {
             "level": "INFO",
             "class": LOGGING_FILE_HANDLER,
@@ -76,21 +95,42 @@ LOGGING: dict = {
             "filename": str(paths.ROOT_DIR / "logs" / "server.log"),
             "formatter": "verbose",
         },
+        "error_log_file": {
+            "level": "ERROR",
+            "class": LOGGING_FILE_HANDLER,
+            "filename": str(paths.ROOT_DIR / "logs" / "errors.log"),
+            "formatter": "verbose",
+        },
     },
     "loggers": {
         "django": {
-            "handlers": ["console", "server_log_file"],
+            "handlers": ["console", "server_log_file", "error_log_file"],
             "level": "INFO",
             "propagate": True,
         },
+        "dev": {
+            "handlers": ["rich_console"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+        "rich": {
+            "handlers": ["rich_console", "error_log_file"],
+            "level": "INFO",
+            "propagate": True,
+        },
+        "core.io": {
+            "level": "DEBUG",
+            "propagate": True,
+            "handlers": ["rich_console", "server_log_file", "error_log_file"],
+        },
         "django.db.backends": {
             "level": "DEBUG",
-            "handlers": ["database_queries_file"],
+            "handlers": ["database_queries_file", "error_log_file"],
             "propagate": True,
         },
         "django.security.DisallowedHost": {
             "level": "ERROR",
-            "handlers": ["console", "server_log_file"],
+            "handlers": ["console", "server_log_file", "error_log_file"],
             "propagate": False,
         },
     },

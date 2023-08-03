@@ -4,6 +4,11 @@ from django.test import Client
 
 
 class RestClient(Client):
+    """
+    Mocking the Django test client to add support for JSON data.
+
+    Supports get and post methods right now.
+    """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, enforce_csrf_checks=True, **kwargs)
 

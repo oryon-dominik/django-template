@@ -30,9 +30,9 @@ THIRD_PARTY_APPS: list[str] = [
     "crispy_tailwind",
     "django_extensions",
     "widget_tweaks",
-    # 'rest_framework',
+    # "rest_framework",
     "corsheaders",
-    # 'django_vite',
+    # "django_vite",
 ]
 # See: https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#installed-apps
 # local apps shall override djangos default, so order is important

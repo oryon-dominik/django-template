@@ -7,23 +7,33 @@ from test.factories import generic_user_factory, admin_user_factory
 
 @pytest.fixture
 def valid_password() -> str:
+    """
+    A valid password that passes the password validation.
+    """
     return "secretpasswordthatpassesvalidation1!"
 
 
 @pytest.fixture
 def wrong_password() -> str:
+    """
+    A wrong password that passes the password validation.
+    """
     return "wrongpasswordthatpassesvalidation1!"
 
 
 @pytest.fixture
 def invalid_password() -> str:
+    """
+    An invalid password that does not pass the password validation.
+    """
     return "invalid"
 
 
 @pytest.fixture
 def user(valid_password):
-    """Explicitly create a user from the factory or the original fixture will
-    be overwritten in a case of a test that uses both of the fixtures."""
+    """
+    Yields from user factory.
+    """
     user = generic_user_factory(password=valid_password)
     yield user
     get_user_model().objects.get(email=user.email).delete()  # type: ignore[no-untyped-call]
@@ -31,8 +41,9 @@ def user(valid_password):
 
 @pytest.fixture
 def verified_user(valid_password):
-    """Explicitly create a user from the factory or the original fixture will
-    be overwritten in a case of a test that uses both of the fixtures."""
+    """
+    Yields from user factory. Activation is enforced explicitly.
+    """
     user = generic_user_factory(is_active=True, password=valid_password)
     yield user
     get_user_model().objects.get(email=user.email).delete()  # type: ignore[no-untyped-call]
@@ -40,8 +51,9 @@ def verified_user(valid_password):
 
 @pytest.fixture
 def verified_admin_user(valid_password):
-    """Explicitly create a user from the factory or the original fixture will
-    be overwritten in a case of a test that uses both of the fixtures."""
+    """
+    Yields from adminuser factory. Activation is enforced explicitly.
+    """
     user = admin_user_factory(is_active=True, is_staff=True, password=valid_password)
     yield user
     get_user_model().objects.get(email=user.email).delete()  # type: ignore[no-untyped-call]
@@ -49,8 +61,9 @@ def verified_admin_user(valid_password):
 
 @pytest.fixture
 def unverified_user(valid_password):
-    """Explicitly create a user from the factory or the original fixture will
-    be overwritten in a case of a test that uses both of the fixtures."""
+    """
+    Yields from user factory. User is explicitly de-activated.
+    """
     user = generic_user_factory(is_active=False, password=valid_password)
     yield user
     get_user_model().objects.get(email=user.email).delete()  # type: ignore[no-untyped-call]

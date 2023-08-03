@@ -1,4 +1,8 @@
+import logging
 from pathlib import Path
+
+
+log = logging.getLogger("core.io")
 
 
 def read_from_disk(path: Path) -> str:
@@ -10,30 +14,32 @@ def read_from_disk(path: Path) -> str:
         with open(path) as file:
             content = file.read()
         return content
-    except FileNotFoundError:
-        print(f"Template {path} does not exist.")
-    except OSError as e:
-        print(f"An error occurred while reading the file: {e}")
+    except FileNotFoundError as e:
+        log.error(f"{path} does not exist.")
+        raise e
+    except PermissionError as e:
+        log.error(f"A permission error occurred while reading the file: {e}")
+        raise e
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+        log.error(f"An unexpected error occurred: {e}")
+        raise e
     return ""
 
 
 def write_to_disk(path: Path, content: str | bytes):
     """Write to a file."""
-    match content:
-        case str(content):
-            mode = "w"
-        case bytes(content):
-            mode = "wb"
-        case _:
-            raise TypeError(f"Content must be a string or bytes, not {type(content)}")
+    content_type = type(content)
+    if content_type is not bytes and content_type is not str:
+        raise TypeError(f"Content must be a string or bytes, not {content_type}")
+
+    mode = "w" if content_type is str else "wb"
+
     try:
-        with open(path, mode) as file:
+        with open(file=path, mode=mode) as file:
             file.write(content)
-    except FileNotFoundError:
-        print(f"Template {path} does not exist.")
-    except OSError as e:
-        print(f"An error occurred while reading the file: {e}")
+    except PermissionError as e:
+        log.error(f"A permission error occurred while writing the file: {e}")
+        raise e
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+        log.error(f"An unexpected error occurred: {e}")
+        raise e

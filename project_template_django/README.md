@@ -33,14 +33,20 @@ Read the project's [documentation](./documentation/index.md) for all details and
     poetry run python manage.py migrate
 
 
+### Deployment
+
+See the [documentation on deployments](./documentation/for-devops/deployment.md) for details.
+
 ### Pre-Commit hooks
 
 [Pre-commit hooks](https://github.com/pre-commit/pre-commit-hooks) are defined
 in `.pre-commit-config.yaml`. Adding them to the project will ensure that the
-code is formatted and linted before committing.  
+code is formatted and linted before committing. Repeat the installation
+everytime you re-create the venv  
 
     poetry run pre-commit install
 
+TODO: reactivate pyupgrade after the support for typing.Optional is added in 1.0 of typer
 
 ### Tests
 
@@ -73,23 +79,7 @@ Static type checking can be checked with [mypy](https://mypy-lang.org/).
 
 ### gitflow
 
-Following the blog-post from [Vincent Driessen: A successful git branching model](https://nvie.com/posts/a-successful-git-branching-model/) we are using our own naming conventions: `develop` -> `trunk`, `master` -> `production` to orient a bit more on apaches [svn-branching model](https://subversion.apache.org/quick-start) and [the modern github flow](https://guides.github.com/introduction/flow/). Starting a new release should usally be followed up by a [pull request](https://docs.github.com/articles/creating-a-pull-request). Hint: use [hub](https://hub.github.com/) to add them from CLI.  
-
-To start a new feature, use `git flow feature start <name>`.  
-To finish a feature, use `git flow feature finish <name>`.  
-
-`git flow init` shall produce the following entries in `.git/config` following our naming conventions.
-
-    [gitflow "branch"]
-        master = production
-        develop = trunk
-    [gitflow "prefix"]
-        feature = feature/
-        bugfix = bugfix/
-        release = release/
-        hotfix = hotfix/
-        support = support/
-        versiontag =
+See the [documentation on releases](./documentation/releases.md) for details.
 
 
 ### postgresql via docker
