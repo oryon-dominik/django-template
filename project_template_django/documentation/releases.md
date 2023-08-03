@@ -15,13 +15,17 @@ We are trying to orient ourselfs on [semantic versioning](https://semver.org/lan
 
 ## Gitflow 
 
-We combine the branching model from [git-flow](https://nvie.com/posts/a-successful-git-branching-model/) with [github-flow](https://docs.github.com/get-started/quickstart/github-flow) and [trunk based development](https://trunkbaseddevelopment.com/).
+We combine the branching model following the blog-post from [Vincent Driessen: A successful git branching model](https://nvie.com/posts/a-successful-git-branching-model/) with [github-flow](https://docs.github.com/get-started/quickstart/github-flow) and [trunk based development](https://trunkbaseddevelopment.com/) to orient a bit more on apaches [svn-branching model](https://subversion.apache.org/quick-start).
+
+We are using our own naming conventions: `develop` -> `trunk`, `master` -> `production`
+
 
 ### The rules are.
 
 Usally we just dump everything into the trunk.  
 'Use at your own risk'-style.  
-If you want to be safe, use production branches and git-flow:
+If you want to be safe, use production branches and git-flow.
+Starting a new release should be followed up by a [pull request](https://docs.github.com/articles/creating-a-pull-request) (hint: use [hub](https://hub.github.com/) to add them from CLI.)  
 - `production` is the production branch, this is live.
 - `trunk` is the development branch, for smaller teams this might be enough
 - `feature/*` branches are for specific features, they should be created only, if the feature is not trivial and will take more than a few hours or extra steps to develop. They are branched from `trunk` and merged into `trunk`.
