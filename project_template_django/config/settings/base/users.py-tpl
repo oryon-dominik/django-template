@@ -10,6 +10,8 @@ AUTH_USER_MODEL = "auth.User"  # -> users.User if the app is customized.
 # Password validation
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#auth-password-validators
 
+AUTH_PASSWORD_MINIMUM_LENGTH = 12
+
 # fmt: off
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -17,7 +19,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-        "OPTIONS": {"min_length": 12}
+        "OPTIONS": {"min_length": AUTH_PASSWORD_MINIMUM_LENGTH}
     },
     {
         "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
@@ -27,6 +29,3 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 # fmt: on
-AUTH_PASSWORD_MINIMUM_LENGTH = [
-    s["OPTIONS"]["min_length"] for s in AUTH_PASSWORD_VALIDATORS if "MinimumLengthValidator" in s["NAME"]
-][0]
