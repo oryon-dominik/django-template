@@ -27,3 +27,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 # fmt: on
+AUTH_PASSWORD_MINIMUM_LENGTH = [
+    s["OPTIONS"]["min_length"] for s in AUTH_PASSWORD_VALIDATORS if "MinimumLengthValidator" in s["NAME"]
+][0]

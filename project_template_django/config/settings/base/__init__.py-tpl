@@ -72,6 +72,7 @@ from .urlconf import (
 from .users import (
     AUTH_USER_MODEL,  # noqa # pylint: disable=unused-import
     AUTH_PASSWORD_VALIDATORS,  # noqa # pylint: disable=unused-import
+    AUTH_PASSWORD_MINIMUM_LENGTH,  # noqa # pylint: disable=unused-import
 )
 
 # -----------------------------------------------------------------------------
