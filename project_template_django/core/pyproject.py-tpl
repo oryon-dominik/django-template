@@ -181,13 +181,16 @@ def initialize_template_section_to_pyproject(
     )
 
 
-def get_latest_commit_hash(*, repository_url: str):
-
+def clone_and_get_latest_commit_hash(*, repository_url: str):
     with TemporaryDirectory() as temporary_directory:
         repo = git.Repo.clone_from(repository_url, temporary_directory)  # type: ignore
-        latest_commit = repo.head.commit
-        commit_hash = latest_commit.hexsha
+        commit_hash = get_latest_commit_hash(repository=repo)
+    return commit_hash
 
+
+def get_latest_commit_hash(*, repository: git.repo.base.Repo) -> str:  # type: ignore
+    latest_commit = repository.head.commit
+    commit_hash = latest_commit.hexsha
     return commit_hash
 
 
@@ -217,19 +220,54 @@ def cherry_pick_changes(*, pyproject_path):
     if old is None or url is None:
         raise PyProjectTomlLoadException("Template section is not initialized")
 
-    latest = get_latest_commit_hash(repository_url=url)
     current_repo = git.Repo(pyproject_path)  # type: ignore
 
+    
     with TemporaryDirectory() as temporary_directory:
         template_repo = git.Repo.clone_from(url, temporary_directory)  # type: ignore
+        latest = get_latest_commit_hash(repository=template_repo)
+
         relevant_changes = list(template_repo.iter_commits(f"{old}..{latest}"))
 
         # Get the commit messages of the last commits
         commit_message = template_repo.git.log("-n", f"{len(relevant_changes)}", "--pretty=format:%s", latest)
         commit_message = "\n".join(reversed(commit_message.split("\n")))
-        # TODOs:
-        # - squash all commits into one
+
+        # Squash all commits into one
+        template_repo.git.reset("--soft", f"HEAD~{len(relevant_changes)}")
+        template_repo.git.add(".")
+        template_repo.git.commit("-m", commit_message)
+        squashed = template_repo.head.commit
+
         # - throw away all changes except the ones in the template (f"{used_template}") directory
+        # - modify all paths and remove f"{used_template}" from the path
+        # - modify all paths and replace suffix .py-tpl with .py
+        # - replace all occurences of {{ project_name }} with the actual project
+        # - replace django templating variables
+        #    these jinja variables have been replaced by the original values
+        #    - project_name
+        #    - project_directory
+        #    - secret_key
+        #    - docs_version
+        #    - django_version
+
+        # merge the modified commit
+        # merge_result = current_repo.git.merge(squashed)
+        # print(f">>> DEBUG: {merge_result=}")
+
+        # - throw away all changes except the ones in the template (f"{used_template}") directory
+        # modified_new_commit = filter_relevant_project(new_commit)
+
+        # path_modified_new_commit = modify_paths(modified_new_commit)
+
+        # suffixed_path_modified_new_commit = change_suffix(path_modified_new_commit)
+
+        # replaced_commit = replace_template_jinjas(suffixed_path_modified_new_commit)
+        
+        # final_commit = repair_commit_hashes(replaced_commit)
+        
+        # git.merge(final_commit)
+
         # - modify all paths and remove f"{used_template}" from the path
         # - modify all paths and replace suffix .py-tpl with .py
         # - replace all occurences of {{ project_name }} with the actual project
