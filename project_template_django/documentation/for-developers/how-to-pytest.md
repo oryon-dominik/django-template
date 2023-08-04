@@ -41,7 +41,7 @@ pytest --last-failed
 pytest --setup-show
 
 # Drop into pdb on test failure
-pytest --pdb 
+pytest --pdb
 
 ```
 
