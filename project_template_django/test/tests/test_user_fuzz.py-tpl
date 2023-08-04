@@ -1,0 +1,18 @@
+import pytest
+from hypothesis import given
+from hypothesis import strategies as st
+from hypothesis.extra.django import from_model
+
+from django.conf import settings
+from django.contrib.auth import get_user_model
+
+
+@pytest.mark.slow
+@pytest.mark.django_db(transaction=True)
+@given(fuzzing_testuser=from_model(get_user_model(), password=st.text(min_size=settings.AUTH_PASSWORD_MINIMUM_LENGTH)))
+def test_user_fuzzing(fuzzing_testuser):
+    """
+    This test is a fuzzing test for the user model.
+    Hypothesis will generate a bunch of random user for allows data and check if the user model can handle it.
+    """
+    assert fuzzing_testuser.__dict__
