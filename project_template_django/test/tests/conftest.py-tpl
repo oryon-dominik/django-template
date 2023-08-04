@@ -8,3 +8,7 @@ from test.fixtures.users import (  # noqa # pylint: disable=unused-import
     unverified_user,
     valid_password,
 )
+from test.fixtures.vcr import (  # noqa # pylint: disable=unused-import
+    vcr_config,
+    vcr_cassette_dir,
+)

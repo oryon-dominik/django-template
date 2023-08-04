@@ -1,0 +1,22 @@
+from pathlib import Path
+
+import pytest
+
+
+@pytest.fixture(scope="package", autouse=True)
+def vcr_config():
+    """VCR configuration"""
+    return {
+        "filter_headers": [
+            # Replace the Authorization request header with "DUMMY" in cassettes
+            ("Authentication", "Authentication-DUMMY"),
+            # Replace the CSRF request header with "DUMMY" in cassettes
+            ("CSRF", "CSRF-DUMMY"),
+        ],
+    }
+
+
+@pytest.fixture(scope="package", autouse=True)
+def vcr_cassette_dir(request):
+    """VCR cassette directory"""
+    return f"{(Path(__file__).parent.parent / 'cassettes').resolve()}"

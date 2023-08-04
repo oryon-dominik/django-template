@@ -42,6 +42,12 @@ __pycache__
 .ipynb_checkpoints/
 .ipython/
 
+# Tests
+.coverage
+.hypothesis/
+htmlcov/
+
+
 # ===================
 ## Tyepscript Frontend
 # ===================
