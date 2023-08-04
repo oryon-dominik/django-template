@@ -188,6 +188,8 @@ def _version_callback(value: bool) -> None:
 @cli.callback(no_args_is_help=True)
 def default(
     version: Optional[bool] = typer.Option(
+    # BUG: replace Optional with bool | None, when a typer release merges
+    # the pull request for modern Typehints -> also re-activate pre-commit-hook 'pyupgrade', that is currently deactivated bedause of this bug.
         None,
         "--version",
         "-v",
@@ -352,6 +354,16 @@ def nb():
 def up():
     """= run (start the devserver)"""
     run()
+
+
+@cli.command()
+def init():
+    """= setup (setup the project for development)
+    Clean.
+    Create vital files and directories.
+    Write template and commithash info to pyproject.toml.
+    """
+    setup()
 
 
 # ---------- LINTING ----------------------------------------------------------
