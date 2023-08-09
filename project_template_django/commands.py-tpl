@@ -14,8 +14,9 @@ import typer
 try:
     from rich import print  # noqa
 except ImportError:
-    pass
-
+    # if rich is not installed, use the default print
+    # avoid linter warning for undefined print
+    print = print  # noqa
 
 cli = typer.Typer()
 
