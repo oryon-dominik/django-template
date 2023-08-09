@@ -27,6 +27,7 @@ Usally we just dump everything into the trunk.
 If you want to be safe, use production branches and git-flow.
 Starting a new release should be followed up by a [pull request](https://docs.github.com/articles/creating-a-pull-request) (hint: use [hub](https://hub.github.com/) to add them from CLI.)  
 - `production` is the production branch, this is live.
+- In some project we might need a `staging` branch if we have a live staging environment for PO Q&A.
 - `trunk` is the development branch, for smaller teams this might be enough
 - `feature/*` branches are for specific features, they should be created only, if the feature is not trivial and will take more than a few hours or extra steps to develop. They are branched from `trunk` and merged into `trunk`.
 - `release/*` branches are for new releases only - every release has it's own git-tag and is branched from `trunk` and merged into `trunk` and `production`. Releases might involve staging, testing and some bugfixes, no active development.
