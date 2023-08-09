@@ -72,9 +72,13 @@ CORS_ALLOW_METHODS = [
 # Using: https://github.com/mozilla/django-csp
 CSP_CONNECT_SRC = ("*",)
 CSP_DEFAULT_SRC = ("*",)
-CSP_STYLE_SRC = ("'unsafe-inline'",)
+CSP_STYLE_SRC = (
+    "'unsafe-inline'",
+    "'self'",
+)
 CSP_IMG_SRC = ("*",)
 CSP_SCRIPT_SRC = ("*",)
+
 
 # -----------------------------------------------------------------------------
 

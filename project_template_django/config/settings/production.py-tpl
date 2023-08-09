@@ -97,7 +97,7 @@ X_FRAME_OPTIONS = "DENY"
 # CSP: default-src
 # serves as a fallback for the other CSP fetch directives. For each of the following directives that are absent, the
 # user agent looks for the default-src directive and uses this value for it:
-# child-src, connect-src, font-src, frame-src, img-src, manifest-src, media-src, object-src, prefetch-src, script-src, 
+# child-src, connect-src, font-src, frame-src, img-src, manifest-src, media-src, object-src, prefetch-src, script-src,
 # script-src-elem, script-src-attr, style-src, style-src-elem, style-src-attr, worker-src
 # example: ("'self'", f"ws://{PROJECT_FQDN.netloc}")
 CSP_DEFAULT_SRC = ("'self'", PROJECT_URL)
@@ -109,7 +109,8 @@ CSP_DEFAULT_SRC = ("'self'", PROJECT_URL)
 CSP_CONNECT_SRC = ("'self'", PROJECT_URL)
 # CSP: style-src
 # The HTTP Content-Security-Policy (CSP) style-src directive specifies valid sources for stylesheets.
-CSP_STYLE_SRC = ("'self'", PROJECT_URL)
+# ! Tailwind needs unsafe-inline
+CSP_STYLE_SRC = ("'unsafe-inline'", "'self'", PROJECT_URL)
 # CSP: img-src
 # The HTTP Content-Security-Policy img-src directive specifies valid sources of images and favicons.
 CSP_IMG_SRC = ("'self'", PROJECT_URL)
@@ -122,7 +123,7 @@ CSP_SCRIPT_SRC = ("'self'", PROJECT_URL)
 # Permissions-Policy: https://wicg.github.io/feature-policy/
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy
 # Using: https://github.com/adamchainz/django-permissions-policy
-PERMISSIONS_POLICY = {
+PERMISSIONS_POLICY: dict = {
     "accelerometer": [],
     "ambient-light-sensor": [],
     "autoplay": [],
