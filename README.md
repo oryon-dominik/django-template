@@ -23,7 +23,7 @@ course, dear mrkf 😎) `git init`ialize it.
 
 Local python version:
 
-    python -c 'import os;import sys;from pathlib import Path;os.system(str((Path(sys.executable).parent / \"Scripts\" / \"django-admin\").resolve()) + \" startproject --template https://github.com/oryon-dominik/django-template/releases/download/latest/project_template_django.zip --extension=py,md,toml,. <project_name> .\")'
+    python -c 'import os;import sys;from pathlib import Path;os.system(str((Path(sys.executable).parent / \"Scripts\" / \"django-admin\").resolve()) + \" startproject --template https://github.com/oryon-dominik/django-template/releases/download/latest/project_template_django.zip --extension=py,md,toml,env,. <project_name> .\")'
 
 
 For any subsequent command (creating apps..) *install the dependencies* (`poetry install`) and *activate your virtual environment*.
@@ -31,7 +31,7 @@ For any subsequent command (creating apps..) *install the dependencies* (`poetry
 
 ### CLI Project
 
-    django-admin startproject --template https://github.com/oryon-dominik/django-template/releases/download/latest/project_template_cli.zip --extension=py,md,toml,. <project_name> <directory>
+    django-admin startproject --template https://github.com/oryon-dominik/django-template/releases/download/latest/project_template_cli.zip --extension=py,md,toml,env,. <project_name> <directory>
 
 
 ## Django Apps
@@ -40,7 +40,7 @@ For any subsequent command (creating apps..) *install the dependencies* (`poetry
 
 (will be created in the project's `apps` folder)
 
-    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_default.zip --extension=py,md,toml,. <app_name>
+    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_default.zip --extension=py,md,toml,env,. <app_name>
 
 
 - Add `'apps.<app_name>.apps.<app_name.capitalize()>Config'` to `LOCAL_APPS` or `PROJECT_APPS` in `config.settings.base.apps.py`.  
@@ -51,7 +51,7 @@ For any subsequent command (creating apps..) *install the dependencies* (`poetry
 
 (will be created in the project's `apps` folder)
 
-    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_rest.zip --extension=py,md,toml,. <app_name>
+    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_rest.zip --extension=py,md,toml,env,. <app_name>
 
 
 - Add `'apps.<app_name>.apps.<app_name.capitalize()>Config'` to `LOCAL_APPS` or `PROJECT_APPS` in `config.settings.base.apps.py`.  
@@ -62,7 +62,7 @@ For any subsequent command (creating apps..) *install the dependencies* (`poetry
 
 (will be created in the project's `apps` folder)
 
-    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_authentication.zip --extension=py,md,toml,. authentication
+    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_authentication.zip --extension=py,md,toml,env,. authentication
 
 - In `config.urls.apis.py` comment `path('', include('apps.authentication.api.urls')),` in.
 
@@ -77,7 +77,7 @@ If you only use one worker, you might want to switch to memory for development.
 
 (will be created in the project's `apps` folder, please use a singluar name, that will be automatically pluralized - it's a crud app after all ;-] )
 
-    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_simple_crud_templates.zip --extension=py,md,toml,. --pluralize-name --replace-html <app_name>
+    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_simple_crud_templates.zip --extension=py,md,toml,env,. --pluralize-name --replace-html <app_name>
 
 - Add `'apps.<app_name>.apps.<app_name.capitalize()>Config'` to `LOCAL_APPS` or `PROJECT_APPS` in `config.settings.base.apps.py`.  
 - Add the apps routes to `urlpatterns` in `config.urls.routes.py` like this: `path('', include('apps.<app_name>.api.urls', namespace="<app_name>")),`.  
@@ -88,7 +88,7 @@ If you only use one worker, you might want to switch to memory for development.
 
 (will be created in the project's `apps` folder, please use a singluar name)
 
-    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_vuejs_templates.zip --extension=py,md,toml,. --replace-html <app_name>
+    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_vuejs_templates.zip --extension=py,md,toml,env,. --replace-html <app_name>
 
 - Add `'apps.<app_name>.apps.<app_name.capitalize()>Config'` to `LOCAL_APPS` or `PROJECT_APPS` in `config.settings.base.apps.py`.  
 - Comment-In `'django_vite',` in `THIRD_PARTY_APPS` of `config.settings.base.apps.py`.  
