@@ -6,21 +6,21 @@ from pathlib import Path
 from ..inout.files import read_from_disk
 
 
-def random_characters(length: int, characters: str) -> str:
-    """Generate a random secret."""
-    return "".join(secrets.choice(characters) for _ in range(length))
+def random_sequence(*, chars: str, length: int) -> str:
+    """Generate a random sequence from some characters with length."""
+    return "".join(secrets.choice(chars) for _ in range(length))
 
 
-def calculate_sha256(encoded: bytes) -> bytes:
-    """Calculate the SHA-256 hash for some bytes."""
+def sha256(encoded: bytes) -> bytes:
+    """SHA-256 hash for some bytes."""
     return hashlib.sha256(encoded).digest()
 
 
-def calculate_base64(hashed: bytes) -> bytes:
-    """Calculate the base64 encoded SHA-256 hash for some bytes."""
+def b64(hashed: bytes) -> bytes:
+    """base64 encoded SHA-256 hash for some bytes."""
     return base64.b64encode(hashed)
 
 
-def calculate_sha_for_file(path: Path) -> str:
-    """Calculate the SHA-256 hash of a file."""
-    return calculate_base64(calculate_sha256(read_from_disk(path).encode())).decode()
+def hashme(file: Path) -> str:
+    """base64 encoded SHA-256 for a file."""
+    return b64(sha256(read_from_disk(file).encode())).decode()
