@@ -10,19 +10,19 @@ def read_from_disk(path: Path) -> str:
     Read from a file.
     Return the content of the file as a string.
     """
+    if type(path) is not Path:
+        raise TypeError(f"Invalid type for path: {type(path)=}")
+    if not path.exists():
+        raise FileNotFoundError(f"{path} does not exist.")
+    if not path.is_file():
+        raise FileNotFoundError(f"{path} is not a file.")
     try:
         with open(path) as file:
             content = file.read()
         log.debug(f"INOUT.FILES.READ {len(content)=} {path=}")
         return content
-    except FileNotFoundError as e:
-        log.error(f"{path} does not exist.")
-        raise e
     except PermissionError as e:
         log.error(f"A permission error occurred while reading the file: {e}")
-        raise e
-    except TypeError as e:
-        log.error(f"Invalid type for path: {e}")
         raise e
     except OSError as e:
         log.error(f"An OS error occurred while reading the file: {e}")
@@ -38,6 +38,8 @@ def write_to_disk(path: Path, content: str | bytes):
     content_type = type(content)
     if content_type is not bytes and content_type is not str:
         raise TypeError(f"Content must be a string or bytes, not {content_type}")
+    if type(path) is not Path:
+        raise TypeError(f"Invalid type for path: {type(path)=}")
 
     mode = "w" if content_type is str else "wb"
 
@@ -47,9 +49,6 @@ def write_to_disk(path: Path, content: str | bytes):
             file.write(content)
     except PermissionError as e:
         log.error(f"A permission error occurred while writing the file: {e}")
-        raise e
-    except TypeError as e:
-        log.error(f"Invalid type for path: {e}")
         raise e
     except OSError as e:
         log.error(f"An OS error occurred while writing the file: {e}")
