@@ -1,27 +1,31 @@
 import pytest
-
 from hypothesis import given
 from hypothesis import strategies as st
 
 from core.cypher import security
 
 
-@pytest.mark.skip(reason="This FUZZING test is EXTREMELY slow. So skip it, it has run successfully.")
-@pytest.mark.slow
-@given(chars=st.text(), length=st.integers(min_value=1))
-def test_random_sequence_for_positive_integers(chars, length):
+@given(alphabet=st.text(min_size=1, max_size=1000), length=st.integers(min_value=1, max_value=1000))
+def test_random_sequence_for_positive_integers(alphabet, length):
     """Generate a random sequence from some characters with length."""
-    result = security.random_sequence(chars=chars, length=length)
+    result = security.random_sequence(alphabet=alphabet, length=length)
     assert len(result) == length
 
 
-@pytest.mark.skip(reason="This FUZZING test is EXTREMELY slow. So skip it, it has run successfully.")
-@pytest.mark.slow
-@given(chars=st.text(), length=st.integers(max_value=0))
-def test_random_sequence_for_negative_integers_and_zero(chars, length):
-    """Test for negative integers and zero"""
-    result = security.random_sequence(chars=chars, length=length)
-    assert len(result) == 1
+def test_random_sequence_for_integers_out_of_range():
+    with pytest.raises(ValueError):
+        security.random_sequence(alphabet="something", length=0)
+    with pytest.raises(ValueError):
+        security.random_sequence(alphabet="something", length=-1)
+    with pytest.raises(ValueError):
+        security.random_sequence(alphabet="something", length=1001)
+
+
+def test_random_sequence_for_invalid_alphabets():
+    with pytest.raises(ValueError):
+        security.random_sequence(alphabet="", length=1)
+    with pytest.raises(ValueError):
+        security.random_sequence(alphabet="-"*1001, length=1)
 
 
 def test_hashme_fails_for_none():

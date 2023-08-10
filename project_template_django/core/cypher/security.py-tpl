@@ -6,9 +6,20 @@ from pathlib import Path
 from ..inout.files import read_from_disk
 
 
-def random_sequence(*, chars: str, length: int) -> str:
-    """Generate a random sequence from some characters with length."""
-    return "".join(secrets.choice(chars) for _ in range(length))
+def random_sequence(*, alphabet: str, length: int) -> str:
+    """
+    Generate a random sequence from some characters with length.
+    """
+    MAXIMUM_LENGTH = 1000
+    if length < 1:
+        raise ValueError("Length must be positive-nonzero.")
+    if length > MAXIMUM_LENGTH:
+        raise ValueError(f"Length must be less than {MAXIMUM_LENGTH=}.")
+    if not alphabet:
+        raise ValueError("No characters provided.")
+    if len(alphabet) > MAXIMUM_LENGTH:
+        raise ValueError(f"Length of the alphabet {len(alphabet)=} must be less than {MAXIMUM_LENGTH=}.")
+    return "".join(secrets.choice(alphabet) for _ in range(length))
 
 
 def sha256(encoded: bytes) -> bytes:
