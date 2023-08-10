@@ -13,19 +13,21 @@ def test_random_sequence_for_positive_integers(alphabet, length):
 
 
 def test_random_sequence_for_integers_out_of_range():
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=r"^Length must be positive-nonzero.$"):
         security.random_sequence(alphabet="something", length=0)
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=r"^Length must be positive-nonzero.$"):
         security.random_sequence(alphabet="something", length=-1)
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=r"^Length must be less than MAXIMUM_LENGTH=1000.$"):
         security.random_sequence(alphabet="something", length=1001)
 
 
 def test_random_sequence_for_invalid_alphabets():
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=r"^No characters provided.$"):
         security.random_sequence(alphabet="", length=1)
-    with pytest.raises(ValueError):
-        security.random_sequence(alphabet="-"*1001, length=1)
+    with pytest.raises(
+        ValueError, match=r"^Length of the alphabet len\(alphabet\)=1001 must be less than MAXIMUM_LENGTH=1000.$"
+    ):
+        security.random_sequence(alphabet="-" * 1001, length=1)
 
 
 def test_hashme_fails_for_none():
