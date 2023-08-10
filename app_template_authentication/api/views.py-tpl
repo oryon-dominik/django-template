@@ -152,7 +152,10 @@ class AuthTokenRefresh(APIView):
         )  # ! note that the space is required
 
         # now we validate the random signature included upon creation
-        acccess_payload = tokens.insecure_decode_jwt_token(access_token, force=True)
+        try:
+            acccess_payload = tokens.insecure_decode_jwt_token(access_token, force=True)
+        except JWTError:
+            return authentication_failed_repsonse
         if payload["signature"] != acccess_payload["signature"]:
             return authentication_failed_repsonse
 
