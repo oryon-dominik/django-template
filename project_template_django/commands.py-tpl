@@ -50,16 +50,13 @@ def clean_build(panic: bool = True, log_errors: bool = True):
     [delete_tree(p, panic=panic, log_errors=log_errors) for p in cwd.rglob(".ruff_cache")]
     [delete_tree(p, panic=panic, log_errors=log_errors) for p in cwd.rglob(".mypy_cache")]
     [delete_tree(p, panic=panic, log_errors=log_errors) for p in cwd.rglob("dist")]
-    [delete_tree(p, panic=panic) for p in cwd.rglob("dist")]
 
 
 def clean_temp(panic: bool = True, log_errors: bool = True):
     from core.inout.directories import delete_tree
 
-    cwd = Path(CWD)
-
     print("Unlinking temp-files: temp/")
-    delete_tree(cwd / "temp", panic=panic, log_errors=log_errors)
+    delete_tree(Path(CWD) / "temp", keep_parent=True, panic=panic, log_errors=log_errors)
 
 
 def clean_pyc(panic: bool = True, log_errors: bool = True):

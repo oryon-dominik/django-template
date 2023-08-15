@@ -11,7 +11,7 @@ log = logging.getLogger("core.io")
 TEMPORARY_DIRECTORY = Path(__file__).parent.parent.parent / "temp"
 
 
-def delete_tree(path: Path, panic: bool = True, log_errors: bool = True) -> bool:
+def delete_tree(path: Path, keep_parent: bool = False, panic: bool = True, log_errors: bool = True) -> bool:
     """
     Deletes a folder and all its contents.
 
@@ -30,8 +30,10 @@ def delete_tree(path: Path, panic: bool = True, log_errors: bool = True) -> bool
 
     if any(path.iterdir()):
         return False
-    deleted = delete_folder(path, panic=panic, log_errors=log_errors)
-    return success and deleted
+    if not keep_parent:
+        deleted = delete_folder(path, panic=panic, log_errors=log_errors)
+        return success and deleted
+    return success
 
 
 def delete_folder(path: Path, panic: bool = True, log_errors: bool = True) -> bool:  # NOSONAR 19/15 complexity
