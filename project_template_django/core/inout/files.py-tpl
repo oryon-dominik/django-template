@@ -5,7 +5,7 @@ from pathlib import Path
 log = logging.getLogger("core.io")
 
 
-def read_from_disk(path: Path) -> str:
+def read_from_disk(path: Path, panic: bool = True) -> str:
     """
     Read from a file.
     Return the content of the file as a string.
@@ -23,17 +23,20 @@ def read_from_disk(path: Path) -> str:
         return content
     except PermissionError as e:
         log.error(f"A permission error occurred while reading the file: {e}")
-        raise e
+        if panic:
+            raise e
     except OSError as e:
         log.error(f"An OS error occurred while reading the file: {e}")
-        raise e
+        if panic:
+            raise e
     except Exception as e:
         log.error(f"An unexpected error occurred: {e}")
-        raise e
+        if panic:
+            raise e
     return ""
 
 
-def write_to_disk(path: Path, content: str | bytes):
+def write_to_disk(path: Path, content: str | bytes, panic: bool = True) -> bool:
     """Write to a file."""
     content_type = type(content)
     if content_type is not bytes and content_type is not str:
@@ -42,17 +45,45 @@ def write_to_disk(path: Path, content: str | bytes):
         raise TypeError(f"Invalid type for path: {type(path)=}")
 
     mode = "w" if content_type is str else "wb"
-
+    success = False
     try:
         with open(file=path, mode=mode) as file:
             log.debug(f"INOUT.FILES.WRITE {len(content)=} {path=}")
             file.write(content)
+            success = True
     except PermissionError as e:
         log.error(f"A permission error occurred while writing the file: {e}")
-        raise e
+        if panic:
+            raise e
     except OSError as e:
         log.error(f"An OS error occurred while writing the file: {e}")
-        raise e
+        if panic:
+            raise e
     except Exception as e:
         log.error(f"An unexpected error occurred: {e}")
-        raise e
+        if panic:
+            raise e
+    return success
+
+
+def unlink(path: Path, panic: bool = True) -> bool:
+    """Delete a file."""
+    if type(path) is not Path:
+        raise TypeError(f"Invalid type for path: {type(path)=}")
+    success = False
+    try:
+        path.unlink()
+        success = True
+    except PermissionError as e:
+        log.error(f"A permission error occurred while deleting the file: {e}")
+        if panic:
+            raise e
+    except OSError as e:
+        log.error(f"An OS error occurred while deleting the file: {e}")
+        if panic:
+            raise e
+    except Exception as e:
+        log.error(f"An unexpected error occurred: {e}")
+        if panic:
+            raise e
+    return success
