@@ -7,7 +7,7 @@ from django.core.cache import caches
 
 from core.crud.users import get_user_by_email
 from core.cypher import tokens
-from core.typehints import UserType
+from core.typehints.django import UserType
 
 
 MSG_AUTHENTICATION_FAILED = "Authentication failed"

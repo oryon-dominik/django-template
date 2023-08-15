@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 
-from ..typehints import UserType
+from ..typehints.django import UserType
 
 
 UserModel = get_user_model()

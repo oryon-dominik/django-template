@@ -22,7 +22,7 @@ from django.urls import (
     register_converter,
 )
 
-from core.typehints import URLType
+from core.typehints.generic import URLType
 
 from . import converters
 

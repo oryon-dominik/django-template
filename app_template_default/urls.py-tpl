@@ -1,5 +1,5 @@
 # from django.urls import path
-from core.typehints import URLType
+from core.typehints.generic import URLType
 
 
 # from . import views
