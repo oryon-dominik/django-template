@@ -38,37 +38,43 @@ def env_with_pythonpath():
     return env
 
 
-def clean_build():
+def clean_build(panic: bool = True, log_errors: bool = True):
     from core.inout.directories import delete_tree
 
-    print("Unlinking build-files: build/; dist/ *.egg-info; __pycache__;")
     cwd = Path(CWD)
-    [delete_tree(p) for p in cwd.rglob("build")]
-    [delete_tree(p) for p in cwd.rglob("*.egg-info")]
-    [delete_tree(p) for p in cwd.rglob("__pycache__")]
-    [delete_tree(p) for p in cwd.rglob(".ruff_cache")]
-    [delete_tree(p) for p in cwd.rglob(".mypy_cache")]
 
-    try:
-        print("Unlinking temp-files: temp/")
-        delete_tree(cwd / "temp")
-    except OSError as err:
-        print(f"Error deleting temp-folder: {err}")
-    try:
-        [delete_tree(p) for p in cwd.rglob("dist")]
-    except OSError as err:
-        print(f"Error deleting dist-folder: {err}")
+    print("Unlinking build-files: build/; dist/ *.egg-info; __pycache__;")
+    [delete_tree(p, panic=panic, log_errors=log_errors) for p in cwd.rglob("build")]
+    [delete_tree(p, panic=panic, log_errors=log_errors) for p in cwd.rglob("*.egg-info")]
+    [delete_tree(p, panic=panic, log_errors=log_errors) for p in cwd.rglob("__pycache__")]
+    [delete_tree(p, panic=panic, log_errors=log_errors) for p in cwd.rglob(".ruff_cache")]
+    [delete_tree(p, panic=panic, log_errors=log_errors) for p in cwd.rglob(".mypy_cache")]
+    [delete_tree(p, panic=panic, log_errors=log_errors) for p in cwd.rglob("dist")]
+    [delete_tree(p, panic=panic) for p in cwd.rglob("dist")]
 
 
-def clean_pyc():
+def clean_temp(panic: bool = True, log_errors: bool = True):
+    from core.inout.directories import delete_tree
+
+    cwd = Path(CWD)
+
+    print("Unlinking temp-files: temp/")
+    delete_tree(cwd / "temp", panic=panic, log_errors=log_errors)
+
+
+def clean_pyc(panic: bool = True, log_errors: bool = True):
+    from core.inout.files import unlink
+
     print("Unlinking caches: *.pyc; *pyo; *~;")
-    [p.unlink() for p in Path(CWD).rglob("*.py[co]")]
-    [p.unlink() for p in Path(CWD).rglob("*~")]
+    [unlink(p, panic=panic, log_errors=log_errors) for p in Path(CWD).rglob("*.py[co]")]
+    [unlink(p, panic=panic, log_errors=log_errors) for p in Path(CWD).rglob("*~")]
 
 
-def clean_logs():
+def clean_logs(panic: bool = True, log_errors: bool = True):
+    from core.inout.files import unlink
+
     print("Unlinking logs: logs/*")
-    [p.unlink() for p in Path(CWD).rglob("logs/*")]
+    [unlink(p, panic=panic, log_errors=log_errors) for p in (Path(CWD) / "logs").rglob("*")]
 
 
 def create_vital_files_and_directories(production: bool = False):
@@ -189,8 +195,8 @@ def _version_callback(value: bool) -> None:
 @cli.callback(no_args_is_help=True)
 def default(
     version: Optional[bool] = typer.Option(
-    # BUG: replace Optional with bool | None, when a typer release merges
-    # the pull request for modern Typehints -> also re-activate pre-commit-hook 'pyupgrade', that is currently deactivated bedause of this bug.
+        # BUG: replace Optional with bool | None, when a typer release merges
+        # the pull request for modern Typehints -> also re-activate pre-commit-hook 'pyupgrade', that is currently deactivated bedause of this bug.
         None,
         "--version",
         "-v",
@@ -203,11 +209,13 @@ def default(
 
 
 @cli.command()
-def clean():
+def clean(panic: bool = True, log_errors: bool = True):
     """Cleaning pycache, buildfiles, logfiles"""
-    clean_build()
-    clean_pyc()
-    clean_logs()
+    temp_log_errors = False  # BUG: don't log errors when cleaning temp, git has a bug here
+    clean_temp(panic=panic, log_errors=temp_log_errors)
+    clean_build(panic=panic, log_errors=log_errors)
+    clean_pyc(panic=panic, log_errors=log_errors)
+    clean_logs(panic=panic, log_errors=log_errors)
 
 
 @cli.command()
@@ -217,14 +225,14 @@ def check(templates: bool = False):
 
 
 @cli.command()
-def setup(production: bool = False):
+def setup(production: bool = False, panic: bool = True, log_errors: bool = True):
     """
     Setup the project.
     Clean.
     Create vital files and directories.
     Write template and commithash info to pyproject.toml.
     """
-    clean()
+    clean(panic=panic, log_errors=log_errors)
     create_vital_files_and_directories(production=production)
     if not production:
         write_info_to_pyproject_toml(path=CWD)
@@ -237,7 +245,6 @@ def cherry():
     from core.pyproject import cherry_pick_changes
 
     cherry_pick_changes(pyproject_path=CWD)
-
 
 
 # ---------- INTROSPECTION ----------------------------------------------------

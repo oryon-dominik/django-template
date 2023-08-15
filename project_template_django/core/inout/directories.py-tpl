@@ -11,7 +11,7 @@ log = logging.getLogger("core.io")
 TEMPORARY_DIRECTORY = Path(__file__).parent.parent.parent / "temp"
 
 
-def delete_tree(path: Path, panic: bool = True) -> bool:
+def delete_tree(path: Path, panic: bool = True, log_errors: bool = True) -> bool:
     """
     Deletes a folder and all its contents.
 
@@ -20,39 +20,52 @@ def delete_tree(path: Path, panic: bool = True) -> bool:
     success = False
     for element in path.iterdir():
         if element.is_dir():
-            partial_success = delete_tree(element)
+            partial_success = delete_tree(element, panic=panic, log_errors=log_errors)
             if not partial_success and success:
                 success = False
         else:
-            unlinked = files.unlink(element, panic=panic)
+            unlinked = files.unlink(element, panic=panic, log_errors=log_errors)
             if not unlinked and success:
                 success = False
-    deleted = delete_folder(path, panic=panic)
+
+    if any(path.iterdir()):
+        return False
+    deleted = delete_folder(path, panic=panic, log_errors=log_errors)
     return success and deleted
 
 
-def delete_folder(path: Path, panic: bool = True) -> bool:
+def delete_folder(path: Path, panic: bool = True, log_errors: bool = True) -> bool:  # NOSONAR 19/15 complexity
     """
-    Deletes a folder and all its contents.
+    Deletes an empty folder.
     """
     success = False
+    if not isinstance(path, Path):
+        raise TypeError(f"Invalid type for path: {type(path)=}")
+    if not path.exists():
+        raise FileNotFoundError(f"{path} does not exist.")
+    if not path.is_dir():
+        raise ValueError(f"{path} is not a directory.")
+    if any(path.iterdir()):
+        raise ValueError(f"{path} is not empty.")
     try:
         path.rmdir()
         success = True
     except PermissionError as e:
-        log.error(f"A permission error occurred while deleting the folder: {e}")
+        if log_errors:
+            log.error(f"A permission error occurred while deleting the folder: {e}")
         if panic:
             raise e
     except OSError as e:
-        log.error(f"An OS Error occured while deleting the folder: {e}")
+        if log_errors:
+            log.error(f"An OS Error occured while deleting the folder: {e}")
         if panic:
             raise e
     except Exception as e:
-        log.error(f"An unexpected error occured: {e}")
+        if log_errors:
+            log.error(f"An unexpected error occured: {e}")
         if panic:
             raise e
     return success
-
 
 
 class TemporaryDirectory:
@@ -63,8 +76,9 @@ class TemporaryDirectory:
     OS agnostic.
     """
 
-    def __init__(self, directory: Path = TEMPORARY_DIRECTORY, panic: bool = True) -> None:
+    def __init__(self, directory: Path = TEMPORARY_DIRECTORY, panic: bool = True, log_errors: bool = True) -> None:
         self.panic = panic
+        self.log_errors = log_errors
         self.path = directory / os.urandom(24).hex()[:16]
 
     def __enter__(self):
@@ -73,7 +87,7 @@ class TemporaryDirectory:
 
     def __exit__(self, exc_type, exc_value, traceback):
         try:
-            delete_tree(path=self.path, panic=self.panic)
+            delete_tree(path=self.path, panic=self.panic, log_errors=self.log_errors)
         except OSError as e:
             log.error(f"Error deleting temp-folder: {e}")
             if self.panic:

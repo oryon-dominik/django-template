@@ -182,7 +182,7 @@ def initialize_template_section_to_pyproject(
 
 
 def clone_and_get_latest_commit_hash(*, repository_url: str):
-    with TemporaryDirectory() as temporary_directory:
+    with TemporaryDirectory(panic=False, log_errors=False) as temporary_directory:  # BUG: bug in git: TemporaryDirectory is not deleted due to a permission error
         repo = git.Repo.clone_from(repository_url, temporary_directory)  # type: ignore
         commit_hash = get_latest_commit_hash(repository=repo)
     return commit_hash
@@ -222,8 +222,8 @@ def cherry_pick_changes(*, pyproject_path):
 
     current_repo = git.Repo(pyproject_path)  # type: ignore
 
-    
-    with TemporaryDirectory() as temporary_directory:
+
+    with TemporaryDirectory(panic=False, log_errors=False) as temporary_directory:  # BUG: bug in git: TemporaryDirectory is not deleted due to a permission error
         template_repo = git.Repo.clone_from(url, temporary_directory)  # type: ignore
         latest = get_latest_commit_hash(repository=template_repo)
 

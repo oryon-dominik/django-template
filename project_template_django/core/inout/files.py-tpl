@@ -5,43 +5,48 @@ from pathlib import Path
 log = logging.getLogger("core.io")
 
 
-def read_from_disk(path: Path, panic: bool = True) -> str:
+def read_from_disk(path: Path, panic: bool = True, log_errors: bool = True) -> str:  # NOSONAR 18/15 complexity
     """
     Read from a file.
     Return the content of the file as a string.
     """
-    if type(path) is not Path:
+    if not isinstance(path, Path):
         raise TypeError(f"Invalid type for path: {type(path)=}")
     if not path.exists():
         raise FileNotFoundError(f"{path} does not exist.")
     if not path.is_file():
-        raise FileNotFoundError(f"{path} is not a file.")
+        raise ValueError(f"{path} is not a file.")
     try:
         with open(path) as file:
             content = file.read()
         log.debug(f"INOUT.FILES.READ {len(content)=} {path=}")
         return content
     except PermissionError as e:
-        log.error(f"A permission error occurred while reading the file: {e}")
+        if log_errors:
+            log.error(f"A permission error occurred while reading the file: {e}")
         if panic:
             raise e
     except OSError as e:
-        log.error(f"An OS error occurred while reading the file: {e}")
+        if log_errors:
+            log.error(f"An OS error occurred while reading the file: {e}")
         if panic:
             raise e
     except Exception as e:
-        log.error(f"An unexpected error occurred: {e}")
+        if log_errors:
+            log.error(f"An unexpected error occurred: {e}")
         if panic:
             raise e
     return ""
 
 
-def write_to_disk(path: Path, content: str | bytes, panic: bool = True) -> bool:
+def write_to_disk(
+    path: Path, content: str | bytes, panic: bool = True, log_errors: bool = True
+) -> bool:  # NOSONAR 19/15 complexity
     """Write to a file."""
     content_type = type(content)
     if content_type is not bytes and content_type is not str:
         raise TypeError(f"Content must be a string or bytes, not {content_type}")
-    if type(path) is not Path:
+    if not isinstance(path, Path):
         raise TypeError(f"Invalid type for path: {type(path)=}")
 
     mode = "w" if content_type is str else "wb"
@@ -52,38 +57,44 @@ def write_to_disk(path: Path, content: str | bytes, panic: bool = True) -> bool:
             file.write(content)
             success = True
     except PermissionError as e:
-        log.error(f"A permission error occurred while writing the file: {e}")
+        if log_errors:
+            log.error(f"A permission error occurred while writing the file: {e}")
         if panic:
             raise e
     except OSError as e:
-        log.error(f"An OS error occurred while writing the file: {e}")
+        if log_errors:
+            log.error(f"An OS error occurred while writing the file: {e}")
         if panic:
             raise e
     except Exception as e:
-        log.error(f"An unexpected error occurred: {e}")
+        if log_errors:
+            log.error(f"An unexpected error occurred: {e}")
         if panic:
             raise e
     return success
 
 
-def unlink(path: Path, panic: bool = True) -> bool:
+def unlink(path: Path, panic: bool = True, log_errors: bool = True) -> bool:  # NOSONAR 16/15 complexity
     """Delete a file."""
-    if type(path) is not Path:
+    if not isinstance(path, Path):
         raise TypeError(f"Invalid type for path: {type(path)=}")
     success = False
     try:
         path.unlink()
         success = True
     except PermissionError as e:
-        log.error(f"A permission error occurred while deleting the file: {e}")
+        if log_errors:
+            log.error(f"A permission error occurred while deleting the file: {e}")
         if panic:
             raise e
     except OSError as e:
-        log.error(f"An OS error occurred while deleting the file: {e}")
+        if log_errors:
+            log.error(f"An OS error occurred while deleting the file: {e}")
         if panic:
             raise e
     except Exception as e:
-        log.error(f"An unexpected error occurred: {e}")
+        if log_errors:
+            log.error(f"An unexpected error occurred: {e}")
         if panic:
             raise e
     return success
