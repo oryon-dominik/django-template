@@ -39,23 +39,23 @@ def env_with_pythonpath():
 
 
 def clean_build():
-    from core.inout.directories import delete_folder
+    from core.inout.directories import delete_tree
 
     print("Unlinking build-files: build/; dist/ *.egg-info; __pycache__;")
     cwd = Path(CWD)
-    [delete_folder(p) for p in cwd.rglob("build")]
-    [delete_folder(p) for p in cwd.rglob("*.egg-info")]
-    [delete_folder(p) for p in cwd.rglob("__pycache__")]
-    [delete_folder(p) for p in cwd.rglob(".ruff_cache")]
-    [delete_folder(p) for p in cwd.rglob(".mypy_cache")]
+    [delete_tree(p) for p in cwd.rglob("build")]
+    [delete_tree(p) for p in cwd.rglob("*.egg-info")]
+    [delete_tree(p) for p in cwd.rglob("__pycache__")]
+    [delete_tree(p) for p in cwd.rglob(".ruff_cache")]
+    [delete_tree(p) for p in cwd.rglob(".mypy_cache")]
 
     try:
         print("Unlinking temp-files: temp/")
-        delete_folder(cwd / "temp")
+        delete_tree(cwd / "temp")
     except OSError as err:
         print(f"Error deleting temp-folder: {err}")
     try:
-        [delete_folder(p) for p in cwd.rglob("dist")]
+        [delete_tree(p) for p in cwd.rglob("dist")]
     except OSError as err:
         print(f"Error deleting dist-folder: {err}")
 
