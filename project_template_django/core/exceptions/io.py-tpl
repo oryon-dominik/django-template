@@ -1,0 +1,8 @@
+
+class CoreIOException(Exception):
+    def __init__(self, message: str, *args, parent: Exception | None = None, **kwargs) -> None:
+        if parent:
+            message = f"{message} {parent}"
+            parent.__init__(message, *args, **kwargs)
+        else:
+            super().__init__(message, *args, **kwargs)

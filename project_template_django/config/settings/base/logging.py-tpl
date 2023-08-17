@@ -2,13 +2,15 @@
 # These settings are imported in the __init__.py of the base directory explicitly.
 # To add a new setting, also edit the __init__.py
 # -----------------------------------------------------------------------------
+from dataclasses import dataclass
+
 from . import paths
 from . import security
 
 
 # LOGGING
 # ------------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#logging
+# https://docs.djangoproject.com/en/4.2/ref/settings/#logging
 
 # The following loglevels are available:
 # - CRITICAL    (50)    ...
@@ -34,7 +36,7 @@ from . import security
 # Turn it only on in develop
 LOG_DATABASE = False
 
-# See https://docs.djangoproject.com/en/{{ docs_version }}/topics/logging for
+# See https://docs.djangoproject.com/en/4.2/topics/logging for
 # more details on how to customize your logging configuration.
 LOGGING_FILE_HANDLER = "logging.FileHandler"  # "logging.handlers.TimedRotatingFileHandler"
 
@@ -76,7 +78,7 @@ LOGGING: dict = {
             "class": "rich.logging.RichHandler",
             "formatter": "rich",
             "level": "DEBUG",
-            "propagate": False,  # do not propagate to the parent logger (console)
+            # "propagate": False,  # do not propagate to the parent logger (console)
         },
         "requests_file": {
             "level": "INFO",
@@ -109,24 +111,24 @@ LOGGING: dict = {
             "propagate": True,
         },
         "dev": {
-            "handlers": ["rich_console"],
+            "handlers": ["console.rich"],
             "level": "DEBUG",
             "propagate": True,
         },
         "rich": {
-            "handlers": ["rich_console", "error_log_file"],
+            "handlers": ["console.rich", "error_log_file"],
             "level": "INFO",
             "propagate": True,
         },
         "core.io": {
             "level": "DEBUG",
             "propagate": True,
-            "handlers": ["rich_console", "server_log_file", "error_log_file"],
+            "handlers": ["console.rich", "server_log_file", "error_log_file"],
         },
         "core.exceptions": {
             "level": "DEBUG",
             "propagate": True,
-            "handlers": ["rich_console", "server_log_file", "error_log_file"],
+            "handlers": ["console.rich", "server_log_file", "error_log_file"],
         },
         "django.db.backends": {
             "level": "DEBUG",
@@ -140,3 +142,13 @@ LOGGING: dict = {
         },
     },
 }
+
+
+@dataclass
+class LogGuardConfig:
+    """
+    Configuration for the core.exceptions.guard.exception function that handles
+    (and logs) exceptions and their panic level.
+    """
+    logger_name: str
+    log_errors: bool

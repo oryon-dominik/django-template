@@ -1,13 +1,15 @@
 import logging
+from config.settings.base.logging import LogGuardConfig
 
 
-def guard(
+def exception(
     *,
-    message: str,
     exc: Exception,
     panic: bool = True,
-    logger_name: str = "core.exceptions",
-    log_errors: bool = True
+    lgcfg: LogGuardConfig = LogGuardConfig(
+        logger_name="core.exceptions",
+        log_errors=True,
+    ),
 ) -> None:
     """
     Guards an exception.
@@ -19,8 +21,8 @@ def guard(
     Use the flags with care. Preferably, in dev only - or have a very specific
     usecase (like the --no-panic flag on project setup `commands.py setup --production --no-panic`).
     """
-    if log_errors:
-        log = logging.getLogger(logger_name)
-        log.error(message)
+    if lgcfg.log_errors:
+        log = logging.getLogger(lgcfg.logger_name)
+        log.error(str(exc))
     if panic:
         raise exc
