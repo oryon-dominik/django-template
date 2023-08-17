@@ -6,8 +6,6 @@ import git
 import msgspec
 import tomlkit
 
-from .inout.directories import TemporaryDirectory
-
 
 class PyProjectTomlLoadException(Exception):
     pass
@@ -182,7 +180,10 @@ def initialize_template_section_to_pyproject(
 
 
 def clone_and_get_latest_commit_hash(*, repository_url: str):
-    with TemporaryDirectory(panic=False, log_errors=False) as temporary_directory:  # BUG: bug in git: TemporaryDirectory is not deleted due to a permission error
+    # !lazy import to avoid circular imports
+    from .inout.directories import TemporaryDirectory
+
+    with TemporaryDirectory(panic=False, log_errors=False) as temporary_directory:
         repo = git.Repo.clone_from(repository_url, temporary_directory)  # type: ignore
         commit_hash = get_latest_commit_hash(repository=repo)
     return commit_hash
