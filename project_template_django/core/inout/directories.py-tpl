@@ -47,25 +47,25 @@ def delete_folder(path: Path, panic: bool = True, log_errors: bool = True) -> bo
     if not isinstance(path, Path):
         message = f"Invalid type for path: {type(path)=}"
         exc = TypeError(message)
-        excpetions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
+        exceptions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
         return success
 
     if not path.exists():
         message = f"{path} does not exist."
         exc = FileNotFoundError(message)
-        excpetions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
+        exceptions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
         return success
 
     if not path.is_dir():
         message = f"{path} is not a directory."
         exc = ValueError(message)
-        excpetions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
+        exceptions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
         return success
 
     if any(path.iterdir()):
         message = f"{path} is not empty."
         exc = ValueError(message)
-        excpetions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
+        exceptions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
         return success
 
     try:
@@ -73,13 +73,13 @@ def delete_folder(path: Path, panic: bool = True, log_errors: bool = True) -> bo
         success = True
     except PermissionError as exc:
         message = f"A permission error occurred while deleting the folder: {exc}"
-        excpetions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
+        exceptions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
     except OSError as exc:
         message = f"An OS error occurred while deleting the folder: {exc}"
-        excpetions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
+        exceptions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
     except Exception as exc:
         message = f"An unexpected error occurred: {exc}"
-        excpetions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
+        exceptions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
     return success
 
 
@@ -105,4 +105,4 @@ class TemporaryDirectory:
             delete_tree(path=self.path, panic=self.panic, log_errors=self.log_errors)
         except OSError as exc:
             message = f"Error deleting temp-folder: {exc}"
-            excpetions.guard(message=message, log_errors=self.log_errors, logger_name=IO_LOGGER, panic=self.panic, exc=exc)
+            exceptions.guard(message=message, log_errors=self.log_errors, logger_name=IO_LOGGER, panic=self.panic, exc=exc)
