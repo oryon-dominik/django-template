@@ -56,6 +56,7 @@ def clean_temp(panic: bool = True, log_errors: bool = True):
     from core.inout.directories import delete_tree
 
     print("Unlinking temp-files: temp/")
+    # ! keep the parent folder
     delete_tree(Path(CWD) / "temp", keep_parent=True, panic=panic, log_errors=log_errors)
 
 
@@ -229,8 +230,8 @@ def setup(production: bool = False, panic: bool = True, log_errors: bool = True)
     Create vital files and directories.
     Write template and commithash info to pyproject.toml.
     """
-    clean(panic=panic, log_errors=log_errors)
     create_vital_files_and_directories(production=production)
+    clean(panic=panic, log_errors=log_errors)
     if not production:
         write_info_to_pyproject_toml(path=CWD)
 

@@ -123,6 +123,11 @@ LOGGING: dict = {
             "propagate": True,
             "handlers": ["rich_console", "server_log_file", "error_log_file"],
         },
+        "core.exceptions": {
+            "level": "DEBUG",
+            "propagate": True,
+            "handlers": ["rich_console", "server_log_file", "error_log_file"],
+        },
         "django.db.backends": {
             "level": "DEBUG",
             "handlers": ["database_queries_file", "error_log_file"],

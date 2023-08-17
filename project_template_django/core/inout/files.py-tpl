@@ -1,80 +1,100 @@
 import logging
 from pathlib import Path
 
+from .. import excpetions
+from . import IO_LOGGER
 
-log = logging.getLogger("core.io")
+
+log = logging.getLogger(IO_LOGGER)
 
 
-def read_from_disk(path: Path, panic: bool = True, log_errors: bool = True) -> str:  # NOSONAR 18/15 complexity
+def read_from_disk(path: Path, panic: bool = True, log_errors: bool = True) -> str:
     """
     Read from a file.
     Return the content of the file as a string.
+    Return an empty string if the file does not exist or if an error occurred. - or of course: if the file is empty.
     """
+
+    empty = ""
+
     if not isinstance(path, Path):
-        raise TypeError(f"Invalid type for path: {type(path)=}")
+        message = f"Invalid type for path: {type(path)=}"
+        exc = TypeError(message)
+        excpetions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
+        return empty
+
     if not path.exists():
-        raise FileNotFoundError(f"{path} does not exist.")
+        message = f"{path} does not exist."
+        exc = FileNotFoundError(message)
+        excpetions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
+        return empty
+
     if not path.is_file():
-        raise ValueError(f"{path} is not a file.")
+        message = f"{path} is not a file."
+        exc = ValueError(message)
+        excpetions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
+        return empty
+
     try:
         with open(path) as file:
             content = file.read()
         log.debug(f"INOUT.FILES.READ {len(content)=} {path=}")
         return content
-    except PermissionError as e:
-        if log_errors:
-            log.error(f"A permission error occurred while reading the file: {e}")
-        if panic:
-            raise e
-    except OSError as e:
-        if log_errors:
-            log.error(f"An OS error occurred while reading the file: {e}")
-        if panic:
-            raise e
-    except Exception as e:
-        if log_errors:
-            log.error(f"An unexpected error occurred: {e}")
-        if panic:
-            raise e
-    return ""
+    except PermissionError as exc:
+        message = f"A permission error occurred while reading the file: {exc}"
+        excpetions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
+    except OSError as exc:
+        message = f"An OS error occurred while reading the file: {exc}"
+        excpetions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
+    except Exception as exc:
+        message = f"An unexpected error occurred: {exc}"
+        excpetions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
+    return empty
 
 
 def write_to_disk(
     path: Path, content: str | bytes, panic: bool = True, log_errors: bool = True
-) -> bool:  # NOSONAR 19/15 complexity
-    """Write to a file."""
+) -> bool:
+    """
+    Write to a file.
+
+    returns "success" True if the file was written successfully, False otherwise.
+    """
+    success: bool = False
     content_type = type(content)
+
     if content_type is not bytes and content_type is not str:
-        raise TypeError(f"Content must be a string or bytes, not {content_type}")
-    if not isinstance(path, Path):
-        raise TypeError(f"Invalid type for path: {type(path)=}")
+        message = f"Content must be a string or bytes, not {content_type}"
+        exc = TypeError(message)
+        excpetions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
+        return success
 
     mode = "w" if content_type is str else "wb"
-    success = False
+
+    if not isinstance(path, Path):
+        message = f"Invalid type for path: {type(path)=}"
+        exc =  TypeError(message)
+        excpetions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
+        return success
+
     try:
         with open(file=path, mode=mode) as file:
             log.debug(f"INOUT.FILES.WRITE {len(content)=} {path=}")
             file.write(content)
             success = True
-    except PermissionError as e:
-        if log_errors:
-            log.error(f"A permission error occurred while writing the file: {e}")
-        if panic:
-            raise e
-    except OSError as e:
-        if log_errors:
-            log.error(f"An OS error occurred while writing the file: {e}")
-        if panic:
-            raise e
-    except Exception as e:
-        if log_errors:
-            log.error(f"An unexpected error occurred: {e}")
-        if panic:
-            raise e
+    except PermissionError as exc:
+        message = f"A permission error occurred while writing the file: {exc}"
+        excpetions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
+    except OSError as exc:
+        message = f"An OS error occurred while writing the file: {exc}"
+        excpetions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
+    except Exception as exc:
+        message = f"An unexpected error occurred: {exc}"
+        excpetions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
     return success
 
 
-def unlink(path: Path, panic: bool = True, log_errors: bool = True) -> bool:  # NOSONAR 16/15 complexity
+def unlink(path: Path, panic: bool = True, log_errors: bool = True) -> bool:
     """Delete a file."""
     if not isinstance(path, Path):
         raise TypeError(f"Invalid type for path: {type(path)=}")
@@ -82,19 +102,13 @@ def unlink(path: Path, panic: bool = True, log_errors: bool = True) -> bool:  # 
     try:
         path.unlink()
         success = True
-    except PermissionError as e:
-        if log_errors:
-            log.error(f"A permission error occurred while deleting the file: {e}")
-        if panic:
-            raise e
-    except OSError as e:
-        if log_errors:
-            log.error(f"An OS error occurred while deleting the file: {e}")
-        if panic:
-            raise e
-    except Exception as e:
-        if log_errors:
-            log.error(f"An unexpected error occurred: {e}")
-        if panic:
-            raise e
+    except PermissionError as exc:
+        message = f"A permission error occurred while deleting the file: {exc}"
+        excpetions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
+    except OSError as exc:
+        message = f"An OS error occurred while deleting the file: {exc}"
+        excpetions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
+    except Exception as exc:
+        message = f"An unexpected error occurred: {exc}"
+        excpetions.guard(message=message, log_errors=log_errors, logger_name=IO_LOGGER, panic=panic, exc=exc)
     return success
