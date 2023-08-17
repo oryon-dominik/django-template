@@ -46,22 +46,22 @@ def delete_folder(path: Path, panic: bool = True, log_errors: bool = True) -> bo
     Deletes an empty folder.
     """
     success = False
-    lgcfg = LogGuardConfig(logger_name=IO_LOGGER, log_errors=log_errors)
+    log_config = LogGuardConfig(logger_name=IO_LOGGER, log_errors=log_errors)
 
     if not isinstance(path, Path):
-        guard.exception(exc=TypeError(f"Invalid type for path: {type(path)=}"), panic=panic, lgcfg=lgcfg)
+        guard.exception(exc=TypeError(f"Invalid type for path: {type(path)=}"), panic=panic, log_config=log_config)
         return success
 
     if not path.exists():
-        guard.exception(exc=FileNotFoundError(f"{path} does not exist."), panic=panic, lgcfg=lgcfg)
+        guard.exception(exc=FileNotFoundError(f"{path} does not exist."), panic=panic, log_config=log_config)
         return success
 
     if not path.is_dir():
-        guard.exception(exc=ValueError(f"{path} is not a directory."), panic=panic, lgcfg=lgcfg)
+        guard.exception(exc=ValueError(f"{path} is not a directory."), panic=panic, log_config=log_config)
         return success
 
     if any(path.iterdir()):
-        guard.exception(exc=ValueError(f"{path} is not empty."), panic=panic, lgcfg=lgcfg)
+        guard.exception(exc=ValueError(f"{path} is not empty."), panic=panic, log_config=log_config)
         return success
 
     try:
@@ -69,13 +69,13 @@ def delete_folder(path: Path, panic: bool = True, log_errors: bool = True) -> bo
         success = True
     except PermissionError as exc:
         exc = CoreIOException("A permission error occurred while deleting the folder.", parent=exc)
-        guard.exception(exc=exc, panic=panic, lgcfg=lgcfg)
+        guard.exception(exc=exc, panic=panic, log_config=log_config)
     except OSError as exc:
         exc = CoreIOException("An OS error occurred while deleting the folder.", parent=exc)
-        guard.exception(exc=exc, panic=panic, lgcfg=lgcfg)
+        guard.exception(exc=exc, panic=panic, log_config=log_config)
     except Exception as exc:
         exc = CoreIOException("An unexpected error occurred while deleting the folder.", parent=exc)
-        guard.exception(exc=exc, panic=panic, lgcfg=lgcfg)
+        guard.exception(exc=exc, panic=panic, log_config=log_config)
     return success
 
 
@@ -100,6 +100,6 @@ class TemporaryDirectory:
         try:
             delete_tree(path=self.path, panic=self.panic, log_errors=self.log_errors)
         except OSError as exc:
-            lgcfg = LogGuardConfig(logger_name=IO_LOGGER, log_errors=self.log_errors)
+            log_config = LogGuardConfig(logger_name=IO_LOGGER, log_errors=self.log_errors)
             exc = CoreIOException("Error deleting temp-folder.", parent=exc)
-            guard.exception(exc=exc, panic=self.panic, lgcfg=lgcfg)
+            guard.exception(exc=exc, panic=self.panic, log_config=log_config)

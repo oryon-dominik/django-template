@@ -193,8 +193,8 @@ def _version_callback(value: bool) -> None:
 @cli.callback(no_args_is_help=True)
 def default(
     version: Optional[bool] = typer.Option(
-        # BUG: replace Optional with bool | None, when a typer release merges
-        # the pull request for modern Typehints -> also re-activate pre-commit-hook 'pyupgrade', that is currently deactivated bedause of this bug.
+    # BUG: replace Optional with bool | None, when a typer release merges
+    # the pull request for modern Typehints -> also re-activate pre-commit-hook 'pyupgrade', that is currently deactivated bedause of this bug.
         None,
         "--version",
         "-v",
@@ -209,8 +209,8 @@ def default(
 @cli.command()
 def clean(panic: bool = True, log_errors: bool = True):
     """Cleaning pycache, buildfiles, logfiles"""
-    temp_log_errors = False  # BUG: don't log errors when cleaning temp, git has a bug here
-    clean_temp(panic=panic, log_errors=temp_log_errors)
+    temp_log_errors_and_panic = False  # BUG: don't log errors when cleaning temp, git has a bug here
+    clean_temp(panic=temp_log_errors_and_panic, log_errors=temp_log_errors_and_panic)
     clean_build(panic=panic, log_errors=log_errors)
     clean_pyc(panic=panic, log_errors=log_errors)
     clean_logs(panic=panic, log_errors=log_errors)

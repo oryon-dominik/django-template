@@ -19,18 +19,18 @@ def read_from_disk(path: Path, panic: bool = True, log_errors: bool = True) -> s
     """
 
     empty = ""
-    lgcfg = LogGuardConfig(logger_name=IO_LOGGER, log_errors=log_errors)
+    log_config = LogGuardConfig(logger_name=IO_LOGGER, log_errors=log_errors)
 
     if not isinstance(path, Path):
-        guard.exception(exc=TypeError(f"Invalid type for path: {type(path)=}"), panic=panic, lgcfg=lgcfg)
+        guard.exception(exc=TypeError(f"Invalid type for path: {type(path)=}"), panic=panic, log_config=log_config)
         return empty
 
     if not path.exists():
-        guard.exception(exc=FileNotFoundError(f"{path} does not exist."), panic=panic, lgcfg=lgcfg)
+        guard.exception(exc=FileNotFoundError(f"{path} does not exist."), panic=panic, log_config=log_config)
         return empty
 
     if not path.is_file():
-        guard.exception(exc=ValueError(f"{path} is not a file."), panic=panic, lgcfg=lgcfg)
+        guard.exception(exc=ValueError(f"{path} is not a file."), panic=panic, log_config=log_config)
         return empty
 
     try:
@@ -40,13 +40,13 @@ def read_from_disk(path: Path, panic: bool = True, log_errors: bool = True) -> s
         return content
     except PermissionError as e:
         exc = CoreIOException("A permission error occurred while reading the file.", parent=e)
-        guard.exception(exc=exc, panic=panic, lgcfg=lgcfg)
+        guard.exception(exc=exc, panic=panic, log_config=log_config)
     except OSError as e:
         exc = CoreIOException("An OS error occurred while reading the file.", parent=e)
-        guard.exception(exc=exc, panic=panic, lgcfg=lgcfg)
+        guard.exception(exc=exc, panic=panic, log_config=log_config)
     except Exception as e:
         exc = CoreIOException("An unexpected error occurred.", parent=e)
-        guard.exception(exc=exc, panic=panic, lgcfg=lgcfg)
+        guard.exception(exc=exc, panic=panic, log_config=log_config)
     return empty
 
 
@@ -59,19 +59,19 @@ def write_to_disk(
     returns "success" True if the file was written successfully, False otherwise.
     """
     success: bool = False
-    lgcfg = LogGuardConfig(logger_name=IO_LOGGER, log_errors=log_errors)
+    log_config = LogGuardConfig(logger_name=IO_LOGGER, log_errors=log_errors)
     content_type = type(content)
 
     if content_type is not bytes and content_type is not str:
         exc = TypeError(f"Content must be a string or bytes, not {content_type}")
-        guard.exception(exc=exc, panic=panic, lgcfg=lgcfg)
+        guard.exception(exc=exc, panic=panic, log_config=log_config)
         return success
 
     mode = "w" if content_type is str else "wb"
 
     if not isinstance(path, Path):
         exc =  TypeError(f"Invalid type for path: {type(path)=}")
-        guard.exception(exc=exc, panic=panic, lgcfg=lgcfg)
+        guard.exception(exc=exc, panic=panic, log_config=log_config)
         return success
 
     try:
@@ -81,24 +81,24 @@ def write_to_disk(
             success = True
     except PermissionError as exc:
         exc = CoreIOException("A permission error occurred while writing the file.", parent=exc)
-        guard.exception(exc=exc, panic=panic, lgcfg=lgcfg)
+        guard.exception(exc=exc, panic=panic, log_config=log_config)
     except OSError as exc:
         exc = CoreIOException("An OS error occurred while writing the file.", parent=exc)
-        guard.exception(exc=exc, panic=panic, lgcfg=lgcfg)
+        guard.exception(exc=exc, panic=panic, log_config=log_config)
     except Exception as exc:
         exc = CoreIOException("An unexpected error occurred while writing the file.", parent=exc)
-        guard.exception(exc=exc, panic=panic, lgcfg=lgcfg)
+        guard.exception(exc=exc, panic=panic, log_config=log_config)
     return success
 
 
 def unlink(path: Path, panic: bool = True, log_errors: bool = True) -> bool:
     """Delete a file."""
     success = False
-    lgcfg = LogGuardConfig(logger_name=IO_LOGGER, log_errors=log_errors)
+    log_config = LogGuardConfig(logger_name=IO_LOGGER, log_errors=log_errors)
 
     if not isinstance(path, Path):
         exc = TypeError(f"Invalid type for path: {type(path)=}")
-        guard.exception(exc=exc, panic=panic, lgcfg=lgcfg)
+        guard.exception(exc=exc, panic=panic, log_config=log_config)
         return success
 
     try:
@@ -106,11 +106,11 @@ def unlink(path: Path, panic: bool = True, log_errors: bool = True) -> bool:
         success = True
     except PermissionError as exc:
         exc = CoreIOException("A permission error occurred while deleting the file.", parent=exc)
-        guard.exception(exc=exc, panic=panic, lgcfg=lgcfg)
+        guard.exception(exc=exc, panic=panic, log_config=log_config)
     except OSError as exc:
         exc = CoreIOException("An OS error occurred while deleting the file.", parent=exc)
-        guard.exception(exc=exc, panic=panic, lgcfg=lgcfg)
+        guard.exception(exc=exc, panic=panic, log_config=log_config)
     except Exception as exc:
         exc = CoreIOException("An unexpected error occurred while deleting the file.", parent=exc)
-        guard.exception(exc=exc, panic=panic, lgcfg=lgcfg)
+        guard.exception(exc=exc, panic=panic, log_config=log_config)
     return success
