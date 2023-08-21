@@ -1,9 +1,16 @@
 import base64
 import hashlib
 import secrets
+import string
 from pathlib import Path
 
 from ..inout.files import read_from_disk
+
+
+# Chars not allowed in django secret keys.
+DJANGO_SECRET_CHARS_EXCLUDE = "<[?}].`\\/'>:|{\";,~"
+# Chars not allowed in common secret keys (web, dotenv and postgres compatibility).
+COMMON_SECRET_CHARS_EXCLUDE = "*=()$%^"
 
 
 def random_sequence(*, alphabet: str, length: int) -> str:
@@ -20,6 +27,29 @@ def random_sequence(*, alphabet: str, length: int) -> str:
     if len(alphabet) > MAXIMUM_LENGTH:
         raise ValueError(f"Length of the alphabet {len(alphabet)=} must be less than {MAXIMUM_LENGTH=}.")
     return "".join(secrets.choice(alphabet) for _ in range(length))
+
+
+def sequence(
+    *,
+    use_lowercase_letters: bool = True,
+    use_uppercase_letters: bool = True,
+    use_digits: bool = True,
+    use_punctuation: bool = True,
+    exclude: str = DJANGO_SECRET_CHARS_EXCLUDE + COMMON_SECRET_CHARS_EXCLUDE,
+    length: int = 99,
+) -> str:
+    """Generate a random sequence."""
+    alphabet = ""
+    if use_lowercase_letters:
+        alphabet += string.ascii_lowercase
+    if use_uppercase_letters:
+        alphabet += string.ascii_uppercase
+    if use_digits:
+        alphabet += string.digits
+    if use_punctuation:
+        alphabet += string.punctuation
+    alphabet = "".join(sorted(set(alphabet) - set(exclude)))
+    return random_sequence(alphabet=alphabet, length=length)
 
 
 def sha256(encoded: bytes) -> bytes:
