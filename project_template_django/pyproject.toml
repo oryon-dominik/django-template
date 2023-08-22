@@ -115,6 +115,12 @@ optional = true
 [tool.poetry.group.vite.dependencies]
 django-vite = "^2.0.2"
 
+[tool.pyright]
+exclude = [
+    "**/node_modules",
+    "**/__pycache__",
+]
+
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "config.settings.test"
 addopts = "-m 'not slow' -p no:warnings --instafail --vcr-record=none --cov"
