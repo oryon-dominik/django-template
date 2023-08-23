@@ -86,9 +86,12 @@ class TemporaryDirectory:
     OS agnostic.
     """
 
-    def __init__(self, directory: Path = TEMPORARY_DIRECTORY, panic: bool = True, log_errors: bool = True) -> None:
+    def __init__(
+        self, directory: Path = TEMPORARY_DIRECTORY, panic: bool = True, log_errors: bool = True, keep: bool = False
+    ) -> None:
         self.panic = panic
         self.log_errors = log_errors
+        self.keep = keep
         self.path = directory / os.urandom(24).hex()[:16]
 
     def __enter__(self):
@@ -97,7 +100,8 @@ class TemporaryDirectory:
 
     def __exit__(self, exc_type, exc_value, traceback):
         try:
-            delete_tree(path=self.path, panic=self.panic, log_errors=self.log_errors)
+            if not self.keep:
+                delete_tree(path=self.path, panic=self.panic, log_errors=self.log_errors)
         except OSError as exc:
             log_config = LogGuardConfig(logger_name=IO_LOGGER, log_errors=self.log_errors)
             exc = CoreIOException("Error deleting temp-folder.", parent=exc)

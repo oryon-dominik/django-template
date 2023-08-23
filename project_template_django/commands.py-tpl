@@ -242,6 +242,7 @@ def cherry():
     # lazy import
     from core.pyproject import cherry_pick
 
+    print("Cherry picking changes from the template repository. This may take a while.")
     cherry_pick(pyproject_path=CWD)
 
 

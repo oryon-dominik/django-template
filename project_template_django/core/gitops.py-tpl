@@ -3,19 +3,17 @@ from pathlib import Path
 
 import git
 
-from .inout.directories import TemporaryDirectory
-from .inout.files import jinja_replace_context
-
 
 GitRepo = git.Repo  # type: ignore
 
 
 def sqash_commits(*, repo: GitRepo, commits: list[git.Commit], message: str) -> git.Commit:
     """Squash all commits into one."""
-    repo.git.reset("--soft", f"HEAD~{len(commits)}")
-    repo.git.add(".")
-    repo.git.commit("-m", message)
-    return repo.head.commit
+    # repo.git.reset("--soft", f"HEAD~{len(commits)}")
+    # repo.git.add(".")
+    # repo.git.commit("-m", message)
+    # return repo.head.commit
+    ...
 
 
 def squash_commit_messages(*, repo: GitRepo, commits: list[git.Commit], latest: str):
@@ -46,15 +44,31 @@ def rename_and_inject(
     suffix: str = "-tpl",
 ):
     """Rename -tpl files (remove suffix) and inject jinja context"""
+    # ! lazy import to avoid circular imports
+    from .inout.files import jinja_replace_context
+
+    ignore_patterns = [".git", "keep.pyc"]  # TODO: add more patterns to ignore
     for element in path.iterdir():
-        if element.name == ".git":
-            # don't do things in the git folder
+        if any([pattern in element.name for pattern in ignore_patterns]):
+            # don't do things in the git folder etc..
             continue
         if element.is_dir():
             rename_and_inject(path=element, context=context, suffix=suffix)
+            if "project_name" in element.name:
+                # rename folder if it contains project_name
+                new_path = element.parent / element.name.replace("project_name", context["project_name"])
+                element = element.rename(new_path)
         else:
-            renamed = element.rename(element.name.removesuffix(suffix))
-            jinja_replace_context(path=renamed, context=context)
+            new_name = element.name.removesuffix(suffix)
+            if new_name != element.name:
+                # rename file if it ends with suffix
+                new_path = element.parent / new_name
+                element = element.rename(new_path)
+            if "project_name" in element.name:
+                # rename file if it contains project_name
+                new_path = element.parent / new_name.replace("project_name", context["project_name"])
+                element = element.rename(new_path)
+            jinja_replace_context(path=element, context=context)
 
 
 def pick_changes(
@@ -71,10 +85,12 @@ def pick_changes(
     $ git cherry-pick <old_commit_hash>..<latest_commit_hash>
     $ git cherry-pick --continue
     """
+    # ! lazy import to avoid circular imports
+    from .inout.directories import TemporaryDirectory
 
     current_repo = git.Repo(project_path)  # type: ignore
 
-    with TemporaryDirectory() as temporary_directory:
+    with TemporaryDirectory(panic=False, log_errors=False, keep=False) as temporary_directory:
         # Clone template repository to the temporary directory
         template_repo = GitRepo.clone_from(url=from_url, to_path=temporary_directory)
 
@@ -126,11 +142,10 @@ def pick_changes(
         # - DONE - merge the modified commit
         # TBD: what do you mean with this ???
 
-        merge_result = current_repo.git.merge(squashed)
+        # merge_result = current_repo.git.merge(squashed)
 
-        print(f">>> DEBUG: {merge_result=}")
+        # print(f">>> DEBUG: {merge_result=}")
         template_repo.close()
         current_repo.close()
 
     # update_latest_commithash(project_root_path=project_path, latesthash=)
-
