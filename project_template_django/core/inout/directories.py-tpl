@@ -6,8 +6,7 @@ from config.settings.base.logging import LogGuardConfig
 
 from ..exceptions import guard
 from ..exceptions.io import CoreIOException
-from . import files
-from . import IO_LOGGER
+from . import files, IO_LOGGER
 
 
 log = logging.getLogger(IO_LOGGER)

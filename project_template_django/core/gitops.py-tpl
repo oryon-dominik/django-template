@@ -1,0 +1,136 @@
+from datetime import date
+from pathlib import Path
+
+import git
+
+from .inout.directories import TemporaryDirectory
+from .inout.files import jinja_replace_context
+
+
+GitRepo = git.Repo  # type: ignore
+
+
+def sqash_commits(*, repo: GitRepo, commits: list[git.Commit], message: str) -> git.Commit:
+    """Squash all commits into one."""
+    repo.git.reset("--soft", f"HEAD~{len(commits)}")
+    repo.git.add(".")
+    repo.git.commit("-m", message)
+    return repo.head.commit
+
+
+def squash_commit_messages(*, repo: GitRepo, commits: list[git.Commit], latest: str):
+    message = repo.git.log("-n", f"{len(commits)}", "--pretty=format:%s", latest)
+    return "\n".join(reversed(message.split("\n")))
+
+
+def get_latest_commit_hash(*, repository: GitRepo) -> str:
+    latest_commit = repository.head.commit
+    commit_hash = latest_commit.hexsha
+    return commit_hash
+
+
+def clone_and_get_latest_commit_hash(*, repository_url: str):
+    # !lazy import to avoid circular imports
+    from .inout.directories import TemporaryDirectory
+
+    with TemporaryDirectory(panic=False, log_errors=False) as temporary_directory:
+        repo = GitRepo.clone_from(repository_url, temporary_directory)
+        commit_hash = get_latest_commit_hash(repository=repo)
+    return commit_hash
+
+
+def rename_and_inject(
+    *,
+    path: Path,
+    context: dict,
+    suffix: str = "-tpl",
+):
+    """Rename -tpl files (remove suffix) and inject jinja context"""
+    for element in path.iterdir():
+        if element.name == ".git":
+            # don't do things in the git folder
+            continue
+        if element.is_dir():
+            rename_and_inject(path=element, context=context, suffix=suffix)
+        else:
+            renamed = element.rename(element.name.removesuffix(suffix))
+            jinja_replace_context(path=renamed, context=context)
+
+
+def pick_changes(
+    *,
+    project_path: Path,
+    from_url: str,
+    from_hash: str,
+    template_name: str,
+    context: dict,
+):
+    """
+    cherry pick changes from template repository to the project
+
+    $ git cherry-pick <old_commit_hash>..<latest_commit_hash>
+    $ git cherry-pick --continue
+    """
+
+    current_repo = git.Repo(project_path)  # type: ignore
+
+    with TemporaryDirectory() as temporary_directory:
+        # Clone template repository to the temporary directory
+        template_repo = GitRepo.clone_from(url=from_url, to_path=temporary_directory)
+
+        # Clean up the template repository from unused files.
+        # - Remove all changes not applied for the current project template.
+        # - Remove the suffix -tpl from all files.
+        # - Inject the jinja context into all files.
+        template_repo.git.filter_branch("--subdirectory-filter", template_name, "HEAD")
+        rename_and_inject(
+            path=temporary_directory,
+            suffix="-tpl",
+            context=context,
+        )
+
+        # Stage changes and create a new commit-
+        template_repo.git.add(".")
+        template_repo.git.commit(
+            "--all", f"--message=Inject context from {context['project_name']} into '{template_name}' - {date.today()}"
+        )
+
+        # Get the latest commit hash of the template repository
+        latest = get_latest_commit_hash(repository=template_repo)
+
+        # Get the commit messages of the last commits and squash them into one.
+        commits = list(template_repo.iter_commits(f"{from_hash}..{latest}"))
+        message = squash_commit_messages(repo=template_repo, commits=commits, latest=latest)
+
+        # Squash all commits into one.
+        squashed = sqash_commits(
+            repo=template_repo,
+            commits=commits,
+            message=message,
+        )
+
+        # merge with this project repo if preparation was accurate
+        # merge_template_with_project(
+        #     pyproject=pyproject,
+        #     path_of_template_repo=temporary_directory,
+        #     project_repo=current_repo,
+        # )
+
+        # TODO: clean up has to be done if error!
+        # remove temp branch from project repo if error occured during last run
+        # remove_remote_repo(project_repo=project_repo, temp_repo=temp_repo.name)
+        # Preparation - clean template repo from unused files - checkout to temp branch.
+        # template_repo.git.clean("-f", "-d", "-x")
+        # template_repo.git.checkout("-b", temp_repo.branch)
+
+        # - DONE - merge the modified commit
+        # TBD: what do you mean with this ???
+
+        merge_result = current_repo.git.merge(squashed)
+
+        print(f">>> DEBUG: {merge_result=}")
+        template_repo.close()
+        current_repo.close()
+
+    # update_latest_commithash(project_root_path=project_path, latesthash=)
+

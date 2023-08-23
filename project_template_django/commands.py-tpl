@@ -159,7 +159,7 @@ def formatcode(templates: bool = False):
 
 
 def get_commithash(*, repository: str) -> str:
-    from core.pyproject import clone_and_get_latest_commit_hash
+    from core.gitops import clone_and_get_latest_commit_hash
 
     return clone_and_get_latest_commit_hash(repository_url=repository)
 
@@ -240,9 +240,9 @@ def setup(production: bool = False, panic: bool = True, log_errors: bool = True)
 def cherry():
     """Cherry pick changes from the template repository."""
     # lazy import
-    from core.pyproject import cherry_pick_changes
+    from core.pyproject import cherry_pick
 
-    cherry_pick_changes(pyproject_path=CWD)
+    cherry_pick(pyproject_path=CWD)
 
 
 # ---------- INTROSPECTION ----------------------------------------------------

@@ -6,6 +6,8 @@ import git
 import msgspec
 import tomlkit
 
+from . import gitops
+
 
 class PyProjectTomlLoadException(Exception):
     pass
@@ -179,22 +181,6 @@ def initialize_template_section_to_pyproject(
     )
 
 
-def clone_and_get_latest_commit_hash(*, repository_url: str):
-    # !lazy import to avoid circular imports
-    from .inout.directories import TemporaryDirectory
-
-    with TemporaryDirectory(panic=False, log_errors=False) as temporary_directory:
-        repo = git.Repo.clone_from(repository_url, temporary_directory)  # type: ignore
-        commit_hash = get_latest_commit_hash(repository=repo)
-    return commit_hash
-
-
-def get_latest_commit_hash(*, repository: git.repo.base.Repo) -> str:  # type: ignore
-    latest_commit = repository.head.commit
-    commit_hash = latest_commit.hexsha
-    return commit_hash
-
-
 def update_latest_commithash(*, project_root_path: Path, latesthash: str):
     return modify_pyproject(
         modification={
@@ -206,105 +192,55 @@ def update_latest_commithash(*, project_root_path: Path, latesthash: str):
     )
 
 
-def cherry_pick_changes(*, pyproject_path):
+def django_startproject_jinja_context(pyproject: PyProject) -> dict:
+    """Context used in the startproject management command for Django."""
+    name = pyproject.tool["poetry"]["name"]
+    if name is None:
+        raise ValueError("A project name must be provided in the [tool.poetry] section of the pyproject.toml.")
+    django_version = pyproject.tool["poetry"]["dependencies"]["Django"]
+    if django_version is None:
+        raise ValueError(
+            "A django version must be specified in the [tool.poetry.dependencies] section of the pyproject.toml."
+        )
+
+    django_version = django_version.lstrip("^").lstrip("~")
+    docs_version = ".".join(django_version.split(".")[:2])
+
+    # lazy
+    from core.setup import setup_django_settings
+
+    setup_django_settings(mode="develop")
+    from django.conf import settings
+
+    context = {
+        "project_name": name,
+        "project_directory": settings.ROOT_DIR,
+        "secret_key": settings.SECRET_KEY,
+        "docs_version": docs_version,
+        "django_version": django_version,
+    }
+    return context
+
+
+def cherry_pick(*, pyproject_path: Path):
     """
     cherry pick changes from template repository to the project
-
-    $ git cherry-pick <old_commit_hash>..<latest_commit_hash>
-    $ git cherry-pick --continue
     """
     pyproject = load_pyproject(pyproject_path)
+
     old = pyproject.template.latesthash  # type: ignore
     url = pyproject.template.repository  # type: ignore
     templateused = pyproject.template.templateused  # type: ignore
 
-    if old is None or url is None:
-        raise PyProjectTomlLoadException("Template section is not initialized")
+    if old is None or url is None or templateused is None:
+        raise PyProjectTomlLoadException(f"Template section is not initialized - {old=} - {url=}")
 
-    current_repo = git.Repo(pyproject_path)  # type: ignore
+    context = django_startproject_jinja_context(pyproject=pyproject)
 
-
-    with TemporaryDirectory(panic=False, log_errors=False) as temporary_directory:  # BUG: bug in git: TemporaryDirectory is not deleted due to a permission error
-        template_repo = git.Repo.clone_from(url, temporary_directory)  # type: ignore
-        latest = get_latest_commit_hash(repository=template_repo)
-
-        relevant_changes = list(template_repo.iter_commits(f"{old}..{latest}"))
-
-        # Get the commit messages of the last commits
-        commit_message = template_repo.git.log("-n", f"{len(relevant_changes)}", "--pretty=format:%s", latest)
-        commit_message = "\n".join(reversed(commit_message.split("\n")))
-
-        # Squash all commits into one
-        template_repo.git.reset("--soft", f"HEAD~{len(relevant_changes)}")
-        template_repo.git.add(".")
-        template_repo.git.commit("-m", commit_message)
-        squashed = template_repo.head.commit
-
-        # - throw away all changes except the ones in the template (f"{used_template}") directory
-        # - modify all paths and remove f"{used_template}" from the path
-        # - modify all paths and replace suffix .py-tpl with .py
-        # - replace all occurences of {{ project_name }} with the actual project
-        # - replace django templating variables
-        #    these jinja variables have been replaced by the original values
-        #    - project_name
-        #    - project_directory
-        #    - secret_key
-        #    - docs_version
-        #    - django_version
-
-        # merge the modified commit
-        # merge_result = current_repo.git.merge(squashed)
-        # print(f">>> DEBUG: {merge_result=}")
-
-        # - throw away all changes except the ones in the template (f"{used_template}") directory
-        # modified_new_commit = filter_relevant_project(new_commit)
-
-        # path_modified_new_commit = modify_paths(modified_new_commit)
-
-        # suffixed_path_modified_new_commit = change_suffix(path_modified_new_commit)
-
-        # replaced_commit = replace_template_jinjas(suffixed_path_modified_new_commit)
-        
-        # final_commit = repair_commit_hashes(replaced_commit)
-        
-        # git.merge(final_commit)
-
-        # - modify all paths and remove f"{used_template}" from the path
-        # - modify all paths and replace suffix .py-tpl with .py
-        # - replace all occurences of {{ project_name }} with the actual project
-        #   name ? what about the other things, django templating engine does?
-        #   maybe invoke it here?""
-
-        for commit in relevant_changes:
-            ...
-
-            # ideas below:
-            ...
-            # mv = git.MV(old_path, new_path) ???
-
-            # ????
-            # builder = git.TreeBuilder(commit.tree)
-            # builder.insert(new_path, mv.rename(old_path))
-            # new_tree = builder.write()
-            # new_commit = repo.create_commit(
-            #     ref=f"refs/heads/{commit.branch.name}",
-            #     message=commit.message,
-            #     author=commit.author,
-            #     committer=commit.committer,
-            #     tree=new_tree,
-            #     parents=[commit],
-            # )
-
-            # ???
-            # TODO: git filter-branch --tree-filter "git mv <old_path> <new_path>" <commit_hash>..HEAD
-            # filter out everything outside of the project-template directory
-
-        # squashed_commit
-        # merge_result = current_repo.git.merge(squashed_commit)
-        # import logging
-        # log = logging.getLogger("dev")
-        # log.debug(f">>> DEBUG: {merge_result=}")
-
-        template_repo.close()
-        current_repo.close()
-    # update_latest_commithash(project_root_path=pyproject_path, latest=latesthash)
+    gitops.pick_changes(
+        project_path=pyproject_path,
+        from_url=url,
+        from_hash=old,
+        template_name=templateused,
+        context=context,
+    )

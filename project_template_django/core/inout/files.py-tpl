@@ -1,6 +1,8 @@
 import logging
 from pathlib import Path
 
+import jinja2
+
 from config.settings.base.logging import LogGuardConfig
 
 from ..exceptions import guard
@@ -50,9 +52,7 @@ def read_from_disk(path: Path, panic: bool = True, log_errors: bool = True) -> s
     return empty
 
 
-def write_to_disk(
-    path: Path, content: str | bytes, panic: bool = True, log_errors: bool = True
-) -> bool:
+def write_to_disk(path: Path, content: str | bytes, panic: bool = True, log_errors: bool = True) -> bool:
     """
     Write to a file.
 
@@ -70,7 +70,7 @@ def write_to_disk(
     mode = "w" if content_type is str else "wb"
 
     if not isinstance(path, Path):
-        exc =  TypeError(f"Invalid type for path: {type(path)=}")
+        exc = TypeError(f"Invalid type for path: {type(path)=}")
         guard.exception(exc=exc, panic=panic, log_config=log_config)
         return success
 
@@ -114,3 +114,28 @@ def unlink(path: Path, panic: bool = True, log_errors: bool = True) -> bool:
         exc = CoreIOException("An unexpected error occurred while deleting the file.", parent=exc)
         guard.exception(exc=exc, panic=panic, log_config=log_config)
     return success
+
+
+def jinja_replace_context(
+    *,
+    path: Path,
+    context: dict,
+    panic: bool = True,
+    log_errors: bool = True,
+):
+    success = False
+    log_config = LogGuardConfig(logger_name=IO_LOGGER, log_errors=log_errors)
+
+    if not isinstance(path, Path):
+        exc = TypeError(f"Invalid type for path: {type(path)=}")
+        guard.exception(exc=exc, panic=panic, log_config=log_config)
+        return success
+
+    # Build & render the context into jinja-like templates
+    filesystem_loader = jinja2.FileSystemLoader(searchpath=path.parent, encoding="utf-8")
+    jinja_env = jinja2.Environment(loader=filesystem_loader)
+    compiled_template = jinja_env.from_string(read_from_disk(path=path))
+    rendered = compiled_template.render(**context)
+
+    # Write the rendered template back to disk
+    return write_to_disk(path=path, content=rendered, panic=panic, log_errors=log_errors)

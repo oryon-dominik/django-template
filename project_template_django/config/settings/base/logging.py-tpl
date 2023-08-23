@@ -150,5 +150,6 @@ class LogGuardConfig:
     Configuration for the core.exceptions.guard.exception function that handles
     (and logs) exceptions and their panic level.
     """
+
     logger_name: str
     log_errors: bool
