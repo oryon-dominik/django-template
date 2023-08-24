@@ -97,62 +97,62 @@ def pick_changes(
 
     current_repo = git.Repo(project_path)  # type: ignore
 
-    with TemporaryDirectory(panic=False, log_errors=False, keep=True) as temporary_directory:
+    with TemporaryDirectory(panic=False, log_errors=False, keep=True) as temporary_directory, Progress() as progress:
 
-        with Progress() as progress:
-            print(
-                f"Isolating [blue]{template_name}[/blue] from the skeleton's repository. Adjust files and inject context."
-            )
-            task = progress.add_task("Progress", total=7)
+        print(
+            f"Isolating [blue]{template_name}[/blue] from the skeleton's repository. Adjust files and inject context."
+        )
+        task = progress.add_task("Progress", total=7)
 
-            # Clone template repository to the temporary directory
-            template_repo = GitRepo.clone_from(url=from_url, to_path=temporary_directory)
-            latest = get_latest_commit_hash(repository=template_repo)
-            progress.advance(task)
+        # Clone template repository to the temporary directory
+        template_repo = GitRepo.clone_from(url=from_url, to_path=temporary_directory)
+        latest = get_latest_commit_hash(repository=template_repo)
+        progress.advance(task)
 
-            template_repo.git.checkout("HEAD", b="changes")
-            template_repo.git.commit(
-                "--allow-empty", f"--message=Apply template changes for {context['project_name']}"
-            )
-            initial = get_latest_commit_hash(repository=template_repo)
-            progress.advance(task)
+        template_repo.git.checkout("HEAD", b="changes")
+        template_repo.git.commit(
+            "--allow-empty", f"--message=Apply template changes for {context['project_name']}"
+        )
+        initial = get_latest_commit_hash(repository=template_repo)
+        progress.advance(task)
 
-            # Clean up the template repository from unused files.
-            # - Remove all changes not applied for the current project template.
-            # - Remove the suffix -tpl from all files.
-            # - Inject the jinja context into all files.
-            template_repo.git.filter_branch("--subdirectory-filter", template_name, "HEAD")
-            progress.advance(task)
-            rename_and_inject(
-                path=temporary_directory,
-                suffix="-tpl",
-                context=context,
-            )
-            progress.advance(task)
+        # BUG: we are re-writing the currents repo history here, this is not a good idea.
+        # Clean up the template repository from unused files.
+        # - Remove all changes not applied for the current project template.
+        # - Remove the suffix -tpl from all files.
+        # - Inject the jinja context into all files.
+        template_repo.git.filter_branch("--subdirectory-filter", template_name, "HEAD")
+        progress.advance(task)
+        rename_and_inject(
+            path=temporary_directory,
+            suffix="-tpl",
+            context=context,
+        )
+        progress.advance(task)
 
-            # Stage changes and create a new commit-
-            template_repo.git.add(".")
-            template_repo.git.commit(
-                "--all",
-                f"--message=Inject context from {context['project_name']} into '{template_name}' - {date.today()}"
-            )
-            changed = get_latest_commit_hash(repository=template_repo)
-            progress.advance(task)
+        # Stage changes and create a new commit-
+        template_repo.git.add(".")
+        template_repo.git.commit(
+            "--all",
+            f"--message=Inject context from {context['project_name']} into '{template_name}' - {date.today()}",
+        )
+        changed = get_latest_commit_hash(repository=template_repo)
+        progress.advance(task)
 
-            # Get the commit messages of the last commits and squash them into one.
-            commits = list(template_repo.iter_commits(f"{from_hash}..{changed}"))
-            message = squash_commit_messages(repo=template_repo, commits=commits, latest=changed)
-            squashed = sqash_commits(
-                repo=template_repo,
-                head=initial,
-                message=message,
-            )
-            progress.advance(task)
+        # Get the commit messages of the last commits and squash them into one.
+        commits = list(template_repo.iter_commits(f"{from_hash}..{changed}"))
+        message = squash_commit_messages(repo=template_repo, commits=commits, latest=changed)
+        squashed = sqash_commits(
+            repo=template_repo,
+            head=initial,
+            message=message,
+        )
+        progress.advance(task)
 
-            current_repo.git.merge(squashed)
+        current_repo.git.merge(squashed)
 
-            template_repo.close()
-            current_repo.close()
-            progress.advance(task)
+        template_repo.close()
+        current_repo.close()
+        progress.advance(task)
 
     update_latest_commithash(project_root_path=project_path, latesthash=latest)
