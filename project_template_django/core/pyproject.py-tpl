@@ -193,7 +193,11 @@ def update_latest_commithash(*, project_root_path: Path, latesthash: str):
 
 
 def django_startproject_jinja_context(pyproject: PyProject) -> dict:
-    """Context used in the startproject management command for Django."""
+    """
+    Context used in the startproject management command for Django.
+    
+    Requires Django setup.
+    """
     name = pyproject.tool["poetry"]["name"]
     if name is None:
         raise ValueError("A project name must be provided in the [tool.poetry] section of the pyproject.toml.")
@@ -207,9 +211,6 @@ def django_startproject_jinja_context(pyproject: PyProject) -> dict:
     docs_version = ".".join(django_version.split(".")[:2])
 
     # lazy
-    from core.setup import setup_django_settings
-
-    setup_django_settings(mode="develop")
     from django.conf import settings
 
     context = {

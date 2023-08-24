@@ -240,9 +240,12 @@ def setup(production: bool = False, panic: bool = True, log_errors: bool = True)
 def cherry():
     """Cherry pick changes from the template repository."""
     # lazy import
+    from core.setup import setup_django_settings
+
+    setup_django_settings(mode="develop")
     from core.pyproject import cherry_pick
 
-    print("Cherry picking changes from the template repository. This may take a while.")
+    print("Cherry picking changes from the template repository. [red]This may take a while.[/red]")
     cherry_pick(pyproject_path=CWD)
 
 
