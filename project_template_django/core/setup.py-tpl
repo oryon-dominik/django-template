@@ -1,17 +1,17 @@
 import importlib
 import logging
 from pathlib import Path
-from typing import Literal
 
 import environ
 
 from config.settings.base import ROOT_DIR
+from core.typehints.generic import DjangoMode
 
 
 log = logging.getLogger("dev")
 
 
-def setup_django_settings(*, mode: Literal["test", "develop", "production"], envspath: Path = ROOT_DIR / "envs"):
+def setup_django_settings(*, mode: DjangoMode, envspath: Path = ROOT_DIR / "envs"):
     """
     Setup django settings module depending on mode.
     """
