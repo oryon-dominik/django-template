@@ -148,6 +148,7 @@ def pick_changes(
                 message=message,
             )
             progress.advance(task)
+
             current_repo.git.merge(squashed)
 
             template_repo.close()
