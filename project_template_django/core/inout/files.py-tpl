@@ -63,15 +63,15 @@ def write_to_disk(path: Path, content: str | bytes, panic: bool = True, log_erro
     content_type = type(content)
 
     if content_type is not bytes and content_type is not str:
-        exc = TypeError(f"Content must be a string or bytes, not {content_type}")
-        guard.exception(exc=exc, panic=panic, log_config=log_config)
+        guard.exception(
+            exc=TypeError(f"Content must be a string or bytes, not {content_type}"), panic=panic, log_config=log_config
+        )
         return success
 
     mode = "w" if content_type is str else "wb"
 
     if not isinstance(path, Path):
-        exc = TypeError(f"Invalid type for path: {type(path)=}")
-        guard.exception(exc=exc, panic=panic, log_config=log_config)
+        guard.exception(exc=TypeError(f"Invalid type for path: {type(path)=}"), panic=panic, log_config=log_config)
         return success
 
     try:
@@ -79,14 +79,14 @@ def write_to_disk(path: Path, content: str | bytes, panic: bool = True, log_erro
             log.debug(f"INOUT.FILES.WRITE {len(content)=} {path=}")
             file.write(content)
             success = True
-    except PermissionError as exc:
-        exc = CoreIOException("A permission error occurred while writing the file.", parent=exc)
+    except PermissionError as e:
+        exc = CoreIOException("A permission error occurred while writing the file.", parent=e)
         guard.exception(exc=exc, panic=panic, log_config=log_config)
-    except OSError as exc:
-        exc = CoreIOException("An OS error occurred while writing the file.", parent=exc)
+    except OSError as e:
+        exc = CoreIOException("An OS error occurred while writing the file.", parent=e)
         guard.exception(exc=exc, panic=panic, log_config=log_config)
-    except Exception as exc:
-        exc = CoreIOException("An unexpected error occurred while writing the file.", parent=exc)
+    except Exception as e:
+        exc = CoreIOException("An unexpected error occurred while writing the file.", parent=e)
         guard.exception(exc=exc, panic=panic, log_config=log_config)
     return success
 
@@ -97,21 +97,20 @@ def unlink(path: Path, panic: bool = True, log_errors: bool = True) -> bool:
     log_config = LogGuardConfig(logger_name=IO_LOGGER, log_errors=log_errors)
 
     if not isinstance(path, Path):
-        exc = TypeError(f"Invalid type for path: {type(path)=}")
-        guard.exception(exc=exc, panic=panic, log_config=log_config)
+        guard.exception(exc=TypeError(f"Invalid type for path: {type(path)=}"), panic=panic, log_config=log_config)
         return success
 
     try:
         path.unlink()
         success = True
-    except PermissionError as exc:
-        exc = CoreIOException("A permission error occurred while deleting the file.", parent=exc)
+    except PermissionError as e:
+        exc = CoreIOException("A permission error occurred while deleting the file.", parent=e)
         guard.exception(exc=exc, panic=panic, log_config=log_config)
-    except OSError as exc:
-        exc = CoreIOException("An OS error occurred while deleting the file.", parent=exc)
+    except OSError as e:
+        exc = CoreIOException("An OS error occurred while deleting the file.", parent=e)
         guard.exception(exc=exc, panic=panic, log_config=log_config)
-    except Exception as exc:
-        exc = CoreIOException("An unexpected error occurred while deleting the file.", parent=exc)
+    except Exception as e:
+        exc = CoreIOException("An unexpected error occurred while deleting the file.", parent=e)
         guard.exception(exc=exc, panic=panic, log_config=log_config)
     return success
 
@@ -127,8 +126,7 @@ def jinja_replace_context(
     log_config = LogGuardConfig(logger_name=IO_LOGGER, log_errors=log_errors)
 
     if not isinstance(path, Path):
-        exc = TypeError(f"Invalid type for path: {type(path)=}")
-        guard.exception(exc=exc, panic=panic, log_config=log_config)
+        guard.exception(exc=TypeError(f"Invalid type for path: {type(path)=}"), panic=panic, log_config=log_config)
         return success
 
     content = read_from_disk(path=path, panic=panic, log_errors=log_errors)

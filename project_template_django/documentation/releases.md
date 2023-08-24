@@ -13,7 +13,7 @@ We are trying to orient ourselfs on [semantic versioning](https://semver.org/lan
 - `MINOR` version for added functionality and new features in a backwards compatible manner.
 - `PATCH` version for backwards compatible bugfixes or incremental improvements.
 
-## Gitflow 
+## Gitflow
 
 We combine the branching model following the blog-post from [Vincent Driessen: A successful git branching model](https://nvie.com/posts/a-successful-git-branching-model/) with [github-flow](https://docs.github.com/get-started/quickstart/github-flow) and [trunk based development](https://trunkbaseddevelopment.com/) to orient a bit more on apaches [svn-branching model](https://subversion.apache.org/quick-start).
 

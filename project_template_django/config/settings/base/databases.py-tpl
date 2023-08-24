@@ -25,6 +25,7 @@ def define_databases(env: environ.Env) -> dict:
 
     # --- SQLite ------------------------------------------------------------------
     from . import paths
+
     DATABASES = {
         "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": paths.ROOT_DIR / "database" / "sqlite3.db"}
     }

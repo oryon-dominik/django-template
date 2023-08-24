@@ -51,5 +51,5 @@
 
 
 8. Run the tests
-        
+
         poetry run pytest

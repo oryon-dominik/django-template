@@ -2,7 +2,6 @@ from functools import cache
 from pathlib import Path
 from typing import Any
 
-import git
 import msgspec
 import tomlkit
 
@@ -195,7 +194,7 @@ def update_latest_commithash(*, project_root_path: Path, latesthash: str):
 def django_startproject_jinja_context(pyproject: PyProject) -> dict:
     """
     Context used in the startproject management command for Django.
-    
+
     Requires Django setup.
     """
     name = pyproject.tool["poetry"]["name"]

@@ -12,6 +12,7 @@ import typer
 
 from core.decorators import djangosetup
 
+
 try:
     from rich import print  # noqa
 except ImportError:
@@ -237,8 +238,8 @@ def setup(production: bool = False, panic: bool = True, log_errors: bool = True)
         write_info_to_pyproject_toml(path=CWD)
 
 
-@djangosetup(mode="develop")
 @cli.command()
+@djangosetup
 def cherry():
     """Cherry pick changes from the template repository."""
     # lazy import

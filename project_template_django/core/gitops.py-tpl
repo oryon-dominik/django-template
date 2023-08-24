@@ -1,6 +1,8 @@
 import logging
+import shutil
 from datetime import date
 from pathlib import Path
+from typing import TypeAlias
 
 import git
 from rich import print
@@ -9,10 +11,11 @@ from rich.progress import Progress
 from config.settings.base.logging import loglevel
 
 
-GitRepo = git.Repo  # type: ignore
+GitRepo: TypeAlias = git.Repo  # type: ignore
+GitCommit: TypeAlias = git.Commit  # type: ignore
 
 
-def sqash_commits(*, repo: GitRepo, head: str, message: str) -> git.Commit:
+def sqash_commits(*, repo: GitRepo, head: str, message: str) -> GitCommit:
     """Squash all commits into one."""
     repo.git.reset("--soft", f"{head}")
     repo.git.add(".")
@@ -20,7 +23,7 @@ def sqash_commits(*, repo: GitRepo, head: str, message: str) -> git.Commit:
     return repo.head.commit
 
 
-def squash_commit_messages(*, repo: GitRepo, commits: list[git.Commit], latest: str):
+def squash_commit_messages(*, repo: GitRepo, commits: list[GitCommit], latest: str):
     message = repo.git.log("-n", f"{len(commits)}", "--pretty=format:%s", latest)
     return "\n".join(reversed(message.split("\n")))
 
@@ -99,7 +102,9 @@ def pick_changes(
 
     with TemporaryDirectory(panic=False, log_errors=False, keep=True) as temporary_directory, Progress() as progress:
 
-        print(f"Isolating [blue]{template_name}[/blue] from the skeleton's repository. Adjust files and inject context.")
+        print(
+            f"Isolating [blue]{template_name}[/blue] from the skeleton's repository. Adjust files and inject context."
+        )
         task = progress.add_task("Progress", total=7)
 
         # Clone template repository to the temporary directory
@@ -108,13 +113,14 @@ def pick_changes(
         progress.advance(task)
 
         template_repo.git.checkout("HEAD", b="changes")
-        template_repo.git.commit(
-            "--allow-empty", f"--message=Apply template changes for {context['project_name']}"
-        )
+        template_repo.git.commit("--allow-empty", f"--message=Apply template changes for {context['project_name']}")
         initial = get_latest_commit_hash(repository=template_repo)
         progress.advance(task)
 
         # BUG: we are re-writing the currents repo history here, this is not a good idea.
+        # BUG: We should instead pick the changes and re-write the single blobs
+        # history and rehash the tree to apply changes only and not the whole
+        # file-tree
         # Clean up the template repository from unused files.
         # - Remove all changes not applied for the current project template.
         # - Remove the suffix -tpl from all files.
@@ -140,14 +146,24 @@ def pick_changes(
         # Get the commit messages of the last commits and squash them into one.
         commits = list(template_repo.iter_commits(f"{from_hash}..{changed}"))
         message = squash_commit_messages(repo=template_repo, commits=commits, latest=changed)
-        squashed = sqash_commits(
+        _ = sqash_commits(
             repo=template_repo,
             head=initial,
             message=message,
         )
         progress.advance(task)
 
-        current_repo.git.merge(squashed)
+        from config.settings.base.paths import ROOT_DIR
+
+        shutil.copytree(
+            temporary_directory,
+            ROOT_DIR,
+            dirs_exist_ok=True,
+            ignore=shutil.ignore_patterns(
+                ".git",
+                "keep.pyc",
+            ),
+        )
 
         template_repo.close()
         current_repo.close()

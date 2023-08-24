@@ -66,14 +66,14 @@ def delete_folder(path: Path, panic: bool = True, log_errors: bool = True) -> bo
     try:
         path.rmdir()
         success = True
-    except PermissionError as exc:
-        exc = CoreIOException("A permission error occurred while deleting the folder.", parent=exc)
+    except PermissionError as e:
+        exc = CoreIOException("A permission error occurred while deleting the folder.", parent=e)
         guard.exception(exc=exc, panic=panic, log_config=log_config)
-    except OSError as exc:
-        exc = CoreIOException("An OS error occurred while deleting the folder.", parent=exc)
+    except OSError as e:
+        exc = CoreIOException("An OS error occurred while deleting the folder.", parent=e)
         guard.exception(exc=exc, panic=panic, log_config=log_config)
-    except Exception as exc:
-        exc = CoreIOException("An unexpected error occurred while deleting the folder.", parent=exc)
+    except Exception as e:
+        exc = CoreIOException("An unexpected error occurred while deleting the folder.", parent=e)
         guard.exception(exc=exc, panic=panic, log_config=log_config)
     return success
 

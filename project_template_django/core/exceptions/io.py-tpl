@@ -1,7 +1,12 @@
+from typing import Any
+
+
 class CoreIOException(Exception):
-    def __init__(self, message: str, *args, parent: Exception | None = None, **kwargs) -> None:
-        if parent:
-            message = f"{message} {parent}"
-            parent.__init__(message, *args, **kwargs)
-        else:
-            super().__init__(message, *args, **kwargs)
+    def __init__(self, message: str, parent: Exception, *args, **kwargs) -> None:
+        super().__init__(f"{message} {parent}", *args, **kwargs)
+
+    def __new__(cls, *args, **kwargs) -> Any:  # BUG: wrong typehint to silence mypy complaints..
+        message = args[0]
+        parent = kwargs["parent"]
+        combined_message = f"{message} {parent}"
+        return parent.__class__(combined_message, *args, **kwargs)

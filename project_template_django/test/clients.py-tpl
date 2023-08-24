@@ -9,6 +9,7 @@ class RestClient(Client):
 
     Supports get and post methods right now.
     """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, enforce_csrf_checks=True, **kwargs)
 

@@ -82,7 +82,7 @@ SECURE_CONTENT_TYPE_NOSNIFF = env.bool("DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", def
 # header if you support older browsers.
 SECURE_BROWSER_XSS_FILTER = False
 
-SECURE_REFERRER_POLICY = "same-origin"  #"strict-origin"
+SECURE_REFERRER_POLICY = "same-origin"  # "strict-origin"
 
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
