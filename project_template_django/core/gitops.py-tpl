@@ -99,9 +99,7 @@ def pick_changes(
 
     with TemporaryDirectory(panic=False, log_errors=False, keep=True) as temporary_directory, Progress() as progress:
 
-        print(
-            f"Isolating [blue]{template_name}[/blue] from the skeleton's repository. Adjust files and inject context."
-        )
+        print(f"Isolating [blue]{template_name}[/blue] from the skeleton's repository. Adjust files and inject context.")
         task = progress.add_task("Progress", total=7)
 
         # Clone template repository to the temporary directory
