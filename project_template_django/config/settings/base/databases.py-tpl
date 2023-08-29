@@ -18,17 +18,24 @@ def define_databases(env: environ.Env) -> dict:
     # POSTGRES_PASSWORD = env.str("POSTGRES_PASSWORD")
     # POSTGRES_HOST = env.str("POSTGRES_HOST")
     # POSTGRES_PORT = env.int("POSTGRES_PORT")
-    # POSTGRES_OPTIONS = ""
+    # POSTGRES_OPTIONS = env.str("POSTGRES_OPTIONS", default="")  # type: ignore[no-untyped-call]
     # POSTGRES_CONNECTION_STRING = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}{POSTGRES_OPTIONS}"
     # DATABASE_URL = env.str("DATABASE_URL", default=POSTGRES_CONNECTION_STRING)  # type: ignore[no-untyped-call]
-    # DATABASES = {"default": env.db("DATABASE_URL", default=DATABASE_URL)}  # type: ignore[no-untyped-call]
+    # DATABASES = {
+    #     "default": env.db(
+    #         "DATABASE_URL",
+    #         default=DATABASE_URL,  # type: ignore[no-untyped-call]
+    #         engine="django.db.backends.postgresql",
+    #     )
+    # }
 
     # --- SQLite ------------------------------------------------------------------
     from . import paths
 
-    DATABASES = {
-        "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": paths.ROOT_DIR / "database" / "sqlite3.db"}
-    }
+    DATABASES = {"default": {
+        "ENGINE": "django.db.backends.sqlite3", "NAME": paths.ROOT_DIR / "database" / "sqlite3.db",
+        "OPTIONS": {"timeout": 10},  # ! concurrent queries won't wait forever
+    }}
     DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
     # ! shall not return the env, we didn't want to modify
