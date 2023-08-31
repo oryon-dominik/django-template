@@ -37,6 +37,7 @@ Read the project's [documentation](./documentation/index.md) for all details and
 
 See the [documentation on deployments](./documentation/for-devops/deployment.md) for details.
 
+
 ### Pre-Commit hooks
 
 [Pre-commit hooks](https://github.com/pre-commit/pre-commit-hooks) are defined
@@ -47,6 +48,7 @@ everytime you re-create the venv
     poetry run pre-commit install
 
 TODO: reactivate pyupgrade after the support for typing.Optional is added in 1.0 of typer
+
 
 ### Tests
 
