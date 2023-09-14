@@ -207,6 +207,7 @@ max-line-length = 199
 
 [tool.mypy]
 ignore_missing_imports = true
+ignore_missing_imports_per_module = true
 warn_unused_ignores = false
 namespace_packages = true
 explicit_package_bases = true
