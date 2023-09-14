@@ -9,4 +9,4 @@ class CoreIOException(Exception):
         message = args[0]
         parent = kwargs["parent"]
         combined_message = f"{message} {parent}"
-        return parent.__class__(combined_message, *args, **kwargs)
+        return parent.__class__(combined_message, *args)
