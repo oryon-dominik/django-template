@@ -36,7 +36,7 @@ def test_obtain_token_with_valid_credentials_succeeds_and_token_is_valid(client,
     assert auth_cookie.value == f"Bearer {access_token}"
     assert auth_cookie["secure"] is True
     assert auth_cookie["httponly"] is True
-    assert auth_cookie["domain"].netloc == settings.PROJECT_FQDN.netloc
+    assert auth_cookie["domain"] == settings.PROJECT_FQDN.geturl()
     assert auth_cookie["expires"] in [
         http_date((now + timedelta(seconds=1)).timestamp()),
         http_date(now.timestamp()),
@@ -243,7 +243,7 @@ def test_obtain_a_fresh_access_token_with_valid_refresh_token_succeeds(client, v
     assert auth_cookie.value == f"Bearer {access_token}"
     assert auth_cookie["secure"] is True
     assert auth_cookie["httponly"] is True
-    assert auth_cookie["domain"].netloc == settings.PROJECT_FQDN.netloc
+    assert auth_cookie["domain"] == settings.PROJECT_FQDN.geturl()
     assert auth_cookie["expires"] in [
         http_date((now + timedelta(seconds=1)).timestamp()),
         http_date(now.timestamp()),

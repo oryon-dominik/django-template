@@ -38,6 +38,7 @@ SECRET_KEY = env.str("DJANGO_SECRET_KEY")
 # add project specific production settings here
 PROJECT_FQDN: ParseResult = env.url("PROJECT_FQDN")
 PROJECT_URL: str = PROJECT_FQDN.geturl()
+PROJECT_DOMAIN: str = PROJECT_FQDN.netloc.split(":")[0]
 
 # Production checklist:
 # See https://docs.djangoproject.com/en/{{ doc_version }}/howto/deployment/checklist/
