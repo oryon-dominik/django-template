@@ -20,6 +20,9 @@ database/sqlite3.db
 .secretkey
 production.env
 local.env
+# The venv is deployed to .venv/ in production, should not be part of the
+# version control and could be purged or kept through releases.
+.venv/
 
 # Static files
 staticfiles
