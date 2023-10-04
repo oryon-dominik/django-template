@@ -1,0 +1,3 @@
+[project]
+# To identify development venvs, give the repo itself a name.
+name = "django-template"

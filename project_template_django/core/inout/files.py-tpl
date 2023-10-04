@@ -13,7 +13,7 @@ from . import IO_LOGGER
 log = logging.getLogger(IO_LOGGER)
 
 
-def read_from_disk(path: Path, panic: bool = True, log_errors: bool = True) -> str:
+def read_from_disk(path: Path, panic: bool = True, log_errors: bool = True, encoding: str = "utf-8") -> str:
     """
     Read from a file.
     Return the content of the file as a string.
@@ -36,23 +36,29 @@ def read_from_disk(path: Path, panic: bool = True, log_errors: bool = True) -> s
         return empty
 
     try:
-        with open(path) as file:
+        with open(path, encoding=encoding) as file:
             content = file.read()
-        log.debug(f"INOUT.FILES.READ {len(content)=} {path=}")
+        log.debug("INOUT.FILES.READ {len(content)=} {path=}", extra={"content": content, "path": path})
         return content
-    except PermissionError as e:
-        exc = CoreIOException("A permission error occurred while reading the file.", parent=e)
+    except PermissionError as exception:
+        exc = CoreIOException("A permission error occurred while reading the file.", parent=exception)
         guard.exception(exc=exc, panic=panic, log_config=log_config)
-    except OSError as e:
-        exc = CoreIOException("An OS error occurred while reading the file.", parent=e)
+    except OSError as exception:
+        exc = CoreIOException("An OS error occurred while reading the file.", parent=exception)
         guard.exception(exc=exc, panic=panic, log_config=log_config)
-    except Exception as e:
-        exc = CoreIOException("An unexpected error occurred.", parent=e)
+    except Exception as exception:  # pylint: disable=broad-exception-caught
+        exc = CoreIOException("An unexpected error occurred.", parent=exception)
         guard.exception(exc=exc, panic=panic, log_config=log_config)
     return empty
 
 
-def write_to_disk(path: Path, content: str | bytes, panic: bool = True, log_errors: bool = True) -> bool:
+def write_to_disk(
+    path: Path,
+    content: str | bytes,
+    panic: bool = True,
+    log_errors: bool = True,
+    encoding: str = "utf-8",
+) -> bool:
     """
     Write to a file.
 
@@ -75,18 +81,18 @@ def write_to_disk(path: Path, content: str | bytes, panic: bool = True, log_erro
         return success
 
     try:
-        with open(file=path, mode=mode) as file:
-            log.debug(f"INOUT.FILES.WRITE {len(content)=} {path=}")
+        with open(file=path, mode=mode, encoding=encoding) as file:
+            log.debug("INOUT.FILES.WRITE {len(content)=} {path=}", extra={"content": content, "path": path})
             file.write(content)
             success = True
-    except PermissionError as e:
-        exc = CoreIOException("A permission error occurred while writing the file.", parent=e)
+    except PermissionError as exception:
+        exc = CoreIOException("A permission error occurred while writing the file.", parent=exception)
         guard.exception(exc=exc, panic=panic, log_config=log_config)
-    except OSError as e:
-        exc = CoreIOException("An OS error occurred while writing the file.", parent=e)
+    except OSError as exception:
+        exc = CoreIOException("An OS error occurred while writing the file.", parent=exception)
         guard.exception(exc=exc, panic=panic, log_config=log_config)
-    except Exception as e:
-        exc = CoreIOException("An unexpected error occurred while writing the file.", parent=e)
+    except Exception as exception:  # pylint: disable=broad-exception-caught
+        exc = CoreIOException("An unexpected error occurred while writing the file.", parent=exception)
         guard.exception(exc=exc, panic=panic, log_config=log_config)
     return success
 
@@ -103,14 +109,14 @@ def unlink(path: Path, panic: bool = True, log_errors: bool = True) -> bool:
     try:
         path.unlink()
         success = True
-    except PermissionError as e:
-        exc = CoreIOException("A permission error occurred while deleting the file.", parent=e)
+    except PermissionError as exception:
+        exc = CoreIOException("A permission error occurred while deleting the file.", parent=exception)
         guard.exception(exc=exc, panic=panic, log_config=log_config)
-    except OSError as e:
-        exc = CoreIOException("An OS error occurred while deleting the file.", parent=e)
+    except OSError as exception:
+        exc = CoreIOException("An OS error occurred while deleting the file.", parent=exception)
         guard.exception(exc=exc, panic=panic, log_config=log_config)
-    except Exception as e:
-        exc = CoreIOException("An unexpected error occurred while deleting the file.", parent=e)
+    except Exception as exception:  # pylint: disable=broad-exception-caught
+        exc = CoreIOException("An unexpected error occurred while deleting the file.", parent=exception)
         guard.exception(exc=exc, panic=panic, log_config=log_config)
     return success
 
