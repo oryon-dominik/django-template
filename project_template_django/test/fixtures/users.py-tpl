@@ -2,7 +2,7 @@ import pytest
 
 from django.contrib.auth import get_user_model
 
-from test.factories import generic_user_factory, admin_user_factory
+from test.factories import users
 
 
 @pytest.fixture
@@ -34,7 +34,7 @@ def user(valid_password):
     """
     Yields from user factory.
     """
-    user = generic_user_factory(password=valid_password)
+    user = users.generic_user_factory(password=valid_password)
     yield user
     get_user_model().objects.get(email=user.email).delete()  # type: ignore[no-untyped-call]
 
@@ -44,7 +44,7 @@ def verified_user(valid_password):
     """
     Yields from user factory. Activation is enforced explicitly.
     """
-    user = generic_user_factory(is_active=True, password=valid_password)
+    user = users.generic_user_factory(is_active=True, password=valid_password)
     yield user
     get_user_model().objects.get(email=user.email).delete()  # type: ignore[no-untyped-call]
 
@@ -54,7 +54,7 @@ def verified_admin_user(valid_password):
     """
     Yields from adminuser factory. Activation is enforced explicitly.
     """
-    user = admin_user_factory(is_active=True, is_staff=True, password=valid_password)
+    user = users.admin_user_factory(is_active=True, is_staff=True, password=valid_password)
     yield user
     get_user_model().objects.get(email=user.email).delete()  # type: ignore[no-untyped-call]
 
@@ -64,6 +64,6 @@ def unverified_user(valid_password):
     """
     Yields from user factory. User is explicitly de-activated.
     """
-    user = generic_user_factory(is_active=False, password=valid_password)
+    user = users.generic_user_factory(is_active=False, password=valid_password)
     yield user
     get_user_model().objects.get(email=user.email).delete()  # type: ignore[no-untyped-call]
