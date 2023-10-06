@@ -111,6 +111,11 @@ optional = true
 djangorestframework = "^3.13.1"
 djangorestframework-stubs = {extras = ["compatible-mypy"], version = "^1.9.1"}
 
+[tool.poetry.group.gittools]
+optional = true
+[tool.poetry.group.gittools.dependencies]
+git-fame = "^2.0.1"
+
 [tool.poetry.group.vite]
 optional = true
 [tool.poetry.group.vite.dependencies]

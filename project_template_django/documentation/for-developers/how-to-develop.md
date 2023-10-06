@@ -2,6 +2,7 @@
 
 > Zero to productive..
 
+0. Add the [environment secrets](./environment-secrets.md).
 
 1. Install pyenv & project's python
 
