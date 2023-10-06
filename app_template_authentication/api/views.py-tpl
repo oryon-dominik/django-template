@@ -72,6 +72,7 @@ class AuthTokenLogin(APIView):
             now=now,
             expires_in=tokens.DEFAULT_JWT_TOKEN_REFRESH_EXPIRATION_MINUTES,
         )
+
         response = JsonResponse({"refresh": f"{refresh_token}"})
         response.set_cookie(
             key=tokens.DEFAULT_JWT_TOKEN_COOKIE_KEY,
@@ -183,6 +184,7 @@ class AuthTokenRefresh(APIView):
             now=now,
             expires_in=tokens.DEFAULT_JWT_TOKEN_REFRESH_EXPIRATION_MINUTES,
         )
+
         response = JsonResponse({"refresh": f"{refresh_token}"})
         response.set_cookie(
             key=tokens.DEFAULT_JWT_TOKEN_COOKIE_KEY,
