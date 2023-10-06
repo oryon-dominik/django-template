@@ -5,6 +5,37 @@
             "path": "."
         }
     ],
+    "extensions": {
+        "recommendations": [
+            // python extensions
+            "ms-python.python",
+            "ms-python.vscode-pylance",
+            "ms-toolsai.jupyter",
+            "kevinrose.vsc-python-indent",
+
+            // linting & formatting extensions for quality assurance and CI/CD checks
+            "ms-python.pylint",
+            "ms-python.black-formatter",
+            "ms-python.flake8",
+            "ms-python.isort",
+            "ms-python.mypy-type-checker",
+            "matangover.mypy",
+            "charliermarsh.ruff",
+            "sonarsource.sonarlint-vscode",
+
+            // vue.js & frontend
+            "Vue.volar",
+            "Vue.vscode-typescript-vue-plugin",
+            "bradlc.vscode-tailwindcss",
+
+            // live-share for remote collaboration
+            "ms-vsliveshare.vsliveshare",
+
+            // nice to have
+            // "stkb.rewrap",
+            // "Gruntfuggly.todo-tree",
+        ]
+    },
     "settings": {
         // * files ////////////////////////////////////////////////////////////
         "files.autoSave": "onFocusChange",
@@ -22,19 +53,64 @@
         // * python ///////////////////////////////////////////////////////////
         "python.envFile": "${workspaceFolder}/envs/production.env",
         "python.terminal.activateEnvironment": true,
-        // black-settings
-        "python.formatting.provider": "black",
-        "python.formatting.blackArgs": ["--diff", "--isort", "--line-length", "119"],
+        "[python]": {
+            "files.eol": "\n",
+            // "editor.defaultFormatter": "ms-python.python",
+            "editor.defaultFormatter": "ms-python.black-formatter",
+            "editor.formatOnType": true,
+            "editor.codeActionsOnSave": {
+                // "source.fixAll.ruff": true,
+                // "source.organizeImports.ruff": true
+            }
+        },
+
         // testing-settings
         "python.testing.cwd": "${workspaceFolder}/",
         "python.testing.unittestEnabled": false,
-        "python.testing.nosetestsEnabled": false,
         "python.testing.pytestEnabled": true,
         // "python.testing.pytestArgs": [
         // ],
         "python.testing.autoTestDiscoverOnSaveEnabled": false,
         // to support fast loading in the editor
         "python.analysis.extraPaths": ["."],
+
+        "pylint.args": [
+            "--max-line-length=119",
+            // "--disable=C0301",
+            // http://pylint-messages.wikidot.com/all-messages
+            // C0301: Line too long
+            // C0303: Trailing whitespace
+            // C0111: Missing docstring
+            // C0411, C0412, C0413: import placement
+            // C0103: snake case naming_convention
+            // W0611, W0612, W0613: unused arguments+variables+imports
+            // W0703: Catching too general exception
+            // E0611: no name in module (just for kivy-project..)
+        ],
+    
+        "black-formatter.args": [
+            "--diff",
+            "--isort",
+            "--line-length=119",
+        ],
+    
+        "flake8.args": [
+    
+        ],
+    
+        "mypy-type-checker.args": [
+            "--ignore-missing-imports",
+            "--warn-unused-ignores=false",
+            "--namespace-packages",
+            "--explicit-package-bases",
+            "--plugins=pydantic.mypy,mypy_django_plugin.main,mypy_drf_plugin.main"
+        ],
+    
+        "isort.args":["--profile", "black"],
+        "ruff.args": ["--line-length", "179"],
+        "ruff.organizeImports": false,
+        "ruff.trace.server": "verbose",
+
     },
     "launch": {
         "version": "0.2.0",
@@ -48,6 +124,9 @@
                 "args": [
                     // "test",
                 ],
+                "env": {
+                    // "DOPPLER_ENV": "1"  // Enable doppler-env to inject env vars directly into the terminal, not needed when using .env files
+                }
             },
             {
                 "name": "Python: Django",
@@ -58,7 +137,10 @@
                 "args": [
                     "runserver",
                 ],
-                "django": true
+                "django": true,
+                "env": {
+                    // "DOPPLER_ENV": "1"  // Enable doppler-env to inject env vars directly into the terminal, not needed when using .env files
+                }
             },
             {
                 "name": "Python: commands.py",
@@ -67,6 +149,9 @@
                 "program": "${workspaceFolder}/commands.py",
                 "console": "integratedTerminal",
                 "args": ["--help"],
+                "env": {
+                    // "DOPPLER_ENV": "1"  // Enable doppler-env to inject env vars directly into the terminal, not needed when using .env files
+                }
             },
         ]
     }
