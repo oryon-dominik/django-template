@@ -47,10 +47,15 @@
             ".vscode/": true,
         },
         "files.associations": {
+            "*.py": "python",
             "*.py-tpl": "python",
-            "*.djt": "html",
+            "*.html.djt": "html",
+            "*.djt": "jinja",
         },
         // * python ///////////////////////////////////////////////////////////
+        // In most cases the django-env should be read explicitly and NOT via the editorconfig.
+        // you might use this python.envFile for your developer tools API keys (or whatever..) though.
+        // "python.envFile": "${workspaceFolder}/some.env",
         "python.envFile": "${workspaceFolder}/envs/production.env",
         "python.terminal.activateEnvironment": true,
         "[python]": {
@@ -71,16 +76,29 @@
         // "python.testing.pytestArgs": [
         // ],
         "python.testing.autoTestDiscoverOnSaveEnabled": false,
+
+        "python.defaultInterpreterPath": "python",
+        "python.poetryPath": "poetry",
         // to support fast loading in the editor
-        "python.analysis.extraPaths": ["."],
+        "python.analysis.extraPaths": [
+            ".",
+            "project_template_django",
+        ],
 
         "pylint.args": [
             "--max-line-length=119",
+            "--logging-format-style=new",
+            "--disable=C0114",
+            "--disable=C0115",
+            "--disable=C0116",
             // "--disable=C0301",
             // http://pylint-messages.wikidot.com/all-messages
             // C0301: Line too long
             // C0303: Trailing whitespace
             // C0111: Missing docstring
+            // C0114: missing-module-docstring
+            // C0115: missing-class-docstring
+            // C0116: missing-function-docstring
             // C0411, C0412, C0413: import placement
             // C0103: snake case naming_convention
             // W0611, W0612, W0613: unused arguments+variables+imports
@@ -88,14 +106,14 @@
             // E0611: no name in module (just for kivy-project..)
         ],
     
-        "black-formatter.args": [
-            "--diff",
-            "--isort",
-            "--line-length=119",
+        "flake8.args" : [
+            "--max-line-length=119",
         ],
     
-        "flake8.args": [
-    
+        "black-formatter.args": [
+            "--line-length=119",
+            "--diff",
+            "--isort",
         ],
     
         "mypy-type-checker.args": [
@@ -105,11 +123,63 @@
             "--explicit-package-bases",
             "--plugins=pydantic.mypy,mypy_django_plugin.main,mypy_drf_plugin.main"
         ],
-    
-        "isort.args":["--profile", "black"],
-        "ruff.args": ["--line-length", "179"],
+        "mypy.runUsingActiveInterpreter": false,
+        "mypy.dmypyExecutable": "dmypy",
+
+        "isort.args":[
+            "--profile", "black",
+            "--skip", ".eggs",
+            "--skip", ".git",
+            "--skip", ".mypy_cache",
+            "--skip", ".venv",
+            "--skip", "_build",
+            "--skip", "build",
+            "--skip", "dist",
+            "--skip", "node_modules",
+            "--skip", "venv",
+            "--extend-skip", ".md",
+            "--extend-skip", ".json",
+            "--skip-glob", "*/node_modules/*",
+            "--skip-glob", "*/config/settings/*.py",
+            "--line-length", "119",
+            "--project", "config",
+            "--project", "core",
+            "--project", "test",
+            "--project", "apps",
+            "--multi-line", "3",
+            "--lines-after-imports", "2",
+            // lines_between_sections = 1  # no CLI support yet
+            "--lines-between-types", "0",
+            "--combine-star", // is true now, false by default
+            "--trailing-comma", // is true now, false by default
+            "--split-on-trailing-comma", // is true now, false by default  # black compatible
+            "--no-lines-before", "future",
+            "--no-lines-before", "stdlib",
+            "--no-inline-sort", // is true now, false by default
+            "--src-path", "config",
+            "--src-path", "core",
+            "--src-path", "test",
+            "--src-path", "apps",
+            "--src-path", "manage.py",
+            "--section-default", "THIRDPARTY",
+            // "--check-only",
+            // known_django = "django"  # no CLI support yet
+            // sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'DJANGO', 'FIRSTPARTY', 'LOCALFOLDER']  # no CLI support yet
+        ],
+
+        "ruff.lint.args": ["--line-length", "179",],
         "ruff.organizeImports": false,
         "ruff.trace.server": "verbose",
+
+        "jupyter.askForKernelRestart": false,
+        "jupyter.debugJustMyCode": false,
+        "jupyter.widgetScriptSources": ["jsdelivr.com", "unpkg.com"],
+    
+        "notebook.cellToolbarLocation": {
+            "default": "right",
+            "jupyter-notebook": "right"
+        },
+        "notebook.output.textLineLimit": 300,
 
     },
     "launch": {
