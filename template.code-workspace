@@ -51,6 +51,7 @@
             "*.py-tpl": "python",
             "*.html.djt": "html",
             "*.djt": "jinja",
+            "*.tcss": "styled-components",
         },
         // * python ///////////////////////////////////////////////////////////
         // In most cases the django-env should be read explicitly and NOT via the editorconfig.
@@ -91,6 +92,7 @@
             "--disable=C0114",
             "--disable=C0115",
             "--disable=C0116",
+            "--disable=W0511",  // should not be linted via pylint (use TODO-tree instead)
             // "--disable=C0301",
             // http://pylint-messages.wikidot.com/all-messages
             // C0301: Line too long
@@ -101,6 +103,7 @@
             // C0116: missing-function-docstring
             // C0411, C0412, C0413: import placement
             // C0103: snake case naming_convention
+            // W0511: TODO comments
             // W0611, W0612, W0613: unused arguments+variables+imports
             // W0703: Catching too general exception
             // E0611: no name in module (just for kivy-project..)

@@ -1,0 +1,11 @@
+PROJECT_FQDN=
+DJANGO_SETTINGS_MODULE=config.settings.production
+DJANGO_ALLOW_ASYNC_UNSAFE=false
+DJANGO_SECRET_KEY={{ secret_key }}
+DJANGO_ADMIN_URL=admin/
+POSTGRES_USER={{ stage_name }}
+POSTGRES_PASSWORD={{ stage_name }}
+POSTGRES_DB={{ project_name }}
+POSTGRES_OPTIONS=?sslmode=prefer
+POSTGRES_PORT=5432
+POSTGRES_HOST=localhost

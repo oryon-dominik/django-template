@@ -3,6 +3,7 @@
 """Typer cli interface to manage the dev-environment"""
 
 import os
+import sys
 import subprocess
 import webbrowser
 from pathlib import Path
@@ -243,6 +244,16 @@ def check(templates: bool = False):
 
 
 @cli.command()
+def tui():
+    """Run the TUI app"""
+    # from terminalui import terminalui  # pylint: disable=import-outside-toplevel
+    # app = terminalui.TerminalUserInterface()
+    # app.run()
+    # sys.exit(app.return_code or 0)
+    raise NotImplementedError("The TUI is not yet implemented.")
+
+
+@cli.command()
 def setup(production: bool = False, panic: bool = True, log_errors: bool = True):
     """
     Setup the project.
@@ -254,9 +265,7 @@ def setup(production: bool = False, panic: bool = True, log_errors: bool = True)
     clean(panic=panic, log_errors=log_errors)
     if not production:
         write_info_to_pyproject_toml(path=CWD)
-        from configapp import Configuration  # pylint: disable=import-outside-toplevel
-        app = Configuration()
-        app.run()
+        tui()
 
 
 @cli.command()
