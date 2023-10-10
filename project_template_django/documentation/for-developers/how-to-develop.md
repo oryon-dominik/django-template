@@ -34,6 +34,10 @@
         poetry config virtualenvs.path <global path to your venvs>  # optional
         poetry install  # will install the dependencies to the venv
 
+        # mypy will be used by the project linter, so I recommend to install it globally for a available dmypy on PATH
+        # otherwise you will have to configure your IDE and dmypy yourself
+        python -m pip install mypy
+
 
 5. Setup the project for development
 
