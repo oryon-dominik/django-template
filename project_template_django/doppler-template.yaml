@@ -52,6 +52,11 @@ projects:
         # POSTGRES_HOST=localhost
         POSTGRES_HOST: 'host.docker.internal'
         VITE_APP_MODE: 'django'
+        DJANGO_ALLOWED_HOSTS: ''
+        DJANGO_CORS_ALLOWED_ORIGINS: ''
+        DJANGO_CORS_ALLOW_ALL_ORIGINS: 'true'
+        # ssl may be terminated by nginx or caddy, then this is false
+        DJANGO_SECURE_SSL_REDIRECT: 'false'
         # -----------------------------------------------------------------------------
       test:
         DJANGO_SETTINGS_MODULE: 'config.settings.test'
@@ -69,6 +74,11 @@ projects:
         POSTGRES_PORT: '5432'
         POSTGRES_HOST: 'localhost'
         VITE_APP_MODE: 'django'
+        DJANGO_ALLOWED_HOSTS: ''
+        DJANGO_CORS_ALLOWED_ORIGINS: ''
+        DJANGO_CORS_ALLOW_ALL_ORIGINS: 'false'
+        # ssl may be terminated by nginx or caddy, then this is false
+        DJANGO_SECURE_SSL_REDIRECT: 'true'
       production:
         DEPLOYMENT_TOKEN: ''
         PROJECT_FQDN: ''
@@ -84,3 +94,8 @@ projects:
         POSTGRES_PORT: '5432'
         POSTGRES_HOST: 'localhost'
         VITE_APP_MODE: 'django'
+        DJANGO_ALLOWED_HOSTS: ''
+        DJANGO_CORS_ALLOWED_ORIGINS: ''
+        DJANGO_CORS_ALLOW_ALL_ORIGINS: 'false'
+        # ssl may be terminated by nginx or caddy, then this is false
+        DJANGO_SECURE_SSL_REDIRECT: 'true'
