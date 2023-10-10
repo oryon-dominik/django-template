@@ -5,6 +5,7 @@ from textual.binding import Binding
 from textual.containers import VerticalScroll
 from textual.widgets import Footer, Header, Placeholder
 
+
 # from textual.containers import Container, VerticalScroll
 # from textual.validation import Function, ValidationResult, Validator
 # from textual.widgets import Button, Footer, Header, Static, Input, Label, Pretty, Placeholder
@@ -166,6 +167,7 @@ from textual.widgets import Footer, Header, Placeholder
 
 class TerminalUserInterface(App):
     """A Textual app basic-scaffold."""
+
     TITLE = "TODO: Terminal UI."
     CSS = "#a { color: red; height: 20%; } #b { height: 30%; } #c { height: 60%; }"
     # CSS_PATH = "terminalui.tcss"

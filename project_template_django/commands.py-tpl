@@ -3,8 +3,9 @@
 """Typer cli interface to manage the dev-environment"""
 
 import os
-import sys
 import subprocess
+
+# tui: import sys
 import webbrowser
 from pathlib import Path
 from typing import Optional
@@ -68,21 +69,15 @@ def clean_pyc(panic: bool = True, log_errors: bool = True):
     from core.inout.files import unlink  # pylint: disable=import-outside-toplevel
 
     print("Unlinking caches: *.pyc; *pyo; *~;")
-    _ = [
-        unlink(p, panic=panic, log_errors=log_errors) for p in Path(CWD).rglob("*.py[co]")
-    ]
-    _ = [
-        unlink(p, panic=panic, log_errors=log_errors) for p in Path(CWD).rglob("*~")
-    ]
+    _ = [unlink(p, panic=panic, log_errors=log_errors) for p in Path(CWD).rglob("*.py[co]")]
+    _ = [unlink(p, panic=panic, log_errors=log_errors) for p in Path(CWD).rglob("*~")]
 
 
 def clean_logs(panic: bool = True, log_errors: bool = True):
     from core.inout.files import unlink  # pylint: disable=import-outside-toplevel
 
     print("Unlinking logs: logs/*")
-    _ = [
-        unlink(p, panic=panic, log_errors=log_errors) for p in (Path(CWD) / "logs").rglob("*")
-    ]
+    _ = [unlink(p, panic=panic, log_errors=log_errors) for p in (Path(CWD) / "logs").rglob("*")]
 
 
 def create_vital_files_and_directories(production: bool = False):
@@ -104,9 +99,8 @@ def create_vital_files_and_directories(production: bool = False):
         ]
 
     _ = [
-        path.mkdir(  # type: ignore[func-returns-value]
-            parents=True, exist_ok=True
-        ) for path in (logs, media, assets, database, temp)
+        path.mkdir(parents=True, exist_ok=True)  # type: ignore[func-returns-value]
+        for path in (logs, media, assets, database, temp)
     ]
 
 
@@ -184,7 +178,7 @@ def write_info_to_pyproject_toml(path: Path):
     # lazy import
     from core.pyproject import (  # pylint: disable=import-outside-toplevel
         initialize_template_section_to_pyproject,
-        PyProjectHasBeenSetupBeforeException
+        PyProjectHasBeenSetupBeforeException,
     )
 
     try:

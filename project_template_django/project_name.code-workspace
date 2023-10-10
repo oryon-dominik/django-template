@@ -104,17 +104,17 @@
             // W0703: Catching too general exception
             // E0611: no name in module (just for kivy-project..)
         ],
-    
+
         "flake8.args" : [
             "--max-line-length=119",
         ],
-    
+
         "black-formatter.args": [
             "--line-length=119",
             "--diff",
             "--isort",
         ],
-    
+
         "mypy-type-checker.args": [
             "--ignore-missing-imports",
             "--warn-unused-ignores=false",
@@ -178,7 +178,7 @@
         "jupyter.askForKernelRestart": false,
         "jupyter.debugJustMyCode": false,
         "jupyter.widgetScriptSources": ["jsdelivr.com", "unpkg.com"],
-    
+
         "notebook.cellToolbarLocation": {
             "default": "right",
             "jupyter-notebook": "right"
