@@ -7,13 +7,23 @@
     # Test
     # To be able to run pytest, checkout test-settings
     doppler configure set config=test
-    doppler secrets download --format=env ./envs/test.env
+    
+    # posix (unix/mac)
+        doppler secrets download --format=json --no-file --config=test | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' | awk -F'=' '{print $1"="$2}' > ./envs/test.env
+
+    # or powershell
+        (doppler secrets download --format=json --no-file  | ConvertFrom-Json | ForEach-Object { $_.PSObject.Properties } | ForEach-Object { "$($_.Name)=$($_.Value)" }) -join "`n" | Out-File './envs/test.env'
 
     # Development
     doppler configure set config=dev
-    doppler secrets download --format=env ./envs/develop.env
+    # posix (unix/mac)
+        doppler secrets download --format=json --no-file --config=develop | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' | awk -F'=' '{print $1"="$2}' > ./envs/develop.env
+
+    # or powershell
+        (doppler secrets download --format=json --no-file  | ConvertFrom-Json | ForEach-Object { $_.PSObject.Properties } | ForEach-Object { "$($_.Name)=$($_.Value)" }) -join "`n" | Out-File './envs/develop.env'
 
     # TODO: also download the secrets for the frontend
+
 
 ## To get prepared.
 
@@ -35,28 +45,52 @@
         sudo rpm --import 'https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key'
         curl -sLf --retry 3 --tlsv1.2 --proto "=https" 'https://packages.doppler.com/public/cli/config.rpm.txt' | sudo tee /etc/yum.repos.d/doppler-cli.repo
         sudo yum update && sudo yum install doppler
+        # also add jq for json parsing
+        sudo dnf install jq --assumeyes
 
     MacOS:
         # Prerequisite. gnupg is required for binary signature verification
         brew install gnupg
         # Next, install using brew (use `doppler update` for subsequent updates)
         brew install dopplerhq/cli/doppler
+        # also add jq for json parsing
+        brew install jq
 
 
-2. If nobody did it, you might just add the project to doppler, from it's `doppler-template.yaml`.
+2. If nobody did it, you might just add the project to `doppler.com`, from it's `doppler-template.yaml`.
 
     doppler import
-    doppler setup
-    doppler secrets download --format=env ./envs/develop.env
-    # optionally open the dashboard in a browser and add test settings
+    # now you can open the project in a browser and set all the empty secrets for all the created environemnts.
+    # also mask the ones to RESTRICTED you don't want to see outside of your pipelines (production passwords and keys especially)
     doppler open dashboard
-    doppler configure set config=test
-    doppler secrets download --format=env ./envs/test.env
-    # reset to dev
-    doppler configure set config=dev
+
+
+3. Now you can setup. If you're not a member of the project, ask someone to add you.
+
+    doppler setup
+
+    # powershell
+        (doppler secrets download --format=json --no-file  | ConvertFrom-Json | ForEach-Object { $_.PSObject.Properties } | ForEach-Object { "$($_.Name)=$($_.Value)" }) -join "`n" | Out-File './envs/develop.env'
+        # add test settings as well
+        doppler configure set config=test
+        (doppler secrets download --format=json --no-file  | ConvertFrom-Json | ForEach-Object { $_.PSObject.Properties } | ForEach-Object { "$($_.Name)=$($_.Value)" }) -join "`n" | Out-File './envs/test.env'
+        # reset to dev
+        doppler configure set config=dev
+
+    # posix (linux/mac)
+        doppler configure set config=dev
+        doppler secrets download --format=json --no-file --config=develop | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' | awk -F'=' '{print $1"="$2}' > ./envs/develop.env
+        doppler secrets download --format=json --no-file --config=test | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' | awk -F'=' '{print $1"="$2}' > ./envs/test.env
+
 
 
 3. Doppler also integrates into [vscode](https://docs.doppler.com/docs/editors-vs-code) and [pycharm](https://docs.doppler.com/docs/pycharm) debuggers, if you tell em to.
+
+
+## Deployment service token
+
+    # Create a service token for the project
+    doppler configs tokens create --project {{ project_name }} --config production {{ project_name }}-servicetoken-production --plain
 
 
 ## Adding secrets

@@ -1,0 +1,3 @@
+setup:
+  project: {{ project_name }}
+  config: dev
