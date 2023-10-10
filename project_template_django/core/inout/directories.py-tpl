@@ -66,14 +66,14 @@ def delete_folder(path: Path, panic: bool = True, log_errors: bool = True) -> bo
     try:
         path.rmdir()
         success = True
-    except PermissionError as e:
-        exc = CoreIOException("A permission error occurred while deleting the folder.", parent=e)
+    except PermissionError as exception:
+        exc = CoreIOException("A permission error occurred while deleting the folder.", parent=exception)
         guard.exception(exc=exc, panic=panic, log_config=log_config)
-    except OSError as e:
-        exc = CoreIOException("An OS error occurred while deleting the folder.", parent=e)
+    except OSError as exception:
+        exc = CoreIOException("An OS error occurred while deleting the folder.", parent=exception)
         guard.exception(exc=exc, panic=panic, log_config=log_config)
-    except Exception as e:
-        exc = CoreIOException("An unexpected error occurred while deleting the folder.", parent=e)
+    except Exception as exception:  # pylint: disable=broad-exception-caught
+        exc = CoreIOException("An unexpected error occurred while deleting the folder.", parent=exception)
         guard.exception(exc=exc, panic=panic, log_config=log_config)
     return success
 
@@ -102,7 +102,7 @@ class TemporaryDirectory:
         try:
             if not self.keep:
                 delete_tree(path=self.path, panic=self.panic, log_errors=self.log_errors)
-        except OSError as exc:
+        except OSError as exception:
             log_config = LogGuardConfig(logger_name=IO_LOGGER, log_errors=self.log_errors)
-            exc = CoreIOException("Error deleting temp-folder.", parent=exc)
+            exc = CoreIOException("Error deleting temp-folder.", parent=exception)
             guard.exception(exc=exc, panic=self.panic, log_config=log_config)
