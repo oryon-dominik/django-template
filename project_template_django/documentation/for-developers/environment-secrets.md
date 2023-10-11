@@ -137,13 +137,13 @@ doppler configs tokens create --project {{ project_name }} --config production {
 
 ```bash
 # Add secret to Development Root Config
-doppler secrets set -c dev SOME_API_KEY=sk_dev_9YxLnoLDdvOPn2dfjBVPB
+doppler secrets set --config dev SOME_API_KEY=sk_dev_9YxLnoLDdvOPn2dfjBVPB
 
 # Add secret to Staging Root Config
-doppler secrets set -c staging SOME_API_KEY=sk_test_9YxLnoLDdvOPn2dfjBVPB
+doppler secrets set --config staging SOME_API_KEY=sk_test_9YxLnoLDdvOPn2dfjBVPB
 
 # Add secret to Production Root Config
-doppler secrets set -c production SOME_API_KEY=sk_live_SinMsVYhdHurkdOrVKWCd
+doppler secrets set --config production SOME_API_KEY=sk_live_SinMsVYhdHurkdOrVKWCd
 ```
 
 ## Developing with new secrets
@@ -159,8 +159,8 @@ doppler configure set config=dev_new_feature
 doppler secrets set SOME_API_KEY=sk_dev_9YxLnoLDdvOPn2dfjBVPB
 
 # Every other dev might now use it as well
-doppler run -c dev_new_feature -- python manage.py runserver
+doppler run --config dev_new_feature -- python manage.py runserver
 
-# Delete the branched config, after the feature is merged and the secrets are added to prd stg and dev (see above)
+# Delete the branched config, after the feature is merged and the secrets are added to producation staging and dev (see above)
 doppler configs delete dev_new_feature
 ```
