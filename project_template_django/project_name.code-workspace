@@ -44,6 +44,9 @@
             "**/.pytest_cache": true,
             "**/.ipynb_checkpoints/": true,
             ".vscode/": true,
+            ".hypothesis/": true,
+            ".mypy_cache/": true,
+            ".ruff_cache/": true,
         },
         "files.associations": {
             "*.py": "python",
