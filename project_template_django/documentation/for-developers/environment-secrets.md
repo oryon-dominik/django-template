@@ -6,18 +6,32 @@
 doppler login
 ```
 
-*posix (unix/mac)*
+### *posix (unix/mac)*
+
+_develop-settings_
+```bash
+doppler secrets download --format=json --no-file --config=dev | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' | awk -F'=' '{print $1"="$2}' > ./envs/develop.env
+```
+
+_test-settings_
 ```bash
 doppler secrets download --format=json --no-file --config=test | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' | awk -F'=' '{print $1"="$2}' > ./envs/test.env
-doppler secrets download --format=json --no-file --config=develop | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' | awk -F'=' '{print $1"="$2}' > ./envs/develop.env
 ```
 
-*or powershell*
-```bash
+### *or powershell*
+
+_develop-settings_
+```powershell
+(doppler secrets download --format=json --no-file --config=dev | ConvertFrom-Json | ForEach-Object { $_.PSObject.Properties } | ForEach-Object { "$($_.Name)=$($_.Value)" }) -join "`n" | Out-File './envs/develop.env'
+```
+
+_test-settings_
+```powershell
 (doppler secrets download --format=json --no-file --config=test | ConvertFrom-Json | ForEach-Object { $_.PSObject.Properties } | ForEach-Object { "$($_.Name)=$($_.Value)" }) -join "`n" | Out-File './envs/test.env'
-(doppler secrets download --format=json --no-file --config=develop | ConvertFrom-Json | ForEach-Object { $_.PSObject.Properties } | ForEach-Object { "$($_.Name)=$($_.Value)" }) -join "`n" | Out-File './envs/develop.env'
 ```
 
+### dev mode
+setup your workspace, to use the correct variables via `doppler run`
 ```bash
 doppler configure set config=dev
 # or, if you are someone special :)
@@ -69,7 +83,7 @@ doppler configure set config=dev_snowflake
 2. Log-in, If you don't have an acocunt yet, now is the time to ask your coworkers for an invite-link.
 
     ```bash
-        doppler login
+    doppler login
     ```
 
 3. If nobody did it, you might just add the project to `doppler.com`, from it's `doppler-template.yaml`.
@@ -87,21 +101,35 @@ doppler configure set config=dev_snowflake
     doppler setup
     ```
 
-    *posix (linux/mac)*
+    ### *posix (linux/mac)*
+    
+    _develop-settings_
     ```bash
-    doppler configure set config=dev
-    doppler secrets download --format=json --no-file --config=develop | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' | awk -F'=' '{print $1"="$2}' > ./envs/develop.env
+    doppler secrets download --format=json --no-file --config=dev | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' | awk -F'=' '{print $1"="$2}' > ./envs/develop.env
+    ```
+
+    _test-settings_
+    ```bash
     doppler secrets download --format=json --no-file --config=test | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' | awk -F'=' '{print $1"="$2}' > ./envs/test.env
     ```
 
-    *powershell*
+    ### *powershell*
+    develop settings
     ```powershell
-    (doppler secrets download --format=json --no-file  | ConvertFrom-Json | ForEach-Object { $_.PSObject.Properties } | ForEach-Object { "$($_.Name)=$($_.Value)" }) -join "`n" | Out-File './envs/develop.env'
-    # add test settings as well
-    doppler configure set config=test
-    (doppler secrets download --format=json --no-file  | ConvertFrom-Json | ForEach-Object { $_.PSObject.Properties } | ForEach-Object { "$($_.Name)=$($_.Value)" }) -join "`n" | Out-File './envs/test.env'
-    # reset to dev
+    (doppler secrets download --format=json --no-file --config=dev | ConvertFrom-Json | ForEach-Object { $_.PSObject.Properties } | ForEach-Object { "$($_.Name)=$($_.Value)" }) -join "`n" | Out-File './envs/develop.env'
+    ```
+
+    _test-settings_
+    ```powershell
+    (doppler secrets download --format=json --no-file --config=test | ConvertFrom-Json | ForEach-Object { $_.PSObject.Properties } | ForEach-Object { "$($_.Name)=$($_.Value)" }) -join "`n" | Out-File './envs/test.env'
+    ```
+
+    ### dev mode
+    set your workspace, to use the correct variables via `doppler run`
+    ```bash
     doppler configure set config=dev
+    # or, if you are someone special :)
+    doppler configure set config=dev_snowflake
     ```
 
 5. Doppler also integrates into [vscode](https://docs.doppler.com/docs/editors-vs-code) and [pycharm](https://docs.doppler.com/docs/pycharm) debuggers, if you tell em to.
