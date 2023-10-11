@@ -84,6 +84,12 @@ doppler secrets download --format=json --no-file --config=develop | jq -r 'to_en
     ```
 
 
+2. Log-in, If you don't have an acocunt yet, now is the time to ask your coworkers for an invite-link.
+
+```bash
+    doppler login
+```
+
 2. If nobody did it, you might just add the project to `doppler.com`, from it's `doppler-template.yaml`.
 
     ```bash
