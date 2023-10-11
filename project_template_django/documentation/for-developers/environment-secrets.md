@@ -6,40 +6,23 @@
 doppler login
 ```
 
-### Test
-
-To be able to run pytest, checkout test-settings
-    
-```bash
-doppler configure set config=test
-```
-
 *posix (unix/mac)*
 ```bash
 doppler secrets download --format=json --no-file --config=test | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' | awk -F'=' '{print $1"="$2}' > ./envs/test.env
-```
-
-*or powershell*
-```bash
-(doppler secrets download --format=json --no-file  | ConvertFrom-Json | ForEach-Object { $_.PSObject.Properties } | ForEach-Object { "$($_.Name)=$($_.Value)" }) -join "`n" | Out-File './envs/test.env'
-```
-
-### Development
-
-```bash
-doppler configure set config=dev
-```
-
-*posix (unix/mac)*
-```bash
 doppler secrets download --format=json --no-file --config=develop | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' | awk -F'=' '{print $1"="$2}' > ./envs/develop.env
 ```
 
 *or powershell*
 ```bash
-(doppler secrets download --format=json --no-file  | ConvertFrom-Json | ForEach-Object { $_.PSObject.Properties } | ForEach-Object { "$($_.Name)=$($_.Value)" }) -join "`n" | Out-File './envs/develop.env'
+(doppler secrets download --format=json --no-file --config=test | ConvertFrom-Json | ForEach-Object { $_.PSObject.Properties } | ForEach-Object { "$($_.Name)=$($_.Value)" }) -join "`n" | Out-File './envs/test.env'
+(doppler secrets download --format=json --no-file --config=develop | ConvertFrom-Json | ForEach-Object { $_.PSObject.Properties } | ForEach-Object { "$($_.Name)=$($_.Value)" }) -join "`n" | Out-File './envs/develop.env'
 ```
 
+```bash
+doppler configure set config=dev
+# or, if you are someone special :)
+doppler configure set config=dev_snowflake
+```
 
 *TODO: also download the secrets for the frontend*
 
@@ -83,7 +66,6 @@ doppler secrets download --format=json --no-file --config=develop | jq -r 'to_en
     brew install jq
     ```
 
-
 2. Log-in, If you don't have an acocunt yet, now is the time to ask your coworkers for an invite-link.
 
     ```bash
@@ -98,7 +80,6 @@ doppler secrets download --format=json --no-file --config=develop | jq -r 'to_en
     # also mask the ones to RESTRICTED you don't want to see outside of your pipelines (production passwords and keys especially)
     doppler open dashboard
     ```
-
 
 4. Now you can setup. If you're not a member of the project, ask someone to add you.
 
