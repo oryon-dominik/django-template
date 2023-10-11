@@ -86,11 +86,11 @@ doppler secrets download --format=json --no-file --config=develop | jq -r 'to_en
 
 2. Log-in, If you don't have an acocunt yet, now is the time to ask your coworkers for an invite-link.
 
-```bash
-    doppler login
-```
+    ```bash
+        doppler login
+    ```
 
-2. If nobody did it, you might just add the project to `doppler.com`, from it's `doppler-template.yaml`.
+3. If nobody did it, you might just add the project to `doppler.com`, from it's `doppler-template.yaml`.
 
     ```bash
     doppler import
@@ -100,7 +100,7 @@ doppler secrets download --format=json --no-file --config=develop | jq -r 'to_en
     ```
 
 
-3. Now you can setup. If you're not a member of the project, ask someone to add you.
+4. Now you can setup. If you're not a member of the project, ask someone to add you.
 
     ```bash
     doppler setup
@@ -123,7 +123,7 @@ doppler secrets download --format=json --no-file --config=develop | jq -r 'to_en
     doppler configure set config=dev
     ```
 
-4. Doppler also integrates into [vscode](https://docs.doppler.com/docs/editors-vs-code) and [pycharm](https://docs.doppler.com/docs/pycharm) debuggers, if you tell em to.
+5. Doppler also integrates into [vscode](https://docs.doppler.com/docs/editors-vs-code) and [pycharm](https://docs.doppler.com/docs/pycharm) debuggers, if you tell em to.
 
 
 ## Deployment service token
