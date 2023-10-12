@@ -16,7 +16,7 @@ from urllib.parse import ParseResult
 from corsheaders.defaults import default_methods
 
 from .environment.setup import prepare  # noqa: F403 NOSONAR
-from .base import *  # noqa: E402 F403 NOSONAR
+from .base import *  # noqa: E402 F403 NOSONAR  pylint: disable=unused-wildcard-import,wildcard-import
 
 # read environment variables from .env and update the local environment
 env, settings = prepare(mode="test")
@@ -50,9 +50,18 @@ ALLOWED_HOSTS = ["testserver"]
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_METHODS = list(default_methods)
 
-INSTALLED_APPS += []
+INSTALLED_APPS += []  # type: ignore[name-defined] # pylint: disable=undefined-variable # noqa
 
 CACHES["jwt-blacklist"]["BACKEND"] = "django.core.cache.backends.locmem.LocMemCache"
+
+# redis url is dependant on the environment
+# pylint: disable=undefined-variable
+CACHES["redis"]["LOCATION"] = REDIS_URL  # type: ignore[index, name-defined] # noqa: F405
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-broker_url
+CELERY_BROKER_URL = REDIS_URL  # type: ignore[name-defined] # noqa: F405
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_backend
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+# pylint: enable=undefined-variable
 
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#test-runner
 TEST_RUNNER = "test.runners.PytestTestRunner"

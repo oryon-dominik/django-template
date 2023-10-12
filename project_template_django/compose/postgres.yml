@@ -6,7 +6,7 @@ services:
       dockerfile: ./postgres.Dockerfile
     restart: always
     volumes:
-      - {{ project_name }}postgres_data:/var/lib/postgresql/data
+      - {{ project_name }}_postgres_data:/var/lib/postgresql/data
     env_file:
         - ../envs/develop.env
     container_name: {{ project_name }}_postgres
@@ -15,5 +15,5 @@ services:
       - "5432:5432"
 
 volumes:
-  {{ project_name }}postgres_data:
+  {{ project_name }}_postgres_data:
     name: {{ project_name }}_postgres_data

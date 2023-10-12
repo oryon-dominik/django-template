@@ -97,7 +97,7 @@ httpx = "^0.23.0"  # also used in some jupyter dev-notebooks
 [tool.poetry.group.postgres]
 optional = true
 [tool.poetry.group.postgres.dependencies]
-psycopg = {extras = ["binary"], version = "^3.1.10"}
+psycopg = {extras = ["binary"], version = "^3.1.12"}
 
 [tool.poetry.group.authentication]
 optional = true
@@ -109,6 +109,17 @@ optional = true
 [tool.poetry.group.restframework.dependencies]
 djangorestframework = "^3.14.0"
 
+[tool.poetry.group.celery]
+optional = true
+[tool.poetry.group.celery.dependencies]
+celery = "^5.3.4"
+django-celery-beat = "^2.5.0"
+
+[tool.poetry.group.redis]
+optional = true
+[tool.poetry.group.redis.dependencies]
+redis = "^5.0.1"
+django-redis = "^5.4.0"
 
 [tool.poetry.group.environment]
 optional = false

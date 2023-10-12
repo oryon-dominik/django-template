@@ -16,7 +16,7 @@ https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 from urllib.parse import ParseResult
 
 from .environment.setup import prepare  # noqa: F403 NOSONAR
-from .base import *  # noqa: E402 F403 NOSONAR
+from .base import *  # noqa: E402 F403 NOSONAR  pylint: disable=unused-wildcard-import,wildcard-import
 
 # read environment variables from .env and update the local environment
 env, settings = prepare(mode="develop")
@@ -83,9 +83,16 @@ CSP_SCRIPT_SRC = ("*",)
 
 
 # -----------------------------------------------------------------------------
+CACHES["jwt-blacklist"]["BACKEND"] = "django.core.cache.backends.locmem.LocMemCache"  # type: ignore[index]
 
-
-CACHES["jwt-blacklist"]["BACKEND"] = "django.core.cache.backends.locmem.LocMemCache"
+# redis url is dependant on the environment
+# pylint: disable=undefined-variable
+CACHES["redis"]["LOCATION"] = REDIS_URL  # type: ignore[index, name-defined] # noqa: F405
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-broker_url
+CELERY_BROKER_URL = REDIS_URL  # type: ignore[name-defined] # noqa: F405
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_backend
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+# pylint: enable=undefined-variable
 
 # The logging-filter 'log_database_queries' will log to the file, if LOG_DATABASE is True
 # Turn it only on in develop
@@ -110,7 +117,7 @@ NOTEBOOK_ARGUMENTS = [  # to run the notebook with django 3 async set env DJANGO
 
 # django-extensions------------------------------------------------------------
 # debug-toolbar
-def show_toolbar(request):
+def show_toolbar(request):  # pylint: disable=unused-argument
     return False  # True
 
 

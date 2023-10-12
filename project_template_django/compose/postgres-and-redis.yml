@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+
+  {{ project_name }}_postgres:
+    image: postgres:15
+    restart: always
+    volumes:
+      - {{ project_name }}_postgres_data:/var/lib/postgresql/data
+    env_file:
+        - ../envs/develop.env
+    container_name: {{ project_name }}_postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - {{ project_name }}_network
+
+  {{ project_name }}_redis:
+    image: redis:7
+    restart: always
+    ports:
+      - "6379:6379"
+    env_file:
+        - ../envs/develop.env
+    command: >
+      --requirepass secret
+    container_name: {{ project_name }}_redis
+    networks:
+      - {{ project_name }}_network
+
+
+volumes:
+  {{ project_name }}_postgres_data:
+    name: {{ project_name }}_postgres_data
+
+
+networks:
+  {{ project_name }}_network:
+    name: {{ project_name }}_network
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.{{ random.randint(10,210) }}.{{ random.randint(10,210) }}.0/24"

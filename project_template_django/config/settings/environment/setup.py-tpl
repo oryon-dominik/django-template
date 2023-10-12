@@ -25,10 +25,8 @@ def prepare(mode: Literal["test", "develop", "production"]) -> tuple[environ.Env
     env = environ.Env()
     # ! django-environ uses a confusing NOTYPE
     # Providing access to the projects environment variables.
-    from ..base.paths import ROOT_DIR  # noqa # pylint: disable=unused-import
+    from ..base.paths import ROOT_DIR  # pylint: disable=relative-beyond-top-level,import-outside-toplevel
 
-    # Read environment from local.env
-    env = read_environment(path=ROOT_DIR / "envs" / "local.env", env=env, skip_missing=True)
     # skip missing .env file in production
     skip_missing = mode == "production"
     # Read environment from <mode>.env
@@ -42,7 +40,7 @@ def setup_base_settings_for(env: environ.Env) -> tuple[environ.Env, dict]:
     Setup base settings for the project.
     """
     # lazy import to avoid circular imports
-    from ..base.databases import define_databases
+    from ..base.databases import define_databases  # pylint: disable=relative-beyond-top-level,import-outside-toplevel
 
     databases: dict = define_databases(env=env)
     # merge settings that use environment variables

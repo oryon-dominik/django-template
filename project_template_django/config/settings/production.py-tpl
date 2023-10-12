@@ -14,7 +14,7 @@ https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 from urllib.parse import ParseResult
 
 from .environment.setup import prepare  # noqa: F403 NOSONAR
-from .base import *  # noqa: E402 F403 NOSONAR
+from .base import *  # noqa: E402 F403 NOSONAR  pylint: disable=unused-wildcard-import,wildcard-import
 
 # read environment variables from .env and update the local environment
 env, settings = prepare(mode="production")
@@ -51,6 +51,15 @@ INSTALLED_APPS += (
     # apps for production
 )
 
+# redis url is dependant on the environment
+# pylint: disable=undefined-variable
+CACHES["redis"]["LOCATION"] = REDIS_URL  # type: ignore[index, name-defined] # noqa: F405
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-broker_url
+CELERY_BROKER_URL = REDIS_URL  # type: ignore[name-defined] # noqa: F405
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_backend
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+# pylint: enable=undefined-variable
+
 
 # --- SECURITY CONFIGURATION --------------------------------------------------
 # See https://docs.djangoproject.com/en/{{ docs_version }}/ref/middleware/#module-django.middleware.security
@@ -75,8 +84,12 @@ CORS_ALLOW_METHODS = [
 SECURE_HSTS_SECONDS = (
     60 * 60 * 24 * 365
 )  # one year man-in-the-middle-protection - this might be much too long for development and rapid prototyping
-SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool("DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True)  # type: ignore[no-untyped-call]
-SECURE_CONTENT_TYPE_NOSNIFF = env.bool("DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", default=True)  # type: ignore[no-untyped-call]
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool(
+    "DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True  # type: ignore[no-untyped-call]
+)
+SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
+    "DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", default=True  # type: ignore[no-untyped-call]
+)
 
 # Modern browsers don’t honor X-XSS-Protection HTTP header anymore. Although
 # the setting offers little practical benefit, you may still want to set the
@@ -103,7 +116,8 @@ X_FRAME_OPTIONS = "DENY"
 # example: ("'self'", f"ws://{PROJECT_FQDN.netloc}")
 CSP_DEFAULT_SRC = ("'self'", PROJECT_URL)
 # CSP: connect-src
-# connect-src directive restricts the URLs which can be loaded using script interfaces. The APIs that are restricted are:
+# connect-src directive restricts the URLs which can be loaded using script interfaces.
+# The APIs that are restricted are:
 # <a> ping, fetch(), XMLHttpRequest, WebSocket, EventSource, and Navigator.sendBeacon().
 # Note: connect-src 'self' does not resolve to websocket schemes in all browsers, more info in this issue.
 # example: (f"ws://{PROJECT_FQDN.netloc}",)

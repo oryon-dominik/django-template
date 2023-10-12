@@ -12,72 +12,91 @@ https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 # Settings are imported here to make them available for django.conf.settings
 # so, ignore linting errors for unused imports
 # ruff: noqa: F401
+# pylint: disable=unused-import
 
 # Monkeypatching Django, so stubs will work for all generics
-from . import types  # noqa # pylint: disable=unused-import
+from . import types
 
 # --- Explicitly importing all settings from submodules -----------------------
-from .apps import INSTALLED_APPS  # noqa # pylint: disable=unused-import
-from .databases import (
-    DEFAULT_AUTO_FIELD,  # noqa # pylint: disable=unused-import
-    CACHES,  # noqa # pylint: disable=unused-import
+from .apps import INSTALLED_APPS
+from .celery import (
+    CELERY_ACCEPT_CONTENT,
+    CELERY_TASK_SERIALIZER,
+    CELERY_RESULT_SERIALIZER,
+    CELERY_TASK_TIME_LIMIT,
+    CELERY_TASK_SOFT_TIME_LIMIT,
+    CELERY_BEAT_SCHEDULER,
+    CELERY_BEAT_SCHEDULE,
+    CELERY_TASK_ROUTES,
 )
-from .gateway import WSGI_APPLICATION  # noqa # pylint: disable=unused-import
+
+try:
+    from .celery import CELERY_TIMEZONE
+except ImportError:
+    pass
+
+from .databases import (
+    DEFAULT_AUTO_FIELD,
+    CACHES,
+)
+from .gateway import WSGI_APPLICATION
 from .internationalization import (
-    LANGUAGE_CODE,  # noqa # pylint: disable=unused-import
-    TIME_ZONE,  # noqa # pylint: disable=unused-import
-    USE_I18N,  # noqa # pylint: disable=unused-import
-    USE_TZ,  # noqa # pylint: disable=unused-import
+    LANGUAGE_CODE,
+    TIME_ZONE,
+    USE_I18N,
+    USE_TZ,
 )
 from .logging import (
-    LOG_DATABASE,  # noqa # pylint: disable=unused-import
-    LOGGING_FILE_HANDLER,  # noqa # pylint: disable=unused-import
-    LOGGING,  # noqa # pylint: disable=unused-import
+    LOG_DATABASE,
+    LOGGING_FILE_HANDLER,
+    LOGGING,
 )
-from .middleware import MIDDLEWARE  # noqa # pylint: disable=unused-import
+from .middleware import MIDDLEWARE
 from .paths import (
-    ROOT_DIR,  # noqa # pylint: disable=unused-import
-    APPS_DIR,  # noqa # pylint: disable=unused-import
+    ROOT_DIR,
+    APPS_DIR,
+    RESOURCES_DIR,
 )
 from .project import (
-    VERSION,  # noqa # pylint: disable=unused-import
-    PROJECT_TITLE,  # noqa # pylint: disable=unused-import
+    VERSION,
+    PROJECT_TITLE,
 )
 from .security import (
-    DEBUG,  # noqa # pylint: disable=unused-import
-    ALLOWED_HOSTS,  # noqa # pylint: disable=unused-import
-    CORS_ALLOWED_ORIGINS,  # noqa # pylint: disable=unused-import
-    CORS_ALLOW_HEADERS,  # noqa # pylint: disable=unused-import
-    CORS_ALLOW_METHODS,  # noqa # pylint: disable=unused-import
-    SECRET_KEY,  # noqa # pylint: disable=unused-import
+    DEBUG,
+    ALLOWED_HOSTS,
+    CORS_ALLOWED_ORIGINS,
+    CORS_ALLOW_HEADERS,
+    CORS_ALLOW_METHODS,
+    SECRET_KEY,
 )
 from .static import (
-    STATIC_ROOT,  # noqa # pylint: disable=unused-import
-    STATIC_HOST,  # noqa # pylint: disable=unused-import
-    STATIC_URL,  # noqa # pylint: disable=unused-import
-    STATICFILES_DIRS,  # noqa # pylint: disable=unused-import
-    STATICFILES_FINDERS,  # noqa # pylint: disable=unused-import
-    MEDIA_ROOT,  # noqa # pylint: disable=unused-import
-    MEDIA_URL,  # noqa # pylint: disable=unused-import
+    STATIC_ROOT,
+    STATIC_HOST,
+    STATIC_URL,
+    STATICFILES_DIRS,
+    STATICFILES_FINDERS,
+    MEDIA_ROOT,
+    MEDIA_URL,
 )
-from .templates import TEMPLATES  # noqa # pylint: disable=unused-import
+from .templates import TEMPLATES
 from .urlconf import (
-    ADMIN_URL,  # noqa # pylint: disable=unused-import
-    LOGIN_REDIRECT_URL,  # noqa # pylint: disable=unused-import
-    LOGOUT_REDIRECT_URL,  # noqa # pylint: disable=unused-import
-    LOGIN_URL,  # noqa # pylint: disable=unused-import
-    ROOT_URLCONF,  # noqa # pylint: disable=unused-import
-    API_BASE_URL,  # noqa # pylint: disable=unused-import
+    ADMIN_URL,
+    LOGIN_REDIRECT_URL,
+    LOGOUT_REDIRECT_URL,
+    LOGIN_URL,
+    ROOT_URLCONF,
+    API_BASE_URL,
 )
 from .users import (
-    AUTH_USER_MODEL,  # noqa # pylint: disable=unused-import
-    AUTH_PASSWORD_MINIMUM_LENGTH,  # noqa # pylint: disable=unused-import
-    AUTH_PASSWORD_VALIDATORS,  # noqa # pylint: disable=unused-import
+    AUTH_USER_MODEL,
+    AUTH_PASSWORD_MINIMUM_LENGTH,
+    AUTH_PASSWORD_VALIDATORS,
 )
 
 # -----------------------------------------------------------------------------
 
 from .thirdparty import *  # noqa # pylint: disable=wildcard-import,unused-wildcard-import
-from .{{ project_name }} import *  # noqa # pylint: disable=wildcard-import,unused-wildcard-import
+from .pytomatom import *  # noqa # pylint: disable=wildcard-import,unused-wildcard-import
 
 # -----------------------------------------------------------------------------
+# pylint: enable=unused-import
