@@ -173,3 +173,48 @@ doppler run --config dev_new_feature -- python manage.py runserver
 # Delete the branched config, after the feature is merged and the secrets are added to producation staging and dev (see above)
 doppler configs delete dev_new_feature
 ```
+
+## RESTRICTED secrets visibility
+
+Usally you want to restrict the visibility of secrets, that are used in
+production, to the production environment. This way, you can't accidentally use
+them in development or staging and - more importantly - nobody (besides the
+pipeline) knows their value if their are generated in your pipeline. So: use
+pipelines you trust. Build your own.
+
+Commonly restricted secrets are:
+- passwords  
+&nbsp;&nbsp;&nbsp;&nbsp;POSTGRES_PASSWORD
+- keys  
+&nbsp;&nbsp;&nbsp;&nbsp;DJANGO_SECRET_KEY  
+&nbsp;&nbsp;&nbsp;&nbsp;SOME_EXTERNAL_API_KEY  
+- tokens  
+&nbsp;&nbsp;&nbsp;&nbsp;DEPLOYMENT_TOKEN
+
+
+```bash
+curl -X POST "https://api.doppler.com/v3/configs/config/secrets" \
+     -H "Accept: application/json" \
+     -H "Authorization: Bearer $(doppler configure get token --plain)" \
+     -H "Content-Type: application/json" \
+     --data '
+{
+  "project": "{{ project_name }}",
+  "config": "production",
+  "change_requests": [
+    {
+      "name": "DJANGO_SECRET_KEY",
+      "originalName": "DJANGO_SECRET_KEY",
+      "value": null,
+      "visibility": "restricted"
+    }
+  ]
+}
+'
+
+```
+
+A secret could look like this.
+```bash
+SECRET_KEY = $(python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())")
+```
