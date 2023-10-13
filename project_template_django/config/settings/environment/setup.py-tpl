@@ -1,7 +1,8 @@
-from typing import Literal
 from pathlib import Path
 
 import environ
+
+from core.typehints.generic import DjangoMode
 
 
 def read_environment(
@@ -21,7 +22,7 @@ def read_environment(
     return env
 
 
-def prepare(mode: Literal["test", "develop", "production"]) -> tuple[environ.Env, dict]:
+def prepare(mode: DjangoMode) -> tuple[environ.Env, dict]:
     env = environ.Env()
     # ! django-environ uses a confusing NOTYPE
     # Providing access to the projects environment variables.
