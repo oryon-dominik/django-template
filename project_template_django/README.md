@@ -78,6 +78,10 @@ Static type checking can be checked with [mypy](https://mypy-lang.org/).
 
     poetry run mypy --config-file pyproject.toml .
 
+To let the mypy daemon (dmypy) work with your ide, install the following packages in the env, that is used by your ide:
+
+    pip install mypy django-stubs[compatible-mypy] django-stubs-ext django djangorestframework djangorestframework-stubs[compatible-mypy]
+
 
 ### gitflow
 
