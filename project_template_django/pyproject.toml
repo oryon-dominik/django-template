@@ -124,8 +124,7 @@ django-redis = "^5.4.0"
 [tool.poetry.group.environment]
 optional = false
 [tool.poetry.group.environment.dependencies]
-# TODO: replace django-environ with [environs](https://github.com/sloria/environs)
-django-environ = "^0.9.0"
+environs = "^9.5.0"
 rich = "^13.6.0"
 # TODO: Add textual, when the terminalui is finished.
 # textual = "^0.38.1"

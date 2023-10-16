@@ -4,10 +4,10 @@
 # -----------------------------------------------------------------------------
 # DATABASES
 # https://docs.djangoproject.com/en/{{ doc_version }}/ref/settings/#databases
-import environ
+from environs import Env
 
 
-def define_databases(env: environ.Env) -> dict:
+def define_databases(env: Env) -> dict:
     """
     Define databases for the project.
     will be read from .env files or the environment provided.
@@ -15,24 +15,32 @@ def define_databases(env: environ.Env) -> dict:
     # pylint: disable=invalid-name
     # pylint: disable=possibly-unused-variable
     # --- POSTGRES ----------------------------------------------------------------
-    # POSTGRES_DB = env.str("POSTGRES_DB", default="{{ project_name }}")  # type: ignore[no-untyped-call]
+    # POSTGRES_DB = env.str("POSTGRES_DB", default="{{ project_name }}")
     # POSTGRES_USER = env.str("POSTGRES_USER")
     # POSTGRES_PASSWORD = env.str("POSTGRES_PASSWORD")
     # POSTGRES_HOST = env.str("POSTGRES_HOST")
     # POSTGRES_PORT = env.int("POSTGRES_PORT")
-    # POSTGRES_OPTIONS = env.str("POSTGRES_OPTIONS", default="")  # type: ignore[no-untyped-call]
+    # POSTGRES_OPTIONS = env.str("POSTGRES_OPTIONS", default="")
     # POSTGRES_CONNECTION_STRING = (
     #     f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
     #     + f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}{POSTGRES_OPTIONS}"
     # )
-    # DATABASE_URL = env.str("DATABASE_URL", default=POSTGRES_CONNECTION_STRING)  # type: ignore[no-untyped-call]
+    # DATABASE_URL = env.str("DATABASE_URL", default=POSTGRES_CONNECTION_STRING)
+    # TODO: parse DATABASE_URL or connection string to reverse engineer the default options, to be able to setup with the single string
 
     # DATABASES = {
-    #     "default": env.db(
-    #         "DATABASE_URL",
-    #         default=DATABASE_URL,  # type: ignore[no-untyped-call]
-    #         engine="django.db.backends.postgresql",
-    #     )
+    #     "default": {
+    #         "HOST": POSTGRES_HOST,
+    #         "NAME": POSTGRES_DB,
+    #         "PORT": POSTGRES_PORT,
+    #         "USER": POSTGRES_USER,
+    #         "PASSWORD": POSTGRES_PASSWORD,
+    #         "ENGINE" : "django.db.backends.postgresql",
+    #         # see notes om connections: https://docs.djangoproject.com/en/{{ docs_version }}/ref/databases/#general-notes
+    #         "CONN_MAX_AGE": 0,
+    #         # "CONN_HEALTH_CHECKS": False,
+    #         "OPTIONS": {},
+    #     }
     # }
 
     # --- SQLite ------------------------------------------------------------------
@@ -45,13 +53,13 @@ def define_databases(env: environ.Env) -> dict:
     DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
     # --- REDIS ---------------------------------------------------------------
-    REDIS_PASSWORD = env.str("REDIS_PASSWORD", default="")  # type: ignore[no-untyped-call]
+    REDIS_PASSWORD = env.str("REDIS_PASSWORD", default="")
     # REDIS_KEY_FILE = '/path/to/client.key'
     # REDIS_CERT_FILE = '/path/to/client.crt'
     # REDIS_CA_FILE = '/path/to/CAcert.pem' or '/path/to/ca.crt'
 
     redisurlpass = f":{REDIS_PASSWORD}@" if REDIS_PASSWORD else ""
-    REDIS_URL = env.str("REDIS_URL", default=f"redis://{redisurlpass}redis:6379/1")  # type: ignore[no-untyped-call]
+    REDIS_URL = env.str("REDIS_URL", default=f"redis://{redisurlpass}redis:6379/1")
     del redisurlpass
 
     # pylint: enable=invalid-name

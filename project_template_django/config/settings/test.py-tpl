@@ -7,7 +7,6 @@ See `base.py` for basic settings.
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 
-! django-environ uses a confusing NOTYPE, so we are ignoring all env. call type-hints here
 """
 
 
@@ -26,11 +25,11 @@ locals().update(settings)
 # ruff: noqa: F405
 
 
-SECRET_KEY = env.str("DJANGO_SECRET_KEY", default="{{ secret_key }}")  # type: ignore[no-untyped-call]
+SECRET_KEY = env.str("DJANGO_SECRET_KEY", default="{{ secret_key }}")
 
 # =====PROJECT-SPECIFIC-SETTINGS===============================================
 # add project specific production settings here
-PROJECT_FQDN: ParseResult = env.url("PROJECT_FQDN")  # type: ignore[no-untyped-call]
+PROJECT_FQDN: ParseResult = env.url("PROJECT_FQDN")
 PROJECT_URL: str = PROJECT_FQDN.geturl()
 PROJECT_DOMAIN: str = PROJECT_FQDN.netloc.split(":")[0]
 

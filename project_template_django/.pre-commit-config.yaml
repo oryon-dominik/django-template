@@ -55,7 +55,7 @@ repos:
         django-stubs,
         django-stubs-ext,
         djangorestframework-stubs,
-        django-environ,
+        environs,
         django-cors-headers,
         django-csp,
         django-permissions-policy,
