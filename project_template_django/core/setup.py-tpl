@@ -17,7 +17,8 @@ def setup_django_settings(*, mode: DjangoMode, envspath: Path = ROOT_DIR / "envs
     """
     # load environment variables
     env = environs.Env()
-    env.read_env(envspath / f"{mode}.env")
+    strpath = str((envspath / f"{mode}.env").resolve())
+    env.read_env(strpath)
     DJANGO_SETTINGS_MODULE = env.str("DJANGO_SETTINGS_MODULE")
 
     # load django settings, this is a bit complicated doing it manually because we

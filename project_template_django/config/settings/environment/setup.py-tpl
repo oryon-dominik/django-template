@@ -16,7 +16,7 @@ def read_environment(*, path: Path, env: Env, skip_missing: bool = False, overri
         if skip_missing:
             return env
         raise ValueError(f"Tried to read. But dotenv file does not exist (create {path=})")
-    env.read_env(str(path), override=override)
+    env.read_env(str(path.resolve()), override=override)
     return env
 
 
