@@ -59,8 +59,7 @@
         // * python ///////////////////////////////////////////////////////////
         // In most cases the django-env should be read explicitly and NOT via the editorconfig.
         // you might use this python.envFile for your developer tools API keys (or whatever..) though.
-        // "python.envFile": "${workspaceFolder}/some.env",
-        "python.envFile": "${workspaceFolder}/envs/production.env",
+        // "python.envFile": "${workspaceFolder}/envs/develop.env",
         "python.terminal.activateEnvironment": true,
         "[python]": {
             "files.eol": "\n",
