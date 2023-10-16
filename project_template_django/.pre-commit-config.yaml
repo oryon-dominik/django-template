@@ -79,6 +79,7 @@ repos:
         jinja2,
         celery,
         django-celery-beat,
+        django-celery-results,
         redis,
         django-redis,
         djhtml,

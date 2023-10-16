@@ -61,7 +61,7 @@ def define_databases(env: Env) -> dict:
 
     REDIS_HOST = env.str("REDIS_HOST", default="localhost")
     REDIS_PORT = env.int("REDIS_PORT", default=6379)
-    REDIS_DATABASE_NAMESPACE = env.str("REDIS_DATABASE_NAMESPACE", default="0/{{ project_name }}")
+    REDIS_DATABASE_NAMESPACE = env.str("REDIS_DATABASE_NAMESPACE", default="0")
 
     redisurlpass = f":{REDIS_PASSWORD}@" if REDIS_PASSWORD else ""
     REDIS_URL = env.str(

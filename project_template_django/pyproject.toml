@@ -114,6 +114,7 @@ optional = true
 [tool.poetry.group.celery.dependencies]
 celery = "^5.3.4"
 django-celery-beat = "^2.5.0"
+django-celery-results = "^2.5.1"
 
 [tool.poetry.group.redis]
 optional = true

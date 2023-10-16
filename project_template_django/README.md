@@ -118,6 +118,58 @@ DB-shell
     docker compose run postgres psql -h host.docker.internal -U developer -d {{ project_name }}
 
 
+### redis via docker
+
+- [redis](https://redis.io/)
+
+Build and run
+
+    docker compose -f compose/redis.yml build
+    docker compose -f compose/redis.yml up
+
+Redis-shell
+
+    docker exec -it {{ project_name }}_redis redis-cli
+
+        > auth <password>
+        OK
+
+        > ping
+        PONG
+
+
+### postgres + redis via docker
+
+Build and run
+
+    docker compose -f compose/postgres-and-redis.yml build
+    docker compose -f compose/postgres-and-redis.yml up
+
+For single usage, combine the containers, you need -- the specific commands are still valid.
+
+
+### celery
+
+- [celery](https://docs.celeryq.dev/) & [celery-beat](https://github.com/celery/django-celery-beat)
+
+(develop) start the beat, who can't live without the worker
+
+    $env:DJANGO_SETTINGS_MODULE="config.settings.develop"; celery --app config.celeryapp beat --loglevel=INFO
+
+(develop) start the worker
+
+    $env:DJANGO_SETTINGS_MODULE="config.settings.develop"; celery --app config.celeryapp worker --loglevel=INFO --queues celery --uid=app
+
+Ocassionally it's good to purge all (old) celery tasks
+
+    # set DJANGO_SETTINGS_MODULE environment variable
+    $env:DJANGO_SETTINGS_MODULE="config.settings.develop"  # powershell
+    DJANGO_SETTINGS_MODULE=config.settings.develop  # posix
+
+    # Then purge all tasks from queues celery and {{ project_name }}
+    celery --app config.celery purge --queues {{ project_name }},celery
+
+
 ## Preinstalled third party packages
 
 ### root (default)
