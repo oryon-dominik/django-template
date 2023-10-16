@@ -86,7 +86,7 @@
 
         "pylint.args": [
             "--max-line-length=119",
-            "--logging-format-style=new",
+            "--logging-format-style=fstr",
             "--disable=C0114",
             "--disable=C0115",
             "--disable=C0116",

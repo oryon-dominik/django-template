@@ -41,8 +41,8 @@ app.autodiscover_tasks()
 # --- examples ----------------------------------------------------------------
 
 # example tasks.py
-# from config.celery import app
-# @app.task(bind=True)
+# from config.celeryapp import app
+# @app.task(bind=True, name="debug.debugging-task")
 # def debug_task(self):
 #     print(f'Request: {self.request!r}')
 

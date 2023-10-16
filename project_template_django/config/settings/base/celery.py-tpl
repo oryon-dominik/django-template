@@ -31,9 +31,14 @@ CELERY_BEAT_SCHEDULE: dict = {
     #     # 'schedule': crontab(minute=15, hour='*/2'),  # <- every two hours at h:15
     #     # 'schedule': crontab(hour=22),  # <- everyday at 10pm
     # },
+    # 'debugging-task': {
+    #     'task': "debug.debugging-task",
+    #     'schedule': crontab(minute="*/1"),  # <- every minute
+    # },
 }
 # define task routes here (not as args in the single tasks)
 CELERY_TASK_ROUTES: dict = {  # default queue name is: "celery"
     # "<queue-name>.*": {"queue": "<queue-name>"},  # general route for all tasks in apps...
     # "<queue-name>.*": {"queue": "<queue-name>"},  # general route for all tasks in apps...
+    # "debug.*": {"queue": "celery"},
 }
