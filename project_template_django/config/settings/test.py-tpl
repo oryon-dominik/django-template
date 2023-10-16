@@ -30,6 +30,7 @@ SECRET_KEY = env.str("DJANGO_SECRET_KEY", default="{{ secret_key }}")
 # =====PROJECT-SPECIFIC-SETTINGS===============================================
 # add project specific production settings here
 PROJECT_FQDN: ParseResult = env.url("PROJECT_FQDN")
+PROJECT_FRONTEND_FQDN: ParseResult = env.url("PROJECT_FRONTEND_FQDN", default="http://localhost:3000")
 PROJECT_URL: str = PROJECT_FQDN.geturl()
 PROJECT_DOMAIN: str = PROJECT_FQDN.netloc.split(":")[0]
 

@@ -5,9 +5,7 @@ from environs import Env
 from core.typehints.generic import DjangoMode
 
 
-def read_environment(
-    *, path: Path, env: Env, skip_missing: bool = False, override: bool = False
-) -> Env:
+def read_environment(*, path: Path, env: Env, skip_missing: bool = False, override: bool = False) -> Env:
     """
     Read environment variables from .env file.
     return the environment object.

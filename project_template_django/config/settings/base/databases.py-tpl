@@ -35,7 +35,7 @@ def define_databases(env: Env) -> dict:
     #         "PORT": POSTGRES_PORT,
     #         "USER": POSTGRES_USER,
     #         "PASSWORD": POSTGRES_PASSWORD,
-    #         "ENGINE" : "django.db.backends.postgresql",
+    #         "ENGINE": "django.db.backends.postgresql",
     #         # see notes om connections: https://docs.djangoproject.com/en/{{ docs_version }}/ref/databases/#general-notes
     #         "CONN_MAX_AGE": 0,
     #         # "CONN_HEALTH_CHECKS": False,

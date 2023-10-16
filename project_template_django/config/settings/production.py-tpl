@@ -83,12 +83,8 @@ CORS_ALLOW_METHODS = [
 SECURE_HSTS_SECONDS = (
     60 * 60 * 24 * 365
 )  # one year man-in-the-middle-protection - this might be much too long for development and rapid prototyping
-SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool(
-    "DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True
-)
-SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
-    "DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", default=True
-)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool("DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True)
+SECURE_CONTENT_TYPE_NOSNIFF = env.bool("DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", default=True)
 
 # Modern browsers don’t honor X-XSS-Protection HTTP header anymore. Although
 # the setting offers little practical benefit, you may still want to set the
