@@ -26,7 +26,8 @@ def define_databases(env: Env) -> dict:
     #     + f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}{POSTGRES_OPTIONS}"
     # )
     # DATABASE_URL = env.str("DATABASE_URL", default=POSTGRES_CONNECTION_STRING)
-    # TODO: parse DATABASE_URL or connection string to reverse engineer the default options, to be able to setup with the single string
+    # TODO: parse DATABASE_URL or connection string params to reverse engineer
+    # the default options, to be able to setup with the single string
 
     # DATABASES = {
     #     "default": {
@@ -39,7 +40,7 @@ def define_databases(env: Env) -> dict:
     #         # see notes om connections: https://docs.djangoproject.com/en/{{ docs_version }}/ref/databases/#general-notes
     #         "CONN_MAX_AGE": 0,
     #         # "CONN_HEALTH_CHECKS": False,
-    #         "OPTIONS": {},
+    #         "OPTIONS": {'sslmode': "prefer"},
     #     }
     # }
 

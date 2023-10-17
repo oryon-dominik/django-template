@@ -27,7 +27,7 @@ CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
 CELERY_BEAT_SCHEDULE: dict = {
     # "your_task_name_for_the_sheduler": {
-    #     "task": "<queue-name>.<task-name>",
+    #     "task": "<module-name>.<task-name>",
     #     # "args": ["argument_to_commit_to_task"],
     #     "schedule": crontab(minute=0, hour="*/1"),  # <- every hour
     #     # "schedule": crontab(minute="*/10"),  # <- every ten minutes
@@ -41,7 +41,9 @@ CELERY_BEAT_SCHEDULE: dict = {
     # },
 }
 # define task routes here (not as args in the single tasks)
-CELERY_TASK_ROUTES: dict = {  # default queue name is: "celery"
+
+CELERY_TASK_DEFAULT_QUEUE = "celery"
+CELERY_ROUTES: dict = {
     # "<queue-name>.*": {"queue": "<queue-name>"},  # general route for all tasks in apps...
     # "<queue-name>.*": {"queue": "<queue-name>"},  # general route for all tasks in apps...
     # "debug.*": {"queue": "celery"},

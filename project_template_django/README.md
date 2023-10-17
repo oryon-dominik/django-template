@@ -156,9 +156,9 @@ For single usage, combine the containers, you need -- the specific commands are 
 
     $env:DJANGO_SETTINGS_MODULE="config.settings.develop"; celery --app config.celeryapp beat --loglevel=INFO
 
-(develop) start the worker
+(develop) start the worker (threadpool on windows is solo!)
 
-    $env:DJANGO_SETTINGS_MODULE="config.settings.develop"; celery --app config.celeryapp worker --loglevel=INFO --queues celery --uid=app
+    $env:DJANGO_SETTINGS_MODULE="config.settings.develop"; celery --app config.celeryapp worker --loglevel=INFO --queues {{ project_name }},celery --pool solo
 
 Ocassionally it's good to purge all (old) celery tasks
 
@@ -167,7 +167,7 @@ Ocassionally it's good to purge all (old) celery tasks
     DJANGO_SETTINGS_MODULE=config.settings.develop  # posix
 
     # Then purge all tasks from queues celery and {{ project_name }}
-    celery --app config.celery purge --queues {{ project_name }},celery
+    $env:DJANGO_SETTINGS_MODULE="config.settings.develop"; celery --app config.celeryapp purge --queues {{ project_name }},celery
 
 
 ## Preinstalled third party packages

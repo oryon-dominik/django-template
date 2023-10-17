@@ -13,7 +13,7 @@ from django.conf import settings
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.production")
 
 app = celery.Celery(
-    "apps",
+    "tasks",
     broker=settings.REDIS_URL,  # type: ignore[misc]
     backend=settings.REDIS_URL,  # type: ignore[misc]
     broker_use_ssl={
