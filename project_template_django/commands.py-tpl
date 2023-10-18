@@ -11,7 +11,11 @@ from pathlib import Path
 from typing import Optional
 
 import typer
+from environs import Env
 
+from config.settings.base import ROOT_DIR
+from config.settings.base.databases import define_databases
+from config.settings.environment.setup import read_environment
 from core.decorators import djangosetup
 
 
@@ -33,12 +37,14 @@ TEMPLATE = "https://github.com/oryon-dominik/django-template"
 
 
 # --------- HELPERS -----------------------------------------------------------
-def env_with_pythonpath():
+def env_with_pythonpath(environment: dict | None = None):
     """Get en environment dict with includes PYTHONPATH"""
     env = os.environ.copy()
     wd = str(CWD.resolve())
     if wd not in env["PATH"]:
         env["PATH"] += wd
+    if environment is not None:
+        env |= environment
     return env
 
 
@@ -61,7 +67,6 @@ def clean_temp(panic: bool = True, log_errors: bool = True):
 
     print("Unlinking temp-files: temp/")
     # ! keep the parent folder
-    # TODO: fix this PermissionDenied bug
     delete_tree(Path(CWD) / "temp", keep_parent=True, panic=panic, log_errors=log_errors)
 
 
@@ -238,6 +243,34 @@ def check(templates: bool = False):
 
 
 @cli.command()
+def doppler():
+    """download the dotenvs from doppler.com (test + dev) - if your are logged in"""
+    # if os.name == 'nt':
+    #     run_command(
+    #         "(doppler secrets download --format=json --no-file --config=dev |
+    # ConvertFrom-Json | ForEach-Object { $_.PSObject.Properties } |
+    # ForEach-Object { \"$($_.Name)=$($_.Value)\" }) -join \"`n\" | Out-File './envs/develop.env'",
+    #     )
+    #     run_command(
+    #         "(doppler secrets download --format=json --no-file --config=test | ConvertFrom-Json |
+    # ForEach-Object { $_.PSObject.Properties } |
+    # ForEach-Object { \"$($_.Name)=$($_.Value)\" }) -join \"`n\" | Out-File './envs/test.env'",
+    #     )
+    # elif os.name == 'posix':
+    #     run_command(
+    #         "doppler secrets download --format=json --no-file --config=dev |
+    # jq -r 'to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]' | awk -F'=' '{print $1\"=\"$2}' > ./envs/develop.env"
+    #     )
+    #     run_command(
+    #         "doppler secrets download --format=json --no-file --config=test |
+    # jq -r 'to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]' | awk -F'=' '{print $1\"=\"$2}' > ./envs/test.env"
+    #     )
+    # else:
+    #     raise OSError("Operating system not supported.")
+    raise NotImplementedError("Doppler is not yet implemented.")
+
+
+@cli.command()
 def tui():
     """Run the TUI app"""
     # from terminalui import terminalui  # pylint: disable=import-outside-toplevel
@@ -248,12 +281,67 @@ def tui():
 
 
 @cli.command()
+def celery(
+    mode: str = "develop",  # BUG: typer does not accept Literals yet (otherwise this would be "DjangoMode")
+    config: str = "config.celeryapp",
+    worker: bool = False,
+    beat: bool = False,
+    flower: bool = False,
+    # envspath: Path = ROOT_DIR / "envs",
+):
+    """Run the celery worker"""
+    counts = int(worker) + int(beat) + int(flower)
+    if counts > 1:
+        print("Running celery worker, flower or beat over this interface is mutually exclusive.")
+        raise typer.Abort()
+    elif counts < 1:
+        print("Please run at least one of --worker --beat --flower.")
+        raise typer.Abort()
+
+    env: Env = read_environment(env=Env(), path=ROOT_DIR / "envs" / f"{mode}.env")
+    _env = env_with_pythonpath(environment=dict(env.dump()))
+
+    if worker:
+        # run celery worker
+        command = " ".join(
+            [
+                "celery",
+                f"--app {config}",
+                "worker",
+                "--loglevel=INFO",
+                "--queues celery,{{ project_name }}",
+                " --hostname worker-%%h",
+            ]
+        )
+
+        if os.name == "nt":
+            # windows does not support event loops via gevent and eventlet,
+            # because the posix implementation for functions like select, poll,
+            # epoll and pipe differs.
+            command += " --pool solo"
+
+        run_command(command, debug=DEBUG, env=_env)
+
+    if beat:
+        # run celery beat
+        command = f"celery --app {config} beat"
+        run_command(command, debug=DEBUG, env=_env)
+
+    if flower:
+        dbenv = define_databases(env=env)
+        command = f"celery --broker={dbenv['REDIS_URL']} flower --app={config}"
+        run_command(command, debug=DEBUG, env=_env)
+
+
+@cli.command()
 def setup(production: bool = False, panic: bool = True, log_errors: bool = True):
     """
     Setup the project.
     Clean.
     Create vital files and directories.
-    Write template and commithash info to pyproject.toml.
+    if not in production:
+        Write template and commithash info to pyproject.toml.
+        Start the TUI Configapp.
     """
     create_vital_files_and_directories(production=production)
     clean(panic=panic, log_errors=log_errors)

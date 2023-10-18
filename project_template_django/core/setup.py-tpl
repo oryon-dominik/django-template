@@ -2,7 +2,7 @@ import importlib
 import logging
 from pathlib import Path
 
-import environs
+from environs import Env
 
 from config.settings.base import ROOT_DIR
 from core.typehints.generic import DjangoMode
@@ -16,7 +16,7 @@ def setup_django_settings(*, mode: DjangoMode, envspath: Path = ROOT_DIR / "envs
     Setup django settings module depending on mode.
     """
     # load environment variables
-    env = environs.Env()
+    env = Env()
     strpath = str((envspath / f"{mode}.env").resolve())
     env.read_env(strpath)
     DJANGO_SETTINGS_MODULE = env.str("DJANGO_SETTINGS_MODULE")
