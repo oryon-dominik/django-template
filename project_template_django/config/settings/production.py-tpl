@@ -135,11 +135,9 @@ CSP_SCRIPT_SRC = ("'self'", PROJECT_URL)
 # Using: https://github.com/adamchainz/django-permissions-policy
 PERMISSIONS_POLICY: dict = {
     "accelerometer": [],
-    "ambient-light-sensor": [],
     "autoplay": [],
     "camera": [],
     "display-capture": [],
-    "document-domain": [],
     "encrypted-media": [],
     "fullscreen": [],
     "geolocation": [],
