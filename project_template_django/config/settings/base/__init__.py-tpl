@@ -97,7 +97,7 @@ from .users import (
 # -----------------------------------------------------------------------------
 
 from .thirdparty import *  # noqa # pylint: disable=wildcard-import,unused-wildcard-import
-from .pytomatom import *  # noqa # pylint: disable=wildcard-import,unused-wildcard-import
+from .{{ project_name }} import *  # noqa # pylint: disable=wildcard-import,unused-wildcard-import
 
 # -----------------------------------------------------------------------------
 # pylint: enable=unused-import
