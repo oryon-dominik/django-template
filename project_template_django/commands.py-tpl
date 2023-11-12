@@ -277,7 +277,8 @@ def tui():
     # app = terminalui.TerminalUserInterface()
     # app.run()
     # sys.exit(app.return_code or 0)
-    raise NotImplementedError("The TUI is not yet implemented.")
+    # raise NotImplementedError("The TUI is not yet implemented.")
+    ...
 
 
 @cli.command()
