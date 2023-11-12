@@ -126,11 +126,6 @@
             "--explicit-package-bases",
             "--plugins=pydantic.mypy,mypy_django_plugin.main,mypy_drf_plugin.main"
         ],
-        "mypy-type-checker.interpreter": [
-            "python",
-            "-m",
-            "mypy"
-        ],
         "mypy.runUsingActiveInterpreter": false,
         "mypy.dmypyExecutable": "dmypy",
 
