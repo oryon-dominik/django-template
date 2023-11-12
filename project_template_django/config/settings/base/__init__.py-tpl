@@ -57,7 +57,6 @@ from .middleware import MIDDLEWARE
 from .paths import (
     ROOT_DIR,
     APPS_DIR,
-    RESOURCES_DIR,
 )
 from .project import (
     VERSION,
