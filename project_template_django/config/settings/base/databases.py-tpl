@@ -91,20 +91,22 @@ CACHES = {
         "LOCATION": "unique-snowflake-{{ project_name }}--cache",
     },
     "redis": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            # http://niwinz.github.io/django-redis/latest/#_memcached_exceptions_behavior,
-            "IGNORE_EXCEPTIONS": True,  # mimics memcache behavior.
-            # connection pool kwargs to configure the use of certificates
-            "CONNECTION_POOL_KWARGS": {
-                # "ssl_cert_reqs": None
-                # 'ssl_ca_certs': REDIS_CA_FILE,
-                # 'ssl_certfile': REDIS_CERT_FILE,
-                # 'ssl_keyfile': REDIS_KEY_FILE,
-            },
-        },
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "unique-snowflake-{{ project_name }}--locmem-fake-redis-cache",
+        # "BACKEND": "django_redis.cache.RedisCache",
+        # "LOCATION": "",
+        # "OPTIONS": {
+        #     "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        #     # http://niwinz.github.io/django-redis/latest/#_memcached_exceptions_behavior,
+        #     "IGNORE_EXCEPTIONS": True,  # mimics memcache behavior.
+        #     # connection pool kwargs to configure the use of certificates
+        #     "CONNECTION_POOL_KWARGS": {
+        #         # "ssl_cert_reqs": None
+        #         # 'ssl_ca_certs': REDIS_CA_FILE,
+        #         # 'ssl_certfile': REDIS_CERT_FILE,
+        #         # 'ssl_keyfile': REDIS_KEY_FILE,
+        #     },
+        # },
     },
     "jwt-blacklist": {
         # ! this is not thread-safe and not recommended, if you use multiple workers
