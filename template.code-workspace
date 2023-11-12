@@ -63,8 +63,10 @@
         "python.terminal.activateEnvironment": true,
         "[python]": {
             "files.eol": "\n",
-            // "editor.defaultFormatter": "ms-python.python",
+            "editor.tabSize": 4,
+            "editor.insertSpaces": true,
             "editor.defaultFormatter": "ms-python.black-formatter",
+            // "editor.defaultFormatter": "ms-python.python",
             "editor.formatOnType": true,
             "editor.codeActionsOnSave": {
                 // "source.fixAll.ruff": true,
