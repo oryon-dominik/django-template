@@ -35,6 +35,14 @@ Read the project's [documentation](./documentation/index.md) for all details and
     poetry install --only-root --sync
 
 
+### Contributors
+
+Create a [contributors list from the contributors in git](https://github.com/Pierre-Sassoulas/contributors-txt), 
+using aliases defined in `config/contributors/aliases.json`.
+
+    contributors-txt --aliases .\config\contributors\aliases.json
+
+
 ### Setup the project
 
     poetry run python commands.py setup

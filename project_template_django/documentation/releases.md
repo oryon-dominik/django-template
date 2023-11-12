@@ -2,9 +2,8 @@
 
 ## Release History
 
-| Version | Date | Description |
-| --- | --- | --- |
-| 0.0.1 | {% now "YYYY-MM-DD" %} | Initial setup. |
+See [CHANGES.md](./changes.md) file.
+
 
 ## Versioning
 
@@ -12,6 +11,7 @@ We are trying to orient ourselfs on [semantic versioning](https://semver.org/lan
 - `MAJOR` version for incompatible API changes or full-fledged new application life-cycles.
 - `MINOR` version for added functionality and new features in a backwards compatible manner.
 - `PATCH` version for backwards compatible bugfixes or incremental improvements.
+
 
 ## Gitflow
 
@@ -32,6 +32,7 @@ Starting a new release should be followed up by a [pull request](https://docs.gi
 - `feature/*` branches are for specific features, they should be created only, if the feature is not trivial and will take more than a few hours or extra steps to develop. They are branched from `trunk` and merged into `trunk`.
 - `release/*` branches are for new releases only - every release has it's own git-tag and is branched from `trunk` and merged into `trunk` and `production`. Releases might involve staging, testing and some bugfixes, no active development.
 - `hotfix/*` branches are for hotfixes - they are branched from `production` and merged into `production` and `trunk`. They are solely for the purpose of fixing a bug in production.
+
 
 ### git-flow configuration
 
