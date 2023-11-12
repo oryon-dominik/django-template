@@ -79,6 +79,10 @@ from .static import (
     MEDIA_ROOT,
     MEDIA_URL,
 )
+from .sessions import (
+    SESSION_EXPIRE_AT_BROWSER_CLOSE,
+    SESSION_COOKIE_AGE,
+)
 from .templates import TEMPLATES
 from .urlconf import (
     ADMIN_URL,
