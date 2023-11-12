@@ -1,0 +1,50 @@
+# from celery.schedules import crontab
+
+from .internationalization import USE_TZ, TIME_ZONE
+
+# Celery
+# -----------------------------------------------------------------------------
+if USE_TZ:
+    # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-timezone
+    CELERY_TIMEZONE = TIME_ZONE
+
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-accept_content
+CELERY_ACCEPT_CONTENT = ["json"]
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-task_serializer
+CELERY_TASK_SERIALIZER = "json"
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_serializer
+CELERY_RESULT_SERIALIZER = "json"
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#task-time-limit
+CELERY_TASK_TIME_LIMIT = 60 * 60  # 60 minutes
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#task-soft-time-limit
+CELERY_TASK_SOFT_TIME_LIMIT = 60 * 10  # 10 minutes
+
+# Results, using [django-celery-results](https://github.com/celery/django-celery-results)
+CELERY_RESULT_BACKEND = "django-db"  # or: "django-cache" or "default" what is using the CACHES default backend
+
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#beat-scheduler
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+CELERY_BEAT_SCHEDULE: dict = {
+    # "your_task_name_for_the_sheduler": {
+    #     "task": "<module-name>.<task-name>",
+    #     # "args": ["argument_to_commit_to_task"],
+    #     "schedule": crontab(minute=0, hour="*/1"),  # <- every hour
+    #     # "schedule": crontab(minute="*/10"),  # <- every ten minutes
+    #     # "schedule": crontab(minute=30, hour="*/1"),  # <- every hour at h:30
+    #     # "schedule": crontab(minute=15, hour="*/2"),  # <- every two hours at h:15
+    #     # "schedule": crontab(hour=22),  # <- everyday at 10pm
+    # },
+    # "debugging-task": {
+    #     "task": "debug.debugging-task",
+    #     "schedule": crontab(minute="*/1"),  # <- every minute
+    # },
+}
+# define task routes here (not as args in the single tasks)
+
+CELERY_TASK_DEFAULT_QUEUE = "celery"
+CELERY_ROUTES: dict = {
+    # "<queue-name>.*": {"queue": "<queue-name>"},  # general route for all tasks in apps...
+    # "<queue-name>.*": {"queue": "<queue-name>"},  # general route for all tasks in apps...
+    # "debug.*": {"queue": "celery"},
+}

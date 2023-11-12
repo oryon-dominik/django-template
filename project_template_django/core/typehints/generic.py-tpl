@@ -12,4 +12,5 @@ URLType: TypeAlias = URLResolver | URLPattern
 PathType: TypeAlias = Path | WindowsPath | PosixPath
 
 # DjangoMode is a generic, because it has no dependencies on Django itself.
-DjangoMode = Literal["test", "develop", "production"]
+DjangoMode: TypeAlias = Literal["test", "develop", "production"]
+DjangoModeOrNone: TypeAlias = DjangoMode | None

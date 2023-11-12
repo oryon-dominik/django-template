@@ -1,0 +1,29 @@
+# celeryworker.service
+#
+# For spawning a web application celery task manager as a systemd service.
+#
+[Unit]
+Description=WebApplication Task Management via celery workers
+Documentation=Consult the automation agent for infos on the WebApplication running on this localhost
+Wants=nginx.service
+After=nginx.service
+
+# Combined with Restart=5, this will always and forever restart the service if it dies without putting too much stress on it.
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+WorkingDirectory=/app
+
+User=root
+Group=root
+EnvironmentFile=/app/envs/production.env
+# TBD: is --uid=app correct or is this root?
+ExecStart=/opt/poetry/bin/poetry run celery --app config.celeryapp worker --loglevel=INFO --queues {{ project_name }},celery --uid=app --hostname worker-%%h
+ExecReload=/opt/poetry/bin/poetry run celery --app config.celeryapp worker --loglevel=INFO --queues {{ project_name }},celery --uid=app --hostname worker-%%h
+
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

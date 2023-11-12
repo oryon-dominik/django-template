@@ -7,14 +7,13 @@ See `base.py` for basic settings.
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 
-! django-environ uses a confusing NOTYPE, so we are ignoring all env. call type-hints here
 """
 
 
 from urllib.parse import ParseResult
 
 from .environment.setup import prepare  # noqa: F403 NOSONAR
-from .base import *  # noqa: E402 F403 NOSONAR
+from .base import *  # noqa: E402 F403 NOSONAR  pylint: disable=unused-wildcard-import,wildcard-import
 
 # read environment variables from .env and update the local environment
 env, settings = prepare(mode="production")
@@ -38,6 +37,7 @@ SECRET_KEY = env.str("DJANGO_SECRET_KEY")
 # add project specific production settings here
 PROJECT_FQDN: ParseResult = env.url("PROJECT_FQDN")
 PROJECT_URL: str = PROJECT_FQDN.geturl()
+PROJECT_DOMAIN: str = PROJECT_FQDN.netloc.split(":")[0]
 
 # Production checklist:
 # See https://docs.djangoproject.com/en/{{ doc_version }}/howto/deployment/checklist/
@@ -49,6 +49,15 @@ PROJECT_URL: str = PROJECT_FQDN.geturl()
 INSTALLED_APPS += (
     # apps for production
 )
+
+# redis url is dependant on the environment
+# pylint: disable=undefined-variable
+CACHES["redis"]["LOCATION"] = REDIS_URL  # type: ignore[index, name-defined] # noqa: F405
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-broker_url
+CELERY_BROKER_URL = REDIS_URL  # type: ignore[name-defined] # noqa: F405
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_backend
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+# pylint: enable=undefined-variable
 
 
 # --- SECURITY CONFIGURATION --------------------------------------------------
@@ -62,9 +71,9 @@ ADMIN_URL = env("DJANGO_ADMIN_URL")
 # Hosts/domain names that are valid for this site
 # Remember to set this to your expected hostnames
 # See https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=[])  # type: ignore[no-untyped-call]
-CORS_ALLOWED_ORIGINS = env.list("DJANGO_CORS_ALLOWED_ORIGINS", default=[])  # type: ignore[no-untyped-call]
-CORS_ALLOW_ALL_ORIGINS = env.bool("DJANGO_CORS_ALLOW_ALL_ORIGINS", default=False)  # type: ignore[no-untyped-call]
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=[])
+CORS_ALLOWED_ORIGINS = env.list("DJANGO_CORS_ALLOWED_ORIGINS", default=[])
+CORS_ALLOW_ALL_ORIGINS = env.bool("DJANGO_CORS_ALLOW_ALL_ORIGINS", default=False)
 CORS_ALLOW_METHODS = [
     "GET",
     "OPTIONS",
@@ -74,8 +83,8 @@ CORS_ALLOW_METHODS = [
 SECURE_HSTS_SECONDS = (
     60 * 60 * 24 * 365
 )  # one year man-in-the-middle-protection - this might be much too long for development and rapid prototyping
-SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool("DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True)  # type: ignore[no-untyped-call]
-SECURE_CONTENT_TYPE_NOSNIFF = env.bool("DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", default=True)  # type: ignore[no-untyped-call]
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool("DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True)
+SECURE_CONTENT_TYPE_NOSNIFF = env.bool("DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", default=True)
 
 # Modern browsers don’t honor X-XSS-Protection HTTP header anymore. Although
 # the setting offers little practical benefit, you may still want to set the
@@ -86,7 +95,7 @@ SECURE_REFERRER_POLICY = "same-origin"  # "strict-origin"
 
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
-SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)  # type: ignore[no-untyped-call]
+SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
 X_FRAME_OPTIONS = "DENY"
@@ -102,7 +111,8 @@ X_FRAME_OPTIONS = "DENY"
 # example: ("'self'", f"ws://{PROJECT_FQDN.netloc}")
 CSP_DEFAULT_SRC = ("'self'", PROJECT_URL)
 # CSP: connect-src
-# connect-src directive restricts the URLs which can be loaded using script interfaces. The APIs that are restricted are:
+# connect-src directive restricts the URLs which can be loaded using script interfaces.
+# The APIs that are restricted are:
 # <a> ping, fetch(), XMLHttpRequest, WebSocket, EventSource, and Navigator.sendBeacon().
 # Note: connect-src 'self' does not resolve to websocket schemes in all browsers, more info in this issue.
 # example: (f"ws://{PROJECT_FQDN.netloc}",)

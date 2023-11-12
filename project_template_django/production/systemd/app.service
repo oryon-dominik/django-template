@@ -1,0 +1,29 @@
+# app.service
+#
+# For spawning a web application as a systemd service.
+#
+[Unit]
+Description=WebApplication
+Documentation=Consult the automation agent for infos on the WebApplication running on this localhost
+Wants=nginx.service
+After=nginx.service
+
+# Combined with Restart=5, this will always and forever restart the service if it dies without putting too much stress on it.
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+WorkingDirectory=/app
+
+User=root
+Group=root
+EnvironmentFile=/app/envs/production.env
+ExecStartPre=
+ExecStart=/opt/poetry/bin/poetry run gunicorn config.wsgi:application
+ExecReload=/opt/poetry/bin/poetry run gunicorn config.wsgi:application
+
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

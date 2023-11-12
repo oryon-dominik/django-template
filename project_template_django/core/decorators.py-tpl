@@ -1,9 +1,9 @@
 import functools
 
-from core.typehints.generic import DjangoMode
+from core.typehints.generic import DjangoModeOrNone
 
 
-def djangosetup(x_or_func=None, mode: DjangoMode | None = None):
+def djangosetup(x_or_func=None, mode: DjangoModeOrNone = None):
     """
     Setup django settings for the function ahead.
     """

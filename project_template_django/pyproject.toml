@@ -9,14 +9,11 @@ readme = "README.md"
 python = "^3.11"
 gunicorn = "^20.1.0"
 Django = "^4.2"
-django-environ = "^0.9.0"
 django-cors-headers = "^3.13.0"
 django-csp = "^3.7"
 django-permissions-policy = "^4.16.0"
 django-extensions = "^3.2.1"
 django-rich = "^1.4.0"
-django-stubs = {extras = ["compatible-mypy"], version = "^1.15.0"}
-django-stubs-ext = "^0.7.0"
 msgspec = "^0.13.1"
 gitpython = "^3.1.31"
 tomlkit = "^0.11.8"
@@ -26,7 +23,7 @@ jinja2 = "^3.1.2"
 optional = false
 [tool.poetry.group.django.dependencies]
 django-readers = "^2.1.1"
-django-hatchway = "^0.5.1"
+# django-hatchway = "^0.5.1"  # FIXME: deactivated due to pydantic support < 2
 django-widget-tweaks = "^1.4.12"
 django-crispy-forms = "^1.14.0"
 crispy-tailwind = "^0.5.0"
@@ -76,8 +73,11 @@ isort = "^5.12.0"
 optional = false
 # run mypy with: poetry run mypy --config-file pyproject.toml .
 [tool.poetry.group.typechecker.dependencies]
-mypy = "1.0.1"
+mypy = "1.5.1"
 types-toml = "^0.10.8.6"
+django-stubs = {extras = ["compatible-mypy"], version = "^4.2.4"}
+django-stubs-ext = "^4.2.2"
+djangorestframework-stubs = {extras = ["compatible-mypy"], version = "^3.14.3"}
 
 [tool.poetry.group.debugging]
 optional = false
@@ -88,7 +88,6 @@ django-debug-toolbar = "^3.6.0"
 [tool.poetry.group.paragons]
 optional = false
 [tool.poetry.group.paragons.dependencies]
-rich = "^12.5.1"
 humanize = "^4.3.0"
 pendulum = "^2.1.2"
 dill = "^0.3.5.1"
@@ -98,7 +97,7 @@ httpx = "^0.23.0"  # also used in some jupyter dev-notebooks
 [tool.poetry.group.postgres]
 optional = true
 [tool.poetry.group.postgres.dependencies]
-psycopg = {extras = ["binary"], version = "^3.1.10"}
+psycopg = {extras = ["binary"], version = "^3.1.12"}
 
 [tool.poetry.group.authentication]
 optional = true
@@ -108,8 +107,34 @@ python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 [tool.poetry.group.restframework]
 optional = true
 [tool.poetry.group.restframework.dependencies]
-djangorestframework = "^3.13.1"
-djangorestframework-stubs = {extras = ["compatible-mypy"], version = "^1.9.1"}
+djangorestframework = "^3.14.0"
+
+[tool.poetry.group.celery]
+optional = true
+[tool.poetry.group.celery.dependencies]
+celery = "^5.3.4"
+django-celery-beat = "^2.5.0"
+django-celery-results = "^2.5.1"
+
+[tool.poetry.group.redis]
+optional = true
+[tool.poetry.group.redis.dependencies]
+redis = "^5.0.1"
+django-redis = "^5.4.0"
+
+[tool.poetry.group.environment]
+optional = false
+[tool.poetry.group.environment.dependencies]
+environs = "^9.5.0"
+rich = "^13.6.0"
+# TODO: Add textual, when the terminalui is finished.
+# textual = "^0.38.1"
+doppler-env = "^0.3.1"
+
+[tool.poetry.group.gittools]
+optional = true
+[tool.poetry.group.gittools.dependencies]
+git-fame = "^2.0.1"
 
 [tool.poetry.group.vite]
 optional = true

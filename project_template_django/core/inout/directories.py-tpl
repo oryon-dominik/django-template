@@ -102,7 +102,7 @@ class TemporaryDirectory:
         try:
             if not self.keep:
                 delete_tree(path=self.path, panic=self.panic, log_errors=self.log_errors)
-        except OSError as exc:
+        except OSError as exception:
             log_config = LogGuardConfig(logger_name=IO_LOGGER, log_errors=self.log_errors)
-            exc = CoreIOException("Error deleting temp-folder.", parent=exc)
+            exc = CoreIOException("Error deleting temp-folder.", parent=exception)
             guard.exception(exc=exc, panic=self.panic, log_config=log_config)

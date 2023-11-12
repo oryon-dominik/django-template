@@ -2,6 +2,7 @@
 
 > Zero to productive..
 
+0. Add the [environment secrets](./environment-secrets.md).
 
 1. Install pyenv & project's python
 
@@ -32,6 +33,10 @@
         poetry env use python  # will create the venv and use your current local python
         poetry config virtualenvs.path <global path to your venvs>  # optional
         poetry install  # will install the dependencies to the venv
+
+        # mypy will be used by the project linter, so I recommend to install it globally for a available dmypy on PATH
+        # otherwise you will have to configure your IDE and dmypy yourself
+        python -m pip install mypy
 
 
 5. Setup the project for development

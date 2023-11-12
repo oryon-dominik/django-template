@@ -72,6 +72,7 @@ class AuthTokenLogin(APIView):
             now=now,
             expires_in=tokens.DEFAULT_JWT_TOKEN_REFRESH_EXPIRATION_MINUTES,
         )
+
         response = JsonResponse({"refresh": f"{refresh_token}"})
         response.set_cookie(
             key=tokens.DEFAULT_JWT_TOKEN_COOKIE_KEY,
@@ -79,7 +80,7 @@ class AuthTokenLogin(APIView):
             max_age=tokens.DEFAULT_JWT_TOKEN_ACCESS_EXPIRATION_MINUTES * 60,  # seconds
             expires=http_date(now.timestamp()),
             path=f"/{settings.API_BASE_URL}",
-            domain=settings.PROJECT_FQDN,
+            domain=f"{settings.PROJECT_DOMAIN}",
             secure=True,
             httponly=True,
         )
@@ -183,6 +184,7 @@ class AuthTokenRefresh(APIView):
             now=now,
             expires_in=tokens.DEFAULT_JWT_TOKEN_REFRESH_EXPIRATION_MINUTES,
         )
+
         response = JsonResponse({"refresh": f"{refresh_token}"})
         response.set_cookie(
             key=tokens.DEFAULT_JWT_TOKEN_COOKIE_KEY,
@@ -190,7 +192,7 @@ class AuthTokenRefresh(APIView):
             max_age=tokens.DEFAULT_JWT_TOKEN_ACCESS_EXPIRATION_MINUTES * 60,  # seconds
             expires=http_date(now.timestamp()),
             path=f"/{settings.API_BASE_URL}",
-            domain=settings.PROJECT_FQDN,
+            domain=f"{settings.PROJECT_DOMAIN}",
             secure=True,
             httponly=True,
         )
@@ -242,7 +244,7 @@ class AuthTokenLogout(APIView):
         response.delete_cookie(
             key=tokens.DEFAULT_JWT_TOKEN_COOKIE_KEY,
             path=f"/{settings.API_BASE_URL}",
-            domain=settings.PROJECT_FQDN,
+            domain=f"{settings.PROJECT_DOMAIN}",
         )
 
         if user is not None:

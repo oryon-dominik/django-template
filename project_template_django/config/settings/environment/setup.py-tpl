@@ -1,12 +1,11 @@
-from typing import Literal
 from pathlib import Path
 
-import environ
+from environs import Env
+
+from core.typehints.generic import DjangoMode
 
 
-def read_environment(
-    *, path: Path, env: environ.Env, skip_missing: bool = False, override: bool = False
-) -> environ.Env:
+def read_environment(*, path: Path, env: Env, skip_missing: bool = False, override: bool = False) -> Env:
     """
     Read environment variables from .env file.
     return the environment object.
@@ -17,18 +16,15 @@ def read_environment(
         if skip_missing:
             return env
         raise ValueError(f"Tried to read. But dotenv file does not exist (create {path=})")
-    env.read_env(str(path), override=override)
+    env.read_env(str(path.resolve()), override=override)
     return env
 
 
-def prepare(mode: Literal["test", "develop", "production"]) -> tuple[environ.Env, dict]:
-    env = environ.Env()
-    # ! django-environ uses a confusing NOTYPE
+def prepare(mode: DjangoMode) -> tuple[Env, dict]:
+    env = Env()
     # Providing access to the projects environment variables.
-    from ..base.paths import ROOT_DIR  # noqa # pylint: disable=unused-import
+    from ..base.paths import ROOT_DIR  # pylint: disable=relative-beyond-top-level,import-outside-toplevel
 
-    # Read environment from local.env
-    env = read_environment(path=ROOT_DIR / "envs" / "local.env", env=env, skip_missing=True)
     # skip missing .env file in production
     skip_missing = mode == "production"
     # Read environment from <mode>.env
@@ -37,12 +33,12 @@ def prepare(mode: Literal["test", "develop", "production"]) -> tuple[environ.Env
     return setup_base_settings_for(env=env)
 
 
-def setup_base_settings_for(env: environ.Env) -> tuple[environ.Env, dict]:
+def setup_base_settings_for(env: Env) -> tuple[Env, dict]:
     """
     Setup base settings for the project.
     """
     # lazy import to avoid circular imports
-    from ..base.databases import define_databases
+    from ..base.databases import define_databases  # pylint: disable=relative-beyond-top-level,import-outside-toplevel
 
     databases: dict = define_databases(env=env)
     # merge settings that use environment variables

@@ -4,21 +4,27 @@
 
 import os
 import subprocess
+
+# tui: import sys
 import webbrowser
 from pathlib import Path
 from typing import Optional
 
 import typer
+from environs import Env
 
+from config.settings.base import ROOT_DIR
+from config.settings.base.databases import define_databases
+from config.settings.environment.setup import read_environment
 from core.decorators import djangosetup
 
 
 try:
-    from rich import print  # noqa
+    from rich import print  # pylint: disable=redefined-builtin
 except ImportError:
     # if rich is not installed, use the default print
     # avoid linter warning for undefined print
-    print = print  # noqa
+    print = print  # pylint: disable=self-assigning-variable
 
 cli = typer.Typer()
 
@@ -31,31 +37,33 @@ TEMPLATE = "https://github.com/oryon-dominik/django-template"
 
 
 # --------- HELPERS -----------------------------------------------------------
-def env_with_pythonpath():
+def env_with_pythonpath(environment: dict | None = None):
     """Get en environment dict with includes PYTHONPATH"""
     env = os.environ.copy()
     wd = str(CWD.resolve())
     if wd not in env["PATH"]:
         env["PATH"] += wd
+    if environment is not None:
+        env |= environment
     return env
 
 
 def clean_build(panic: bool = True, log_errors: bool = True):
-    from core.inout.directories import delete_tree
+    from core.inout.directories import delete_tree  # pylint: disable=import-outside-toplevel
 
     cwd = Path(CWD)
 
     print("Unlinking build-files: build/; dist/ *.egg-info; __pycache__;")
-    [delete_tree(p, panic=panic, log_errors=log_errors) for p in cwd.rglob("build")]
-    [delete_tree(p, panic=panic, log_errors=log_errors) for p in cwd.rglob("*.egg-info")]
-    [delete_tree(p, panic=panic, log_errors=log_errors) for p in cwd.rglob("__pycache__")]
-    [delete_tree(p, panic=panic, log_errors=log_errors) for p in cwd.rglob(".ruff_cache")]
-    [delete_tree(p, panic=panic, log_errors=log_errors) for p in cwd.rglob(".mypy_cache")]
-    [delete_tree(p, panic=panic, log_errors=log_errors) for p in cwd.rglob("dist")]
+    _ = [delete_tree(p, panic=panic, log_errors=log_errors) for p in cwd.rglob("build")]
+    _ = [delete_tree(p, panic=panic, log_errors=log_errors) for p in cwd.rglob("*.egg-info")]
+    _ = [delete_tree(p, panic=panic, log_errors=log_errors) for p in cwd.rglob("__pycache__")]
+    _ = [delete_tree(p, panic=panic, log_errors=log_errors) for p in cwd.rglob(".ruff_cache")]
+    _ = [delete_tree(p, panic=panic, log_errors=log_errors) for p in cwd.rglob(".mypy_cache")]
+    _ = [delete_tree(p, panic=panic, log_errors=log_errors) for p in cwd.rglob("dist")]
 
 
 def clean_temp(panic: bool = True, log_errors: bool = True):
-    from core.inout.directories import delete_tree
+    from core.inout.directories import delete_tree  # pylint: disable=import-outside-toplevel
 
     print("Unlinking temp-files: temp/")
     # ! keep the parent folder
@@ -63,18 +71,18 @@ def clean_temp(panic: bool = True, log_errors: bool = True):
 
 
 def clean_pyc(panic: bool = True, log_errors: bool = True):
-    from core.inout.files import unlink
+    from core.inout.files import unlink  # pylint: disable=import-outside-toplevel
 
     print("Unlinking caches: *.pyc; *pyo; *~;")
-    [unlink(p, panic=panic, log_errors=log_errors) for p in Path(CWD).rglob("*.py[co]")]
-    [unlink(p, panic=panic, log_errors=log_errors) for p in Path(CWD).rglob("*~")]
+    _ = [unlink(p, panic=panic, log_errors=log_errors) for p in Path(CWD).rglob("*.py[co]")]
+    _ = [unlink(p, panic=panic, log_errors=log_errors) for p in Path(CWD).rglob("*~")]
 
 
 def clean_logs(panic: bool = True, log_errors: bool = True):
-    from core.inout.files import unlink
+    from core.inout.files import unlink  # pylint: disable=import-outside-toplevel
 
     print("Unlinking logs: logs/*")
-    [unlink(p, panic=panic, log_errors=log_errors) for p in (Path(CWD) / "logs").rglob("*")]
+    _ = [unlink(p, panic=panic, log_errors=log_errors) for p in (Path(CWD) / "logs").rglob("*")]
 
 
 def create_vital_files_and_directories(production: bool = False):
@@ -91,9 +99,14 @@ def create_vital_files_and_directories(production: bool = False):
         # files
         production_dotenv = CWD / "envs" / "production.env"
         local_dotenv = CWD / "envs" / "local.env"
-        [path.touch(exist_ok=True) for path in (production_dotenv, local_dotenv)]  # type: ignore[func-returns-value]
+        _ = [
+            path.touch(exist_ok=True) for path in (production_dotenv, local_dotenv)  # type: ignore[func-returns-value]
+        ]
 
-    [path.mkdir(parents=True, exist_ok=True) for path in (logs, media, assets, database, temp)]  # type: ignore[func-returns-value]
+    _ = [
+        path.mkdir(parents=True, exist_ok=True)  # type: ignore[func-returns-value]
+        for path in (logs, media, assets, database, temp)
+    ]
 
 
 def run_command(command, debug=False, cwd=CWD, env=env_with_pythonpath(), shell=True):
@@ -108,7 +121,7 @@ def run_command(command, debug=False, cwd=CWD, env=env_with_pythonpath(), shell=
     if debug:
         print(f">>> Running command: {command}")
     try:
-        subprocess.run(command.split(), cwd=cwd, env=env, shell=shell)
+        subprocess.run(command.split(), cwd=cwd, env=env, shell=shell, check=True)
     except FileNotFoundError:
         print(f"The command {command} threw a FileNotFoundError")
 
@@ -161,14 +174,17 @@ def formatcode(templates: bool = False):
 
 
 def get_commithash(*, repository: str) -> str:
-    from core.gitops import clone_and_get_latest_commit_hash
+    from core.gitops import clone_and_get_latest_commit_hash  # pylint: disable=import-outside-toplevel
 
     return clone_and_get_latest_commit_hash(repository_url=repository)
 
 
 def write_info_to_pyproject_toml(path: Path):
     # lazy import
-    from core.pyproject import initialize_template_section_to_pyproject, PyProjectHasBeenSetupBeforeException
+    from core.pyproject import (  # pylint: disable=import-outside-toplevel
+        initialize_template_section_to_pyproject,
+        PyProjectHasBeenSetupBeforeException,
+    )
 
     try:
         initialize_template_section_to_pyproject(
@@ -182,7 +198,7 @@ def write_info_to_pyproject_toml(path: Path):
 
 def _version_callback(value: bool) -> None:
     if value:
-        from core.pyproject import load_pyproject
+        from core.pyproject import load_pyproject  # pylint: disable=import-outside-toplevel
 
         pyproject = load_pyproject(project_path=CWD)
         title = pyproject.tool["poetry"]["name"]
@@ -194,9 +210,11 @@ def _version_callback(value: bool) -> None:
 # ----------GENERAL COMMANDS----------------------------------------------------
 @cli.callback(no_args_is_help=True)
 def default(
-    version: Optional[bool] = typer.Option(
-    # BUG: replace Optional with bool | None, when a typer release merges
-    # the pull request for modern Typehints -> also re-activate pre-commit-hook 'pyupgrade', that is currently deactivated bedause of this bug.
+    version: Optional[bool] = typer.Option(  # pylint: disable=unused-argument
+        # BUG: replace Optional with bool | None, when a typer release merges
+        # the pull request for modern Typehints -> also re-activate
+        # pre-commit-hook 'pyupgrade', that is currently deactivated bedause of
+        # this bug.
         None,
         "--version",
         "-v",
@@ -225,17 +243,111 @@ def check(templates: bool = False):
 
 
 @cli.command()
+def doppler():
+    """download the dotenvs from doppler.com (test + dev) - if your are logged in"""
+    # if os.name == 'nt':
+    #     run_command(
+    #         "(doppler secrets download --format=json --no-file --config=dev |
+    # ConvertFrom-Json | ForEach-Object { $_.PSObject.Properties } |
+    # ForEach-Object { \"$($_.Name)=$($_.Value)\" }) -join \"`n\" | Out-File './envs/develop.env'",
+    #     )
+    #     run_command(
+    #         "(doppler secrets download --format=json --no-file --config=test | ConvertFrom-Json |
+    # ForEach-Object { $_.PSObject.Properties } |
+    # ForEach-Object { \"$($_.Name)=$($_.Value)\" }) -join \"`n\" | Out-File './envs/test.env'",
+    #     )
+    # elif os.name == 'posix':
+    #     run_command(
+    #         "doppler secrets download --format=json --no-file --config=dev |
+    # jq -r 'to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]' | awk -F'=' '{print $1\"=\"$2}' > ./envs/develop.env"
+    #     )
+    #     run_command(
+    #         "doppler secrets download --format=json --no-file --config=test |
+    # jq -r 'to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]' | awk -F'=' '{print $1\"=\"$2}' > ./envs/test.env"
+    #     )
+    # else:
+    #     raise OSError("Operating system not supported.")
+    raise NotImplementedError("Doppler is not yet implemented.")
+
+
+@cli.command()
+def tui():
+    """Run the TUI app"""
+    # from terminalui import terminalui  # pylint: disable=import-outside-toplevel
+    # app = terminalui.TerminalUserInterface()
+    # app.run()
+    # sys.exit(app.return_code or 0)
+    raise NotImplementedError("The TUI is not yet implemented.")
+
+
+@cli.command()
+def celery(
+    mode: str = "develop",  # BUG: typer does not accept Literals yet (otherwise this would be "DjangoMode")
+    config: str = "config.celeryapp",
+    worker: bool = False,
+    beat: bool = False,
+    flower: bool = False,
+    # envspath: Path = ROOT_DIR / "envs",
+):
+    """Run the celery worker"""
+    counts = int(worker) + int(beat) + int(flower)
+    if counts > 1:
+        print("Running celery worker, flower or beat over this interface is mutually exclusive.")
+        raise typer.Abort()
+    elif counts < 1:
+        print("Please run at least one of --worker --beat --flower.")
+        raise typer.Abort()
+
+    env: Env = read_environment(env=Env(), path=ROOT_DIR / "envs" / f"{mode}.env")
+    _env = env_with_pythonpath(environment=dict(env.dump()))
+
+    if worker:
+        # run celery worker
+        command = " ".join(
+            [
+                "celery",
+                f"--app {config}",
+                "worker",
+                "--loglevel=INFO",
+                "--queues celery,{{ project_name }}",
+                " --hostname worker-%%h",
+            ]
+        )
+
+        if os.name == "nt":
+            # windows does not support event loops via gevent and eventlet,
+            # because the posix implementation for functions like select, poll,
+            # epoll and pipe differs.
+            command += " --pool solo"
+
+        run_command(command, debug=DEBUG, env=_env)
+
+    if beat:
+        # run celery beat
+        command = f"celery --app {config} beat"
+        run_command(command, debug=DEBUG, env=_env)
+
+    if flower:
+        dbenv = define_databases(env=env)
+        command = f"celery --broker={dbenv['REDIS_URL']} flower --app={config}"
+        run_command(command, debug=DEBUG, env=_env)
+
+
+@cli.command()
 def setup(production: bool = False, panic: bool = True, log_errors: bool = True):
     """
     Setup the project.
     Clean.
     Create vital files and directories.
-    Write template and commithash info to pyproject.toml.
+    if not in production:
+        Write template and commithash info to pyproject.toml.
+        Start the TUI Configapp.
     """
     create_vital_files_and_directories(production=production)
     clean(panic=panic, log_errors=log_errors)
     if not production:
         write_info_to_pyproject_toml(path=CWD)
+        tui()
 
 
 @cli.command()
@@ -243,7 +355,7 @@ def setup(production: bool = False, panic: bool = True, log_errors: bool = True)
 def cherry():
     """Cherry pick changes from the template repository."""
     # lazy import
-    from core.pyproject import cherry_pick
+    from core.pyproject import cherry_pick  # pylint: disable=import-outside-toplevel
 
     print("Cherry picking changes from the template repository. [red]This may take a while.[/red]")
     cherry_pick(pyproject_path=CWD)
@@ -253,10 +365,10 @@ def cherry():
 @cli.command()
 def readme():
     """README"""
-    with open("README.md") as file:
+    with open("README.md", encoding="utf-8") as file:
         content = file.read()
     try:
-        from rich.markdown import Markdown
+        from rich.markdown import Markdown  # pylint: disable=import-outside-toplevel
     except ImportError:
         print("Install rich to render README.md as markdown.")
         print(content)

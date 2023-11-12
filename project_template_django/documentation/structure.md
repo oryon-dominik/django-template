@@ -27,10 +27,10 @@
     ├── notebooks/                  # jupyter notebooks for debugging
     ├── templates/                  # django base templates
     ├── test/
+    │   ├── factories/              # factories for users ...
     │   ├── fixtures/               # fixtures for authentication, restframework, ...
     │   ├── tests/                  # actual global tests
     │   ├── clients.py              # test clients
-    │   ├── factories.py            # factories for users ...
     │   └── runners.py              # pytest runner for django
     ├── .gitignore                  # gitignore
     ├── .pre-commit-config.yaml     # pre-commit hooks

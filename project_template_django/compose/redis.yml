@@ -1,0 +1,14 @@
+version: '3.9'
+services:
+  {{ project_name }}_redis:
+    image: redis:7.2
+    restart: always
+    ports:
+      - "6379:6379"
+    env_file:
+        - ../envs/develop.env
+    command: >
+      --requirepass ${REDIS_PASSWORD}
+    container_name: {{ project_name }}_redis
+    networks:
+      - {{ project_name }}_network
