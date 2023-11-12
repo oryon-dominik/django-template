@@ -37,8 +37,9 @@ Read the project's [documentation](./documentation/index.md) for all details and
 
 ### Contributors
 
-Create a [contributors list from the contributors in git](https://github.com/Pierre-Sassoulas/contributors-txt), 
-using aliases defined in `config/contributors/aliases.json`.
+Please add yourself.  
+Create a [CONTRIBUTERS.txt](https://github.com/Pierre-Sassoulas/contributors-txt), 
+using aliases defined in `config/contributors/aliases.json` from the contributors in git.
 
     contributors-txt --aliases .\config\contributors\aliases.json
 
