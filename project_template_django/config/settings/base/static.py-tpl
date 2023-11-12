@@ -32,7 +32,10 @@ STATICFILES_FINDERS = [
 MEDIA_ROOT = str(paths.ROOT_DIR / "media")
 MEDIA_URL = f"{STATIC_HOST}/media/"
 
+USE_VITE_ASSETS = False
+
 if vite is not None:
-    STATICFILES_DIRS += [f"{vite.DJANGO_VITE_ASSETS_PATH}"]
+    if USE_VITE_ASSETS:
+        STATICFILES_DIRS += [f"{vite.DJANGO_VITE_ASSETS_PATH}"]
     if vite.DJANGO_VITE_DEV_MODE:
         STATICFILES_FINDERS += ["config.settings.base.thirdparty.vite.ViteFrontendFinder"]
