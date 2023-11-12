@@ -39,7 +39,10 @@ LOG_DATABASE = False
 
 # See https://docs.djangoproject.com/en/4.2/topics/logging for
 # more details on how to customize your logging configuration.
-LOGGING_FILE_HANDLER = "logging.FileHandler"  # "logging.handlers.TimedRotatingFileHandler"
+LOGGING_FILE_HANDLER = "logging.FileHandler"
+# other handlers:
+# LOGGING_FILE_HANDLER = "logging.handlers.TimedRotatingFileHandler"
+# LOGGING_FILE_HANDLER = "logging.handlers.RotatingFileHandler"
 
 LOGGING: dict = {
     "version": 1,
@@ -85,24 +88,40 @@ LOGGING: dict = {
             "level": "INFO",
             "class": LOGGING_FILE_HANDLER,
             "filename": str(paths.ROOT_DIR / "logs" / "requests.log"),
+            # "maxBytes": 1024 * 1024 * 10,  # 10 MB
+            # "backupCount": 5,
+            # "when": "midnight",
+            # "interval": 1,
         },
         "database_queries_file": {
             "level": "DEBUG",
             "filters": ["log_database_queries"],
             "class": LOGGING_FILE_HANDLER,
             "filename": str(paths.ROOT_DIR / "logs" / "queries.log"),
+            # "maxBytes": 1024 * 1024 * 10,  # 10 MB
+            # "backupCount": 5,
+            # "when": "midnight",
+            # "interval": 1,
         },
         "server_log_file": {
             "level": "INFO",
             "class": LOGGING_FILE_HANDLER,
             "filename": str(paths.ROOT_DIR / "logs" / "server.log"),
             "formatter": "verbose",
+            # "maxBytes": 1024 * 1024 * 10,  # 10 MB
+            # "backupCount": 5,
+            # "when": "midnight",
+            # "interval": 1,
         },
         "error_log_file": {
             "level": "ERROR",
             "class": LOGGING_FILE_HANDLER,
             "filename": str(paths.ROOT_DIR / "logs" / "errors.log"),
             "formatter": "verbose",
+            # "maxBytes": 1024 * 1024 * 10,  # 10 MB
+            # "backupCount": 5,
+            # "when": "midnight",
+            # "interval": 1,
         },
     },
     "loggers": {
