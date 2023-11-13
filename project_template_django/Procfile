@@ -2,6 +2,6 @@
 # web: PYTHONUNBUFFERED=true $WORKON_HOME/{{ project_venv_name }}/bin/python manage.py runserver 0.0.0.0:8000 --settings=config.settings.develop
 web: gunicorn --config=config.gunicorn.py config.wsgi:application
 # notebook: DJANGO_ALLOW_ASYNC_UNSAFE=true DJANGO_SETTINGS_MODULE=config.settings.develop python manage.py shell_plus --notebook
-# celeryworker (windows): $env:DJANGO_SETTINGS_MODULE="config.settings.develop"; celery --app config.celeryapp worker --loglevel=INFO --queues celery,pytomatom --hostname worker-%%h --pool solo
+# celeryworker (windows): $env:DJANGO_SETTINGS_MODULE="config.settings.develop"; celery --app config.celeryapp worker --loglevel=INFO --queues celery,{{ project_name }} --hostname worker-%%h --pool solo
 # celerybeat (windows): $env:DJANGO_SETTINGS_MODULE="config.settings.develop"; celery --app config.celeryapp beat
 # celeryflower (windows): $env:DJANGO_SETTINGS_MODULE="config.settings.develop"; celery --broker=redis://:secret@host.docker.internal:6379/0 flower --basic_auth=floweruser:flowerpassword --app=config.celeryapp

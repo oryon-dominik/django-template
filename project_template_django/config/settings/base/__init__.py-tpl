@@ -57,7 +57,6 @@ from .middleware import MIDDLEWARE
 from .paths import (
     ROOT_DIR,
     APPS_DIR,
-    RESOURCES_DIR,
 )
 from .project import (
     VERSION,
@@ -80,6 +79,10 @@ from .static import (
     MEDIA_ROOT,
     MEDIA_URL,
 )
+from .sessions import (
+    SESSION_EXPIRE_AT_BROWSER_CLOSE,
+    SESSION_COOKIE_AGE,
+)
 from .templates import TEMPLATES
 from .urlconf import (
     ADMIN_URL,
@@ -98,7 +101,7 @@ from .users import (
 # -----------------------------------------------------------------------------
 
 from .thirdparty import *  # noqa # pylint: disable=wildcard-import,unused-wildcard-import
-from .pytomatom import *  # noqa # pylint: disable=wildcard-import,unused-wildcard-import
+from .{{ project_name }} import *  # noqa # pylint: disable=wildcard-import,unused-wildcard-import
 
 # -----------------------------------------------------------------------------
 # pylint: enable=unused-import

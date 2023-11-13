@@ -32,6 +32,7 @@
 
             // nice to have
             // "stkb.rewrap",
+            // "aaron-bond.better-comments",
             // "Gruntfuggly.todo-tree",
         ]
     },
@@ -62,9 +63,10 @@
         "python.terminal.activateEnvironment": true,
         "[python]": {
             "files.eol": "\n",
-            // "editor.defaultFormatter": "ms-python.python",
+            "editor.tabSize": 4,
+            "editor.insertSpaces": true,
             "editor.defaultFormatter": "ms-python.black-formatter",
-            "editor.formatOnType": true,
+            // "editor.defaultFormatter": "ms-python.python",
             "editor.codeActionsOnSave": {
                 // "source.fixAll.ruff": true,
                 // "source.organizeImports.ruff": true
@@ -124,11 +126,6 @@
             "--explicit-package-bases",
             "--plugins=pydantic.mypy,mypy_django_plugin.main,mypy_drf_plugin.main"
         ],
-        "mypy-type-checker.interpreter": [
-            "python",
-            "-m",
-            "mypy"
-        ],
         "mypy.runUsingActiveInterpreter": false,
         "mypy.dmypyExecutable": "dmypy",
 
@@ -177,6 +174,19 @@
         "ruff.organizeImports": false,
         "ruff.trace.server": "verbose",
 
+        "sonarlint.rules": {
+            // "Define a constant instead of duplicating this literal"
+            "python:S1192":{  // String literals should not be duplicated
+                "level": "on",
+                "parameters": {
+                    "threshold": 7
+                }
+            },
+            "typescript:S1117":{  // ""already declared in the upper scope" has a lot of false positives
+                "level": "off",
+            }
+        },
+
         "jupyter.askForKernelRestart": false,
         "jupyter.debugJustMyCode": false,
         "jupyter.widgetScriptSources": ["jsdelivr.com", "unpkg.com"],
@@ -187,146 +197,145 @@
         },
         "notebook.output.textLineLimit": 300,
 
-        // // better-comments
-        // "better-comments.tags": [
-        //     {
-        //         "tag": "!",  // alerts
-        //         "color": "#FF2D00",
-        //         "strikethrough": false,
-        //         "underline": false,
-        //         "backgroundColor": "transparent",
-        //         "bold": false,
-        //         "italic": false
-        //     },
-        //     {
-        //         "tag": "?",  // queries
-        //         "color": "#3498DB",
-        //         "strikethrough": false,
-        //         "underline": false,
-        //         "backgroundColor": "transparent",
-        //         "bold": false,
-        //         "italic": false
-        //     },
-        //     {
-        //         "tag": "//",  // disabled-comment
-        //         "color": "#474747",
-        //         "strikethrough": true,
-        //         "underline": false,
-        //         "backgroundColor": "transparent",
-        //         "bold": false,
-        //         "italic": false
-        //     },
-        //     {
-        //         "tag": "todo",  // t0d0s
-        //         "color": "#ffc800",
-        //         "strikethrough": false,
-        //         "underline": false,
-        //         "backgroundColor": "transparent",
-        //         "bold": false,
-        //         "italic": false
-        //     },
-        //     {
-        //         "tag": "fixme",  // fixmes
-        //         "color": "#ff9100",
-        //         "strikethrough": false,
-        //         "underline": false,
-        //         "backgroundColor": "transparent",
-        //         "bold": false,
-        //         "italic": false
-        //     },
-        //     {
-        //         "tag": "hack",  // fixmes
-        //         "color": "#fffb00",
-        //         "strikethrough": false,
-        //         "underline": false,
-        //         "backgroundColor": "transparent",
-        //         "bold": false,
-        //         "italic": false
-        //     },
-        //     {
-        //         "tag": "bug",  // bugs
-        //         "color": "#cc212c",
-        //         "strikethrough": false,
-        //         "underline": false,
-        //         "backgroundColor": "transparent",
-        //         "bold": false,
-        //         "italic": false
-        //     },
-        //     {
-        //         "tag": "wtf",
-        //         "color": "#ff5733",
-        //         "strikethrough": false,
-        //         "underline": false,
-        //         "backgroundColor": "transparent",
-        //         "bold": false,
-        //         "italic": false
-        //     },
-        //     {
-        //         "tag": "*",  // highlights
-        //         "color": "#98C379",
-        //         "strikethrough": false,
-        //         "underline": false,
-        //         "backgroundColor": "transparent",
-        //         "bold": false,
-        //         "italic": false
-        //     }
-        // ],
+        // better-comments
+        "better-comments.tags": [
+            {
+                "tag": "!",  // alerts
+                "color": "#FF2D00",
+                "strikethrough": false,
+                "underline": false,
+                "backgroundColor": "transparent",
+                "bold": false,
+                "italic": false
+            },
+            {
+                "tag": "?",  // queries
+                "color": "#3498DB",
+                "strikethrough": false,
+                "underline": false,
+                "backgroundColor": "transparent",
+                "bold": false,
+                "italic": false
+            },
+            {
+                "tag": "//",  // disabled-comment
+                "color": "#474747",
+                "strikethrough": true,
+                "underline": false,
+                "backgroundColor": "transparent",
+                "bold": false,
+                "italic": false
+            },
+            {
+                "tag": "todo",  // t0d0s
+                "color": "#ffc800",
+                "strikethrough": false,
+                "underline": false,
+                "backgroundColor": "transparent",
+                "bold": false,
+                "italic": false
+            },
+            {
+                "tag": "fixme",  // fixmes
+                "color": "#ff9100",
+                "strikethrough": false,
+                "underline": false,
+                "backgroundColor": "transparent",
+                "bold": false,
+                "italic": false
+            },
+            {
+                "tag": "hack",  // fixmes
+                "color": "#fffb00",
+                "strikethrough": false,
+                "underline": false,
+                "backgroundColor": "transparent",
+                "bold": false,
+                "italic": false
+            },
+            {
+                "tag": "bug",  // bugs
+                "color": "#cc212c",
+                "strikethrough": false,
+                "underline": false,
+                "backgroundColor": "transparent",
+                "bold": false,
+                "italic": false
+            },
+            {
+                "tag": "wtf",
+                "color": "#ff5733",
+                "strikethrough": false,
+                "underline": false,
+                "backgroundColor": "transparent",
+                "bold": false,
+                "italic": false
+            },
+            {
+                "tag": "*",  // highlights
+                "color": "#98C379",
+                "strikethrough": false,
+                "underline": false,
+                "backgroundColor": "transparent",
+                "bold": false,
+                "italic": false
+            }
+        ],
 
-        // // T0D0-tree
-        // "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
-        // "todo-tree.general.tags" :[
-        //     "TODO",
-        //     "FIXME",
-        //     "HACK",
-        //     "BUG",
-        //     "TBD",
-        //     "WTF",
-        //     "[ ]",
-        //     "[x]"
-        // ],
-        // "todo-tree.highlights.customHighlight": {
-        //     "TODO": {
-        //         "type": "tag",
-        //         "foreground": "#FF00FF",
-        //         "iconColour": "#008000",
-        //     },
-        //     "FIXME": {
-        //         "type": "tag",
-        //         "foreground": "#FF00FF",
-        //         "icon": "alert",
-        //         "iconColour": "#FFFF00",
-        //     },
-        //     "HACK": {
-        //         "type": "tag",
-        //         "icon": "flame",
-        //         "iconColour": "#808080",
-        //     },
-        //     "BUG": {
-        //         "type": "text",
-        //         "foreground": "#FF0000",
-        //         "icon": "zap",
-        //         "iconColour": "#FF0000",
-        //     },
-        //     "TBD": {
-        //         "type": "tag",
-        //         "foreground": "#FF00FF",
-        //         "icon": "organization",
-        //         "iconColour": "#FF00FF",
-        //     },
-        //     "WTF": {
-        //         "type": "text",
-        //         "foreground": "#FFA500",
-        //         "icon": "megaphone",
-        //         "iconColour": "#FFA500",
-        //     },
-        //     "[ ]": {
-        //         "background": "#ff000080"
-        //     },
-        //     "[x]": {
-        //         "background": "#00ff0080"
-        //     }
-        // },
-
+        // T0D0-tree
+        "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
+        "todo-tree.general.tags" :[
+            "TODO",
+            "FIXME",
+            "HACK",
+            "BUG",
+            "TBD",
+            "WTF",
+            "[ ]",
+            "[x]"
+        ],
+        "todo-tree.highlights.customHighlight": {
+            "TODO": {
+                "type": "tag",
+                "foreground": "#FF00FF",
+                "iconColour": "#008000",
+            },
+            "FIXME": {
+                "type": "tag",
+                "foreground": "#FF00FF",
+                "icon": "alert",
+                "iconColour": "#FFFF00",
+            },
+            "HACK": {
+                "type": "tag",
+                "icon": "flame",
+                "iconColour": "#808080",
+            },
+            "BUG": {
+                "type": "text",
+                "foreground": "#FF0000",
+                "icon": "zap",
+                "iconColour": "#FF0000",
+            },
+            "TBD": {
+                "type": "tag",
+                "foreground": "#FF00FF",
+                "icon": "organization",
+                "iconColour": "#FF00FF",
+            },
+            "WTF": {
+                "type": "text",
+                "foreground": "#FFA500",
+                "icon": "megaphone",
+                "iconColour": "#FFA500",
+            },
+            "[ ]": {
+                "background": "#ff000080"
+            },
+            "[x]": {
+                "background": "#00ff0080"
+            }
+        },
     },
     "launch": {
         "version": "0.2.0",

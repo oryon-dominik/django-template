@@ -17,7 +17,7 @@ def random_sequence(*, alphabet: str, length: int) -> str:
     """
     Generate a random sequence from some characters with length.
     """
-    MAXIMUM_LENGTH = 1000
+    MAXIMUM_LENGTH = 1000  # pylint: disable=invalid-name
     if length < 1:
         raise ValueError("Length must be positive-nonzero.")
     if length > MAXIMUM_LENGTH:
