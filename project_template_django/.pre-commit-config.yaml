@@ -74,6 +74,7 @@ repos:
         django-widget-tweaks,
         django-vite,
         django-debug-toolbar,
+        django-template-partials,
         django_tailwind_cli,
         psycopg,
         psycopg-binary,
