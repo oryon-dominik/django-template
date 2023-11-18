@@ -11,7 +11,7 @@
 .idea/
 
 # Database
-database/sqlite3.db
+database/
 # don't ignore migrations
 !**/migrations/__init__.py
 

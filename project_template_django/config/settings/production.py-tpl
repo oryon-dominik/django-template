@@ -121,8 +121,12 @@ CSP_CONNECT_SRC = ("'none'",)
 # CSP_CONNECT_SRC = ("'self'", PROJECT_URL)
 # CSP: style-src
 # The HTTP Content-Security-Policy (CSP) style-src directive specifies valid sources for stylesheets.
-# ! Tailwind needs unsafe-inline
-CSP_STYLE_SRC = ("'unsafe-inline'", "'self'", PROJECT_URL, )  # "https://fonts.googleapis.com/",)
+# ! Tailwind needs unsafe-inline. TBD: add the nonce to the style tag. ({% verbatim %}{{request.csp_nonce}}{% endverbatim %})
+CSP_STYLE_SRC = (
+    "'unsafe-inline'",
+    "'self'",
+    PROJECT_URL,
+)  # "https://fonts.googleapis.com/",)
 # CSP: img-src
 # The HTTP Content-Security-Policy img-src directive specifies valid sources of images and favicons.
 CSP_IMG_SRC = ("'self'", PROJECT_URL)
@@ -134,6 +138,9 @@ CSP_FONT_SRC = ("'self'",)  # 'fonts.gstatic.com')
 # only URLs loaded directly into <script> elements, but also things like inline script event handlers (onclick) and
 # XSLT stylesheets which can trigger script execution.
 CSP_SCRIPT_SRC = ("'self'", PROJECT_URL)
+# CSP: worker-src
+# The HTTP Content-Security-Policy (CSP) worker-src directive specifies valid sources for Workers or SharedWorkers.
+CSP_WORKER_SRC = ("'self'",)
 
 # Permissions-Policy: https://wicg.github.io/feature-policy/
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy

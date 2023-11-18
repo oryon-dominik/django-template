@@ -137,6 +137,11 @@ optional = true
 [tool.poetry.group.gittools.dependencies]
 git-fame = "^2.0.1"
 
+[tool.poetry.group.tailwindcss]
+optional = true
+[tool.poetry.group.tailwindcss.dependencies]
+django-tailwind-cli = "^2.6.0"
+
 [tool.poetry.group.vite]
 optional = true
 [tool.poetry.group.vite.dependencies]

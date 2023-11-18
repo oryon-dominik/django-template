@@ -47,10 +47,13 @@ def define_databases(env: Env) -> dict:
     # --- SQLite ------------------------------------------------------------------
     from . import paths
 
-    DATABASES = {"default": {
-        "ENGINE": "django.db.backends.sqlite3", "NAME": paths.ROOT_DIR / "database" / "sqlite3.db",
-        "OPTIONS": {"timeout": 10},  # ! concurrent queries won't wait forever
-    }}
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": paths.ROOT_DIR / "database" / "{{ project_name }}-sqlite3.db",
+            "OPTIONS": {"timeout": 10},  # ! concurrent queries won't wait forever
+        }
+    }
     DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
     # --- REDIS ---------------------------------------------------------------

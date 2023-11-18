@@ -78,7 +78,7 @@ CSP_STYLE_SRC = (
     "'self'",
     # "https://fonts.googleapis.com/",
 )
-CSP_FONT_SRC = ("'self'",)  # 'fonts.gstatic.com')
+CSP_FONT_SRC = ("'self'",)  # "fonts.gstatic.com")
 CSP_IMG_SRC = ("'self'",)
 CSP_SCRIPT_SRC = ("'self'",)
 
