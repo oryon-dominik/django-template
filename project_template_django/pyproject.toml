@@ -23,6 +23,7 @@ contributors-txt = "^1.0.0"
 [tool.poetry.group.django]
 optional = false
 [tool.poetry.group.django.dependencies]
+django-template-partials = "^23.3.post1"
 django-readers = "^2.1.1"
 # django-hatchway = "^0.5.1"  # FIXME: deactivated due to pydantic support < 2
 django-widget-tweaks = "^1.4.12"

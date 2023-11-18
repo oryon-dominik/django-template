@@ -17,6 +17,8 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
+            # django-template-partials
+            "builtins": ["template_partials.templatetags.partials"],
         },
     },
 ]
