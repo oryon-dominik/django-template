@@ -71,14 +71,16 @@ CORS_ALLOW_METHODS = [
 # Content-Security-Policy: https://www.w3.org/TR/CSP/
 # See https://django-csp.readthedocs.io/en/latest/configuration.html
 # Using: https://github.com/mozilla/django-csp
-CSP_CONNECT_SRC = ("*",)
-CSP_DEFAULT_SRC = ("*",)
+CSP_CONNECT_SRC = ("'none'",)
+CSP_DEFAULT_SRC = ("'none'",)
 CSP_STYLE_SRC = (
     "'unsafe-inline'",
     "'self'",
+    # "https://fonts.googleapis.com/",
 )
-CSP_IMG_SRC = ("*",)
-CSP_SCRIPT_SRC = ("*",)
+CSP_FONT_SRC = ("'self'",)  # 'fonts.gstatic.com')
+CSP_IMG_SRC = ("'self'",)
+CSP_SCRIPT_SRC = ("'self'",)
 
 
 # -----------------------------------------------------------------------------

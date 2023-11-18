@@ -109,21 +109,26 @@ X_FRAME_OPTIONS = "DENY"
 # child-src, connect-src, font-src, frame-src, img-src, manifest-src, media-src, object-src, prefetch-src, script-src,
 # script-src-elem, script-src-attr, style-src, style-src-elem, style-src-attr, worker-src
 # example: ("'self'", f"ws://{PROJECT_FQDN.netloc}")
-CSP_DEFAULT_SRC = ("'self'", PROJECT_URL)
+CSP_DEFAULT_SRC = ("'none'",)  # be as strict as possible
+# CSP_DEFAULT_SRC = ("'self'", PROJECT_URL)
 # CSP: connect-src
 # connect-src directive restricts the URLs which can be loaded using script interfaces.
 # The APIs that are restricted are:
 # <a> ping, fetch(), XMLHttpRequest, WebSocket, EventSource, and Navigator.sendBeacon().
 # Note: connect-src 'self' does not resolve to websocket schemes in all browsers, more info in this issue.
 # example: (f"ws://{PROJECT_FQDN.netloc}",)
-CSP_CONNECT_SRC = ("'self'", PROJECT_URL)
+CSP_CONNECT_SRC = ("'none'",)
+# CSP_CONNECT_SRC = ("'self'", PROJECT_URL)
 # CSP: style-src
 # The HTTP Content-Security-Policy (CSP) style-src directive specifies valid sources for stylesheets.
 # ! Tailwind needs unsafe-inline
-CSP_STYLE_SRC = ("'unsafe-inline'", "'self'", PROJECT_URL)
+CSP_STYLE_SRC = ("'unsafe-inline'", "'self'", PROJECT_URL, )  # "https://fonts.googleapis.com/",)
 # CSP: img-src
 # The HTTP Content-Security-Policy img-src directive specifies valid sources of images and favicons.
 CSP_IMG_SRC = ("'self'", PROJECT_URL)
+# CSP: font-src
+# The HTTP Content-Security-Policy (CSP) font-src directive specifies valid sources for fonts loaded with @font-face.
+CSP_FONT_SRC = ("'self'",)  # 'fonts.gstatic.com')
 # CSP: script-src
 # The HTTP Content-Security-Policy (CSP) script-src directive specifies valid sources for JavaScript. This includes not
 # only URLs loaded directly into <script> elements, but also things like inline script event handlers (onclick) and
