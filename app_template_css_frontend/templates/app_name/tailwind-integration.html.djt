@@ -1,0 +1,15 @@
+{% extends 'INSERT_APP_NAME_HERE/base.html.djt' %}
+
+{% block header %}
+
+{% load tailwind_cli %}
+{% tailwind_css %}
+
+{% endblock %}
+
+
+{% block content %}
+
+<h1 class="text-3xl font-bold text-cyan-500">{{ context_from_view }}</h1>
+
+{% endblock %}

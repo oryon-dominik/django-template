@@ -83,8 +83,8 @@
 
         "python.defaultInterpreterPath": "python",
         "python.poetryPath": "poetry",
-        // to support fast loading in the editor
-        "python.analysis.extraPaths": ["."],
+        // To support fast loading in the editor. Might cause problems with mypy.
+        // "python.analysis.extraPaths": ["."],
 
         "pylint.args": [
             "--max-line-length=119",
@@ -126,8 +126,9 @@
             "--explicit-package-bases",
             "--plugins=pydantic.mypy,mypy_django_plugin.main,mypy_drf_plugin.main"
         ],
-        "mypy.runUsingActiveInterpreter": false,
+        "mypy.runUsingActiveInterpreter": true,
         "mypy.dmypyExecutable": "dmypy",
+        "mypy.configFile": "./pyproject.toml",
 
         "isort.args":[
             "--profile", "black",

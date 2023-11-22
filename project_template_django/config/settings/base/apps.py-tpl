@@ -26,6 +26,7 @@ DJANGO_APPS: list[str] = [
     "django.contrib.staticfiles",
 ]
 THIRD_PARTY_APPS: list[str] = [
+    "template_partials",
     "crispy_forms",
     "crispy_tailwind",
     "django_extensions",
