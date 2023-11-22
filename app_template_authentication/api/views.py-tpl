@@ -1,5 +1,4 @@
 import logging
-from http import cookies
 
 from jose import jwt, JWTError
 from rest_framework import status
