@@ -11,15 +11,12 @@ from django.conf import settings
 from django.core.cache import caches
 from django.dispatch import Signal
 from django.http import JsonResponse
-from django.middleware.csrf import get_token as get_csrf_token
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.http import http_date
 
 from core.crud.users import get_user_by_email
 from core.cypher import tokens
-from core.middlewares.csrf import EnsureCsrfCookie
-from core.middlewares.decorators import middleware_on_class
 from core.typehints.django import UserType
 
 from .backends import MSG_AUTHENTICATION_FAILED, MSG_VERIFICATION_FAILED, JWTAuthentication
@@ -106,7 +103,6 @@ class AuthTokenVerify(APIView):
         return Response({"detail": "Token is valid."}, status=status.HTTP_200_OK)
 
 
-@middleware_on_class(EnsureCsrfCookie)
 class AuthTokenRefresh(APIView):
     # No authentication required for token refresh.
     authentication_classes = []
@@ -114,9 +110,6 @@ class AuthTokenRefresh(APIView):
     permission_classes = []
 
     def get(self, request):
-        csrf = get_csrf_token(request)
-        # ensuring csrf cookie is set
-        request.COOKIES.update(cookies.SimpleCookie({"CSRF": f"{csrf}"}))
         return JsonResponse({"detail": "post your refresh-token to get a new access token."})
 
     def post(self, request):
