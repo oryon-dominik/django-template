@@ -18,6 +18,7 @@ database/
 # Environment
 .env
 .secretkey
+develop.env
 production.env
 local.env
 # The venv is deployed to .venv/ in production, should not be part of the

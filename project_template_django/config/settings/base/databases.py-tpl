@@ -47,10 +47,12 @@ def define_databases(env: Env) -> dict:
     # --- SQLite ------------------------------------------------------------------
     from . import paths
 
+    DATABASES_DIR = paths.ROOT_DIR / "databases"
+    DATABASES_DIR.mkdir(exist_ok=True)
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
-            "NAME": paths.ROOT_DIR / "database" / "{{ project_name }}-sqlite3.db",
+            "NAME": DATABASES_DIR / "{{ project_name }}-sqlite3.db",
             "OPTIONS": {"timeout": 10},  # ! concurrent queries won't wait forever
         }
     }

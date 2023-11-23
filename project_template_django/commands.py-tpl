@@ -90,15 +90,12 @@ def create_vital_files_and_directories(production: bool = False):
 
     # directories
     assets = CWD / "assets"
-    database = CWD / "database"
     logs = CWD / "logs"
     media = CWD / "media"
     temp = CWD / "temp"
 
     if not production:
         # files
-        production_dotenv = CWD / "envs" / "production.env"
-        local_dotenv = CWD / "envs" / "local.env"
         _ = [
             path.touch(exist_ok=True) for path in (production_dotenv, local_dotenv)  # type: ignore[func-returns-value]
         ]
