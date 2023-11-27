@@ -100,6 +100,23 @@ To let the mypy daemon (dmypy) work with your ide, install the following package
     pip install mypy django-stubs[compatible-mypy] django-stubs-ext django djangorestframework djangorestframework-stubs[compatible-mypy]
 
 
+### Tailwind-Frontend
+
+    scoop install main/tailwindcss
+    python manage.py tailwind watch
+
+```html
+{% load tailwind_cli %}
+...
+<head>
+  ...
+  {% tailwind_css %}
+  ...
+</head>
+
+<p class="text-red-700">style me</p>
+```
+
 ### gitflow
 
 See the [documentation on releases](./documentation/releases.md) for details.

@@ -1,3 +1,5 @@
+import sys
 
-# Is a folder
-TAILWIND_CLI_PATH = "tailwindcli"
+# Is a folder to download to, or the preinstalled path to the preinstalled tailwind cli.
+TAILWIND_CLI_PATH = "~/scoop/shims/tailwindcss.exe" if sys.platform == "win32" else "tailwindcli"
+TAILWIND_CLI_AUTOMATIC_DOWNLOAD = False
