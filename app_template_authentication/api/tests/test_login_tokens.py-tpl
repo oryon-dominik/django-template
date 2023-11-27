@@ -182,15 +182,7 @@ def test_obtain_a_fresh_access_token_with_invalid_refresh_token_fails(
     login_response = client.post(f"/{settings.API_BASE_URL}/auth/token/", json=login_payload)
     assert login_response.status_code == 200
     payload = {"refresh": invalid_refresh_token}
-    client.get(f"/{settings.API_BASE_URL}/auth/token/refresh/", json=payload)
-    csrf = client.cookies["csrftoken"].value
-    # fails 403 without csrf token
     response = client.post(f"/{settings.API_BASE_URL}/auth/token/refresh/", json=payload)
-    assert response.status_code == 403
-    # retry with csrf token
-    response = client.post(
-        f"/{settings.API_BASE_URL}/auth/token/refresh/", json=payload, headers={settings.CSRF_HEADER_NAME: csrf}
-    )
     assert response.status_code == 401
 
 
@@ -220,16 +212,7 @@ def test_obtain_a_fresh_access_token_with_valid_refresh_token_succeeds(client, v
     # Obtain a new access token
     payload = {"refresh": login_response.json()["refresh"]}
 
-    client.get(f"/{settings.API_BASE_URL}/auth/token/refresh/", json=payload)
-    csrf = client.cookies["csrftoken"].value
-    assert csrf is not None
-    # fails 403 without csrf token
     response = client.post(f"/{settings.API_BASE_URL}/auth/token/refresh/", json=payload)
-    assert response.status_code == 403
-    # retry with csrf token
-    response = client.post(
-        f"/{settings.API_BASE_URL}/auth/token/refresh/", json=payload, headers={settings.CSRF_HEADER_NAME: csrf}
-    )
 
     assert response.status_code == 200
     assert response.headers["Content-Type"] == "application/json"
@@ -294,15 +277,7 @@ def test_obtain_a_fresh_access_token_with_expired_refresh_token_fails(client, ve
     then = now + timedelta(seconds=tokens.DEFAULT_JWT_TOKEN_REFRESH_EXPIRATION_MINUTES * 60 + 1)
     with freeze_time(then):
         # Obtain a new access token
-        client.get(f"/{settings.API_BASE_URL}/auth/token/refresh/", json=payload)
-        csrf = client.cookies["csrftoken"].value
-        # fails 403 without csrf token
         response = client.post(f"/{settings.API_BASE_URL}/auth/token/refresh/", json=payload)
-        assert response.status_code == 403
-        # expired with csrf token
-        response = client.post(
-            f"/{settings.API_BASE_URL}/auth/token/refresh/", json=payload, headers={settings.CSRF_HEADER_NAME: csrf}
-        )
 
     assert response.status_code == 401
 
@@ -333,13 +308,9 @@ def test_cant_refresh_with_accesstoken(client, verified_user, valid_password: st
     )
 
     # Obtain a new access token with the refresh token
-    client.get(f"/{settings.API_BASE_URL}/auth/token/refresh/")
-    csrf = client.cookies["csrftoken"].value
     payload = {"refresh": access_token}
 
-    response = client.post(
-        f"/{settings.API_BASE_URL}/auth/token/refresh/", json=payload, headers={settings.CSRF_HEADER_NAME: csrf}
-    )
+    response = client.post(f"/{settings.API_BASE_URL}/auth/token/refresh/", json=payload)
     assert response.status_code == 401, "Access tokens can not be used to refresh"
 
 
@@ -384,13 +355,8 @@ def test_cant_refresh_after_logout_with_wrong_payload(client, verified_user, val
     assert response.status_code == 400
     assert response.json() == {"error": "Logout failed. Provide the users refresh token for a proper logout."}
     # Obtain a new access token
-    client.get(f"/{settings.API_BASE_URL}/auth/token/refresh/")
-    csrf = client.cookies["csrftoken"].value
-    # fails 403 without csrf token
+    # fails 401 with no payload
     response = client.post(f"/{settings.API_BASE_URL}/auth/token/refresh/")
-    assert response.status_code == 403
-    # fails 401 with csrf token and no payload
-    response = client.post(f"/{settings.API_BASE_URL}/auth/token/refresh/", headers={settings.CSRF_HEADER_NAME: csrf})
     assert response.status_code == 401
 
     # We should have another time by now, or tokens might be blacklisted, because they are literalaly the same for that user
@@ -404,9 +370,8 @@ def test_cant_refresh_after_logout_with_wrong_payload(client, verified_user, val
             expires_in=tokens.DEFAULT_JWT_TOKEN_ACCESS_EXPIRATION_MINUTES,
         )
         payload = {"refresh": new_token}
-        headers = {settings.CSRF_HEADER_NAME: csrf}
         client.cookies["Authentication"] = f"Bearer {old_access_token}"
-        response = client.post(f"/{settings.API_BASE_URL}/auth/token/refresh/", json=payload, headers=headers)
+        response = client.post(f"/{settings.API_BASE_URL}/auth/token/refresh/", json=payload)
     assert (
         response.status_code == 401
     ), "The tokens should have a comparable random secret included, so the new_token should have a different signature and fail."
@@ -425,14 +390,6 @@ def test_cant_refresh_after_logout_with_payload(client, verified_user, valid_pas
     assert response.status_code == 200
     # Obtain a new access token
     payload = {"refresh": login_response.json()["refresh"]}
-    # obtain a fresh csrf token
-    client.get(f"/{settings.API_BASE_URL}/auth/token/refresh/", json=payload)
-    csrf = client.cookies["csrftoken"].value
-    # fails without csrf token
+    # I'am logged out - because access token is blacklisted
     response = client.post(f"/{settings.API_BASE_URL}/auth/token/refresh/", json=payload)
-    assert response.status_code == 403
-    # I'am logged out though csrf token - because access token is blacklisted
-    response = client.post(
-        f"/{settings.API_BASE_URL}/auth/token/refresh/", json=payload, headers={settings.CSRF_HEADER_NAME: csrf}
-    )
     assert response.status_code == 401

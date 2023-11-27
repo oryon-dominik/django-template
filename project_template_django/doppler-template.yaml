@@ -52,14 +52,44 @@ projects:
         # POSTGRES_HOST=localhost
         POSTGRES_HOST: 'host.docker.internal'
         VITE_APP_MODE: 'django'
-        DJANGO_ALLOWED_HOSTS: ''
+        DJANGO_ALLOWED_HOSTS: '*'
         DJANGO_CORS_ALLOWED_ORIGINS: ''
         DJANGO_CORS_ALLOW_ALL_ORIGINS: 'true'
         # ssl may be terminated by nginx or caddy, then this is false
         DJANGO_SECURE_SSL_REDIRECT: 'false'
         # -----------------------------------------------------------------------------
       test:
+        PROJECT_FQDN: 'http://localhost:8000'
+        PROJECT_FRONTEND_FQDN: ''
         DJANGO_SETTINGS_MODULE: 'config.settings.test'
+        DJANGO_ALLOW_ASYNC_UNSAFE: 'true'
+        DJANGO_SECRET_KEY: '{{ secret_key }}'
+        DJANGO_ADMIN_URL: 'admin/'
+        # --- POSTGRES ----------------------------------------------------------------
+        # postgres settings might be specific to a developer if you're using your own postgres instance
+        # doppler configure set config=dev_aro
+        # these settings get injected into the postgres docker, before you build
+        # if you change them, you need to rebuild the postgres docker (and remove the old volume)
+        # docker volume rm {{ project_name }}_postgres_data
+        POSTGRES_USER: '{{ project_name }}devuser'
+        POSTGRES_PASSWORD: 'develop'
+        POSTGRES_DB: '{{ project_name }}devdb'
+        POSTGRES_OPTIONS: '?sslmode=prefer'
+        # this is used by django only, to change the port of the postgres docker, modify it's compose file
+        POSTGRES_PORT: '5432'
+        # docker host when also running in the docker network
+        # POSTGRES_HOST=postgres
+        # docker host on windows/mac
+        # POSTGRES_HOST=host.docker.internal
+        # docker host on linux
+        # POSTGRES_HOST=localhost
+        POSTGRES_HOST: 'host.docker.internal'
+        VITE_APP_MODE: 'django'
+        DJANGO_ALLOWED_HOSTS: '*'
+        DJANGO_CORS_ALLOWED_ORIGINS: ''
+        DJANGO_CORS_ALLOW_ALL_ORIGINS: 'true'
+        # ssl may be terminated by nginx or caddy, then this is false
+        DJANGO_SECURE_SSL_REDIRECT: 'false'
       staging:
         PROJECT_FQDN: ''
         PROJECT_FRONTEND_FQDN: ''
