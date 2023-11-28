@@ -23,3 +23,11 @@ try:
     )
 except ImportError:
     pass
+
+try:
+    from .tailwind import (
+        TAILWIND_CLI_PATH,  # noqa # pylint: disable=unused-import
+        TAILWIND_CLI_AUTOMATIC_DOWNLOAD  # noqa # pylint: disable=unused-import
+    )
+except ImportError:
+    pass
