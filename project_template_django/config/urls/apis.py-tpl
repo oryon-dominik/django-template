@@ -29,6 +29,7 @@ app_name = "api"
 #     """Root response answering with system status and version."""
 #     return Response({"status": "up and running", "version": settings.VERSION})
 
+
 urlpatterns = [
     # default apis, should not be removed
     # path("", api_root),
