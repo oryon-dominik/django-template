@@ -7,6 +7,7 @@ import subprocess
 
 # tui: import sys
 import webbrowser
+from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
@@ -82,7 +83,15 @@ def clean_logs(panic: bool = True, log_errors: bool = True):
     from core.inout.files import unlink  # pylint: disable=import-outside-toplevel
 
     print("Unlinking logs: logs/*")
-    _ = [unlink(p, panic=panic, log_errors=log_errors) for p in (Path(CWD) / "logs").rglob("*")]
+
+    for path in (Path(CWD) / "logs").rglob("*"):
+        if path.name.startswith("frozen-"):
+            continue
+        # freeze the historic instance of the logfile
+        dest = Path(CWD) / "logs" / f"frozen-{path.stem}-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}-{path.suffix}"
+        dest.write_text(path.read_text())
+        # delete the original
+        unlink(path, panic=panic, log_errors=log_errors)
 
 
 def create_vital_files_and_directories(production: bool = False):
