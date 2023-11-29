@@ -132,3 +132,7 @@ if DEBUG:
     DEBUG_TOOLBAR_CONFIG = {
         "SHOW_TOOLBAR_CALLBACK": show_toolbar,
     }
+
+    SILENCED_SYSTEM_CHECKS = [
+        "debug_toolbar.W006",  # See jazzband/django-debug-toolbar#1780
+    ]

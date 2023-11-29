@@ -21,21 +21,43 @@ Project dependencies are managed by [poetry](https://python-poetry.org/).
 
 ## TLDR
 
-    poetry install
-    workon
+```powershell
+# python + venv
+poetry install
+workon
 
-    cc init
-    cc migrate
-    python manage.py createcachetable
+# setup the project locally
+pre-commit install
 
-    pre-commit install
+# secret envs from doppler.com (via scoop installation)
+irm get.scoop.sh | iex
+scoop bucket add doppler https://github.com/DopplerHQ/scoop-doppler.git
+doppler login
+doppler setup
+(doppler secrets download --format=json --no-file --config=dev | ConvertFrom-Json | ForEach-Object { $_.PSObject.Properties } | ForEach-Object { "$($_.Name)=$($_.Value)" }) -join "`n" | Out-File './envs/develop.env'
+(doppler secrets download --format=json --no-file --config=test | ConvertFrom-Json | ForEach-Object { $_.PSObject.Properties } | ForEach-Object { "$($_.Name)=$($_.Value)" }) -join "`n" | Out-File './envs/test.env'
+# hint for custom settings: doppler configure set config=dev_snowflake
 
-    # run the project
-    pytest
-    python manage.py runserver
-    docker compose -f compose/postgres-and-redis.yml up
-    
+cc init
+docker compose -f compose/postgres-and-redis.yml up
+cc migrate
+python manage.py createcachetable
 
+# run the project tests, once
+pytest
+
+# create a testuser
+poetry run python manage.py shell
+$ from django.contrib.auth import get_user_model
+$ email = "test@example.com"
+$ User = get_user_model()
+$ user = User.objects.create(username=email, email=email, is_active=True)
+$ user.set_password("test")
+$ user.save()
+
+docker compose -f compose/postgres-and-redis.yml up -d
+python manage.py runserver
+```
 
 
 ## Setup & developing
