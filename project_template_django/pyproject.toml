@@ -1,3 +1,33 @@
+[project]
+# BUG: until poetry supports a [PEP 621](https://peps.python.org/pep-0621/)
+# compliant [project section](https://github.com/python-poetry/poetry/issues/3332)
+# we need to duplicate the project information here.
+name = "{{ project_name }}"
+version = "0.0.1"
+description = ""
+authors = [
+    # {name = ..., email = ...},
+]
+maintainers = []
+dependencies = [
+    # ...
+]
+requires-python = ">=3.11"
+readme = "README.md"
+# license = {file = "LICENSE.txt", classifier = "proprietary"}
+[project.optional-dependencies]
+test = [
+  "pytest > 7",
+]
+# ...
+
+# [project.urls] ...
+# homepage = "https://example.com"
+# documentation = "https://readthedocs.org"
+# repository = "https://github.com"
+# changelog = "https://github.com/me/spam/blob/master/CHANGELOG.md"
+
+
 [tool.poetry]
 name = "{{ project_name }}"
 version = "0.0.1"
