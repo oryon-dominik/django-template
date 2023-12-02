@@ -172,6 +172,7 @@ git-fame = "^2.0.1"
 optional = false
 [tool.poetry.group.tailwindcss.dependencies]
 django-tailwind-cli = "^2.7.0"
+django-browser-reload = "^1.12.1"
 
 [tool.poetry.group.vite]
 optional = true

@@ -76,6 +76,7 @@ repos:
         django-debug-toolbar,
         django-template-partials,
         django_tailwind_cli,
+        django_browser_reload,
         psycopg,
         psycopg-binary,
         jinja2,
