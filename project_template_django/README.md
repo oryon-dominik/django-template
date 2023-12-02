@@ -150,11 +150,11 @@ To let the mypy daemon (dmypy) work with your ide, install the following package
     python manage.py tailwind watch
 
 ```html
-{% load tailwind_cli %}
+{% verbatim %}{% load tailwind_cli %}{% endverbatim %}
 ...
 <head>
   ...
-  {% tailwind_css %}
+  {% verbatim %}{% tailwind_css %}{% endverbatim %}
   ...
 </head>
 
