@@ -108,9 +108,11 @@ def create_vital_files_and_directories(production: bool = False):
 
     if not production:
         # files
-        _ = [
-            path.touch(exist_ok=True) for path in (production_dotenv, local_dotenv)  # type: ignore[func-returns-value]
-        ]
+        # _ = [
+        #     path.touch(exist_ok=True) for path in (production_dotenv, local_dotenv)  # type: ignore[func-returns-value]
+        # ]
+        ...
+        # comment: removed the creation of the .env files, because they are usally handled by doppler now..
 
     _ = [
         path.mkdir(parents=True, exist_ok=True)  # type: ignore[func-returns-value]
