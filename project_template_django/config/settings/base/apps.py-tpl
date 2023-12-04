@@ -32,6 +32,7 @@ THIRD_PARTY_APPS: list[str] = [
     "django_extensions",
     "widget_tweaks",
     "django_tailwind_cli",
+    "django_browser_reload",
     # "rest_framework",
     # "django_celery_beat",
     # "django_celery_results",

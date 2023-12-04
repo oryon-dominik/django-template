@@ -8,6 +8,7 @@ from . import paths
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
+        # "BACKEND": "django.template.backends.jinja2.Jinja2",
         "DIRS": [str(paths.ROOT_DIR / "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -19,6 +20,8 @@ TEMPLATES = [
             ],
             # django-template-partials
             "builtins": ["template_partials.templatetags.partials"],
+            # For using the jinja2 backend template engine
+            # "environment": "core.jinja.environment",
         },
     },
 ]

@@ -128,6 +128,8 @@ if DEBUG:
         "debug_toolbar",
     ]
     MIDDLEWARE.insert(4, "debug_toolbar.middleware.DebugToolbarMiddleware")
+    # Django-Browser-Reload (https://github.com/adamchainz/django-browser-reload)
+    MIDDLEWARE.insert(5, "django_browser_reload.middleware.BrowserReloadMiddleware")
     # trick to have debug toolbar when developing with docker
     DEBUG_TOOLBAR_CONFIG = {
         "SHOW_TOOLBAR_CALLBACK": show_toolbar,
