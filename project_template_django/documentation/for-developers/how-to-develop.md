@@ -38,7 +38,6 @@
     # otherwise you will have to configure your IDE and dmypy yourself
     python -m pip install mypy
 
-
 5. Setup the project for development
 
     poetry run python commands.py setup
@@ -70,3 +69,27 @@
     $ user = User.objects.create(username=email, email=email, is_active=True)
     $ user.set_password("test")
     $ user.save()
+
+
+10. Handling large files (> 100 MB)
+
+Files larger 10MB will usally trigger the pre-commit-hooks `- id: check-added-large-files\n   args: ['--maxkb=10000']`, 
+it is heavily recommended to use [git-lfs](https://git-lfs.com/) for any larger files.
+_LFS stores binary files in a separate file system. When you clone a repository,_
+_you only download the latest copies of the binary files and not every single_
+_changed version of them._
+
+To use LFS you need to install it seperately.  
+POSIX: come on, you know how to install software. ;-P  
+Windows: Use scoop (https://scoop.sh/) to install git-lfs:.  
+
+```powershell
+scoop install main/git-lfs
+```
+
+In `.gitattributes` you can define which files should be tracked by lfs.  
+Add the files to track (e.g. `*.zip filter=lfs diff=lfs merge=lfs -text`).  
+
+Finally add the lfs hook to the project.
+
+    git lfs install
