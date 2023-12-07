@@ -30,46 +30,55 @@
 
 4. Install project dependencies
 
-    poetry env use python  # will create the venv and use your current local python
-    poetry config virtualenvs.path <global path to your venvs>  # optional
-    poetry install  # will install the dependencies to the venv
+```bash
+poetry env use python  # will create the venv and use your current local python
+poetry config virtualenvs.path <global path to your venvs>  # optional
+poetry install  # will install the dependencies to the venv
 
-    # mypy will be used by the project linter, so I recommend to install it globally for a available dmypy on PATH
-    # otherwise you will have to configure your IDE and dmypy yourself
-    python -m pip install mypy
+# mypy will be used by the project linter, so I recommend to install it globally for a available dmypy on PATH
+# otherwise you will have to configure your IDE and dmypy yourself
+python -m pip install mypy
+```
 
 5. Setup the project for development
 
-    poetry run python commands.py setup
-    poetry run python manage.py migrate
+**Activate your venv**.
 
+```bash
+python commands.py setup
+python manage.py migrate
+```
 
 6. Install pre-commit hooks
 
-    poetry run pre-commit install  # repeat everytime you re-create the venv
-
+```bash
+pre-commit install  # repeat everytime you re-create the venv
+```
 
 7. Run the devserver
 
-    poetry run python manage.py runserver
-
+```bash
+python manage.py runserver
+```
 
 8. Run the tests
 
-    poetry run pytest
-
+```bash
+pytest
+```
 
 9. Create devuser
 
-    poetry run python manage.py shell
+```bash
+python manage.py shell
 
-    $ from django.contrib.auth import get_user_model
-    $ email = "test@example.com"
-    $ User = get_user_model()
-    $ user = User.objects.create(username=email, email=email, is_active=True)
-    $ user.set_password("test")
-    $ user.save()
-
+$ from django.contrib.auth import get_user_model
+$ email = "test@example.com"
+$ User = get_user_model()
+$ user = User.objects.create(username=email, email=email, is_active=True)
+$ user.set_password("test")
+$ user.save()
+```
 
 10. Handling large files (> 100 MB)
 
@@ -81,7 +90,7 @@ _changed version of them._
 
 To use LFS you need to install it seperately.  
 POSIX: come on, you know how to install software. ;-P  
-Windows: Use scoop (https://scoop.sh/) to install git-lfs:.  
+Windows: Use [scoop](https://scoop.sh/) to install git-lfs:.  
 
 ```powershell
 scoop install main/git-lfs
