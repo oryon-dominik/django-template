@@ -9,9 +9,8 @@ class CacheMixin:
     Requires CACHES setting setup (usally in config.settings.base.databases).
     See https://docs.djangoproject.com/en/{{ docs_version }}/topics/cache/
     """
+
     cache_timeout: int = 60  # in seconds
 
     def dispatch(self, *args, **kwargs):
-        return cache_page(self.cache_timeout)(
-            super().dispatch  # type: ignore
-        )(*args, **kwargs)
+        return cache_page(self.cache_timeout)(super().dispatch)(*args, **kwargs)  # type: ignore
