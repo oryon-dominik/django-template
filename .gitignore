@@ -1,2 +1,4 @@
 # Don't commit local poetry.lock files for templates.
 project_template_django/poetry.lock
+
+__pycache__

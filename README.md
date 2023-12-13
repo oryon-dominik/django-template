@@ -100,6 +100,17 @@ If you only use one worker, you might want to switch to memory for development.
     git clone https://github.com/oryon-dominik/skeleton-vuejs-djangoexample/ ./frontend
 
 
+### Custom User App
+
+(will be created in the project's `apps` folder)  
+TODOs: after setting up the template:
+- Comment in `LOCAL_APPS` in `config.settings.base.apps.py` (Line 17).
+- Comment in the apps routes to `urlpatterns` in `config.urls.routes.py` (line 42)
+- Change `AUTH_USER_MODEL` in `config.settings.base.users.py`.
+
+    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_users.zip --extension=py,md,toml,yaml,yml,env,. --replace-html users
+
+
 ## Caveats
 
 The .pre-commit-config.yaml mypy hook needs a lot of dependencies, so you might

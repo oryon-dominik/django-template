@@ -32,6 +32,10 @@ jobs:
           dest: app_template_vuejs_templates.zip
       - uses: vimtor/action-zip@v1
         with:
+          files: app_template_users/
+          dest: app_template_users.zip
+      - uses: vimtor/action-zip@v1
+        with:
           files: project_template_django/
           dest: project_template_django.zip
       - uses: vimtor/action-zip@v1
@@ -50,5 +54,6 @@ jobs:
             app_template_authentication.zip
             app_template_simple_crud_templates.zip
             app_template_vuejs_templates.zip
+            app_template_users.zip
             project_template_django.zip
             project_template_cli.zip
