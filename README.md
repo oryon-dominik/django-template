@@ -108,8 +108,9 @@ TODOs: after setting up the template:
 - Comment in the apps routes to `urlpatterns` in `config.urls.routes.py` (line 42)
 - Change `AUTH_USER_MODEL` in `config.settings.base.users.py`.
 
-    python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_users.zip --extension=py,md,toml,yaml,yml,env,. --replace-html users
-
+```bash
+python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_users.zip --extension=py,md,toml,yaml,yml,env,. --replace-html users
+```
 
 ## Caveats
 
