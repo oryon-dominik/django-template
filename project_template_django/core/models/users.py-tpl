@@ -1,0 +1,70 @@
+from django.contrib.auth.models import AbstractUser as DjangoAbstractUser
+from django.core.validators import validate_email
+from django.db import models
+from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
+
+from .generics import UUIDModel
+
+
+class CoreAbstractUser(  # type: ignore # BUG: https://github.com/typeddjango/django-stubs/issues/471
+    UUIDModel,
+    DjangoAbstractUser,
+):
+    """Abstract User model."""
+
+    email = models.EmailField(
+        _("email address"),
+        unique=True,
+        help_text=_("Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."),
+        validators=[validate_email],
+        error_messages={
+            "unique": _("A user with that email already exists."),
+        },
+        max_length=150,
+    )
+
+    EMAIL_FIELD = "email"
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+
+    @property
+    def username(self):
+        return self.email
+
+    class Meta:
+        verbose_name = _("user")
+        verbose_name_plural = _("users")
+        abstract = True
+
+
+class CoreBaseUser(CoreAbstractUser):
+    class Roles(models.TextChoices):
+        INCOMPLETE = "inc", "Incomplete Profile"  # !default
+        ADMIN = "adm", "Admin"  # dev only
+        API = "api", "Api User"
+
+    role = models.CharField(max_length=3, choices=Roles.choices, default=Roles.INCOMPLETE)
+
+    # First Name and Last Name do not cover name patterns
+    # around the globe.
+    name = models.CharField(blank=True, max_length=255)
+
+    def get_absolute_url(self):
+        return reverse("users:detail", kwargs={"username": self.username})
+
+    @property
+    def url(self):
+        return self.get_absolute_url()
+
+    @property
+    def designation(self):
+        return self.Roles(self.role).label
+
+    def __str__(self):
+        return self.email
+
+    class Meta:
+        verbose_name = _("user")
+        verbose_name_plural = _("users")
+        abstract = True
