@@ -7,7 +7,12 @@
 # -----------------------------------------------------------------------------
 # ! order is important
 # project specific apps
-CORE_APPS: list[str] = ["core.app.CoreConfig"]
+CORE_APPS: list[str] = [
+    "core.app.CoreConfig",
+    # To replace with a the custom userapp -> comment "core.users" out & comment in
+    # apps.users.apps.UsersConfig in LOCAL_APPS
+    "core.users",
+]
 PROJECT_APPS: list[str] = [
     # "apps.things.apps.ThingsConfig",
 ]

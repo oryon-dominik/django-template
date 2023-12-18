@@ -1,0 +1,13 @@
+from django.db import models
+
+from ..models.users import CoreBaseUser
+
+
+class User(CoreBaseUser):
+    class Roles(models.TextChoices):
+        # roles derived from CoreBaseUser.Roles:
+        INCOMPLETE = "inc", "Incomplete Profile"  # !default
+        ADMIN = "adm", "Admin"  # dev only
+        API = "api", "Api User"
+        # additional roles
+        ...

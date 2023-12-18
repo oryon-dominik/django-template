@@ -104,9 +104,10 @@ If you only use one worker, you might want to switch to memory for development.
 
 (will be created in the project's `apps` folder)  
 TODOs: after setting up the template:
-- Comment in `LOCAL_APPS` in `config.settings.base.apps.py` (Line 17).
+
+- Comment out `"core.users"` in `CORE_APPS` in `config.settings.base.apps.py` (Line 14).
+- Comment in `"apps.users.apps.UsersConfig",` in `LOCAL_APPS` in `config.settings.base.apps.py` (Line 26).
 - Comment in the apps routes to `urlpatterns` in `config.urls.routes.py` (line 42)
-- Change `AUTH_USER_MODEL` in `config.settings.base.users.py`.
 
 ```bash
 python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_users.zip --extension=py,md,toml,yaml,yml,env,. --replace-html users
