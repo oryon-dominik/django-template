@@ -1,2 +1,5 @@
+from core.typehints.generic import URLType
+
+
 app_name = "users"
-urlpatterns = []
+urlpatterns: list[URLType] = []

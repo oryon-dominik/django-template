@@ -1,13 +1,19 @@
 from django.db import models
 
-from ..models.users import CoreBaseUser
+from ..models.users import CoreAbstractUser
 
 
-class User(CoreBaseUser):
+class User(CoreAbstractUser):
     class Roles(models.TextChoices):
-        # roles derived from CoreBaseUser.Roles:
+        # roles derived from CoreAbstractUser.Roles:
         INCOMPLETE = "inc", "Incomplete Profile"  # !default
         ADMIN = "adm", "Admin"  # dev only
         API = "api", "Api User"
         # additional roles
         ...
+
+    class Meta(CoreAbstractUser.Meta):
+        swappable = "AUTH_USER_MODEL"
+
+    # ! All changes to the user model that add non-nullable fields break backwards compatibility with AUTH_USER_MODEL.
+    ...
