@@ -3,9 +3,11 @@ Overwriting Djangos builtin Management Commands.
 
 """
 import sys
+from importlib import import_module
 from pathlib import Path
 
 from django.conf import settings
+from django.core.management.base import CommandError
 from django.core.management.commands import startapp
 
 from ...inout import files
@@ -56,6 +58,44 @@ class Command(startapp.Command):
         if apps in [Path(p) for p in sys.path]:
             sys.path = [p for p in sys.path if Path(p) != apps]
 
+        self.a_or_an = "an"
         super().handle(*args, **options)
         if replace_html:
             replace_app_name(path=app, suffix=".djt", pluralized=pluralize_name)
+
+    def validate_name(self, name, name_or_dir="name"):
+        if name is None:
+            raise CommandError(
+                "you must provide {an} {app} name".format(
+                    an=self.a_or_an,
+                    app=self.app_or_project,
+                )
+            )
+        # Check it's a valid directory name.
+        if not name.isidentifier():
+            raise CommandError(
+                "'{name}' is not a valid {app} {type}. Please make sure the "
+                "{type} is a valid identifier.".format(
+                    name=name,
+                    app=self.app_or_project,
+                    type=name_or_dir,
+                )
+            )
+        # Check it cannot be imported.
+        try:
+            import_module(name)
+        except ImportError:
+            pass
+        else:
+            if name != "users":
+                # ! Monkey patch to allow another custom users app
+                raise CommandError(
+                    "'{name}' conflicts with the name of an existing Python "
+                    "module and cannot be used as {an} {app} {type}. Please try "
+                    "another {type}.".format(
+                        name=name,
+                        an=self.a_or_an,
+                        app=self.app_or_project,
+                        type=name_or_dir,
+                    )
+                )
