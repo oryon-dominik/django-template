@@ -121,10 +121,29 @@ def pick_changes(
         # BUG: We should instead pick the changes and re-write the single blobs
         # history and rehash the tree to apply changes only and not the whole
         # file-tree
-        # Clean up the template repository from unused files.
-        # - Remove all changes not applied for the current project template.
-        # - Remove the suffix -tpl from all files.
-        # - Inject the jinja context into all files.
+
+        # FIXME: we need to refactor logic, so:
+        # - make an initial commit
+        # start with startproject
+        # - make an update commit
+        # - note that update_from_hash
+        # - work commits are here..
+        # update:
+        # - make a new branch "new-trunk"
+        # - make a new startproject
+        # - make an update commit
+        # - note the new_update_from_hash
+        # - rebase all commits after the startproject update_from_hash commit ontop of new_update_from_hash
+        # - remove update_from_hash from toml and replace with new_update_from_hash
+        # delete old trunk replace with new trunk or replace with tags and versions?!
+
+        # deprecated old :
+        # ~~ Clean up the template repository from unused files. ~~
+        # ~~ - Remove all changes not applied for the current project template. ~~
+        # ~~ - Remove the suffix -tpl from all files. ~~
+        # ~~ - Inject the jinja context into all files. ~~
+
+
         template_repo.git.filter_branch("--subdirectory-filter", template_name, "HEAD")
         progress.advance(task)
         rename_and_inject(
