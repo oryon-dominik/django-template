@@ -1,0 +1,5 @@
+# TODO: test logging handlers and loggers
+# def test_core_io_logging():
+#     "core.io"
+#     "core.exceptions"
+#     ...
