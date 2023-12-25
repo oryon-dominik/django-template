@@ -1,0 +1,73 @@
+{% load tailwind_cli %}
+{% load partials %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="de" class="h-full text-base antialiased leading-tight bg-neutral-950">
+
+<head>
+  <meta charset="utf-8">
+
+  <link rel="icon" href="{% static 'images/favicon.ico' %}">
+
+  {# Fonts #}
+
+  {% block css %}
+  <link rel="stylesheet" href="{% static 'css/reset.css' %}">
+  {% tailwind_css %}
+  {% comment %} <link rel="stylesheet" href="{% static 'css/INSERT_PROJECT_NAME_HERE.css' %}"> {% endcomment %}
+  {% endblock %}
+
+  <title>{% block title %}{{ settings.TITLE }}{% endblock title %}</title>
+
+  <meta charset="utf-8">
+
+</head>
+
+<body class="">
+
+{% comment %} basic container {% endcomment %}
+
+<header class="header">
+  <!--Main Navigation-->
+  <nav class="navigation">
+
+  </nav>
+</header>
+
+
+<!-- Messages -->
+<div class="messages">
+  {% if messages %}
+  {% for message in messages %}
+    {% if message.tags %}{{ message.tags }}{% endif %}
+      {{ message }}
+  {% endfor %}
+  {% endif %}
+</div>
+
+<!-- Main Container -->
+<div class="container">
+    {% block body %}
+    {% block outer_content %}
+    <div class="content">
+      {% block content %}
+      {% endblock content %}
+    </div>
+    {% endblock outer_content %}
+    {% endblock body %}
+    <!-- End Content -->
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  
+</footer>
+
+{% block javascript %}
+  {% comment %} <script nonce="{{request.csp_nonce}}" src="{% static 'js/INSERT_PROJECT_NAME_HERE.js' %}"></script> {% endcomment %}
+{% endblock javascript %}
+
+
+</body>
+
+</html>

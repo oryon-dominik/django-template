@@ -28,7 +28,6 @@ except ImportError:
 try:
     from .tailwind import (
         TAILWIND_CLI_PATH,
-        TAILWIND_CLI_CONFIG_DIR,
         TAILWIND_CLI_CONFIG_FILE,
         TAILWIND_CLI_AUTOMATIC_DOWNLOAD,
     )

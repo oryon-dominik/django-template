@@ -3,9 +3,13 @@ import sys
 from ..paths import ROOT_DIR
 
 
+# django-tailwind-cli: https://github.com/oliverandrich/django-tailwind-cli
+
+# If True, the tailwind cli will be downloaded automatically from github.
+TAILWIND_CLI_AUTOMATIC_DOWNLOAD = False
+
 # Is a folder to download to, or the preinstalled path to the preinstalled tailwind cli.
 TAILWIND_CLI_PATH = "~/scoop/shims/tailwindcss.exe" if sys.platform == "win32" else "tailwindcli"
-TAILWIND_CLI_CONFIG_DIR = ROOT_DIR / "frontend" / "django-tailwind-cli"
-TAILWIND_CLI_CONFIG_DIR.mkdir(exist_ok=True)
-TAILWIND_CLI_CONFIG_FILE = TAILWIND_CLI_CONFIG_DIR / "tailwind.config.js"
-TAILWIND_CLI_AUTOMATIC_DOWNLOAD = False
+TAILWIND_CLI_CONFIG_FILE = ROOT_DIR / "tailwind.config.js"
+
+TAILWIND_CLI_DIST_CSS = "css/tailwind.css"
