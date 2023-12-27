@@ -9,3 +9,4 @@ POSTGRES_DB={{ project_name }}
 POSTGRES_OPTIONS=?sslmode=prefer
 POSTGRES_PORT=5432
 POSTGRES_HOST=localhost
+DJANGO_DEBUG=false

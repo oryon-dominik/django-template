@@ -14,7 +14,7 @@
   {% block css %}
   <link rel="stylesheet" href="{% static 'css/reset.css' %}">
   {% tailwind_css %}
-  {% comment %} <link rel="stylesheet" href="{% static 'css/INSERT_PROJECT_NAME_HERE.css' %}"> {% endcomment %}
+  <link rel="stylesheet" href="{% static 'css/INSERT_PROJECT_NAME_HERE.css' %}">
   {% endblock %}
 
   <title>{% block title %}{{ settings.TITLE }}{% endblock title %}</title>
@@ -23,9 +23,7 @@
 
 </head>
 
-<body class="">
-
-{% comment %} basic container {% endcomment %}
+<body class="flex flex-col min-h-full">
 
 <header class="header">
   <!--Main Navigation-->
