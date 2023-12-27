@@ -127,13 +127,20 @@ if DEBUG:
     INSTALLED_APPS += [
         "debug_toolbar",
     ]
-    MIDDLEWARE.insert(4, "debug_toolbar.middleware.DebugToolbarMiddleware")
-    # Django-Browser-Reload (https://github.com/adamchainz/django-browser-reload)
-    MIDDLEWARE.insert(5, "django_browser_reload.middleware.BrowserReloadMiddleware")
     # trick to have debug toolbar when developing with docker
     DEBUG_TOOLBAR_CONFIG = {
         "SHOW_TOOLBAR_CALLBACK": show_toolbar,
     }
+
+    common_middleware_index = MIDDLEWARE.index("django.middleware.common.CommonMiddleware")
+
+    # Disable client side caching for development.
+    MIDDLEWARE.insert(common_middleware_index, "core.middlewares.caching.DisableClientSideCachingMiddleware")
+
+    MIDDLEWARE.insert(common_middleware_index, "debug_toolbar.middleware.DebugToolbarMiddleware")
+
+    # Django-Browser-Reload (https://github.com/adamchainz/django-browser-reload)
+    MIDDLEWARE.insert(common_middleware_index, "django_browser_reload.middleware.BrowserReloadMiddleware")
 
     SILENCED_SYSTEM_CHECKS = [
         "debug_toolbar.W006",  # See jazzband/django-debug-toolbar#1780
