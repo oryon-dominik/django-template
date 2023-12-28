@@ -117,7 +117,7 @@ CSP_DEFAULT_SRC = ("'none'",)  # be as strict as possible
 # <a> ping, fetch(), XMLHttpRequest, WebSocket, EventSource, and Navigator.sendBeacon().
 # Note: connect-src 'self' does not resolve to websocket schemes in all browsers, more info in this issue.
 # example: (f"ws://{PROJECT_FQDN.netloc}",)
-CSP_CONNECT_SRC = ("'none'",)
+CSP_CONNECT_SRC = ("'self'",)
 # CSP_CONNECT_SRC = ("'self'", PROJECT_URL)
 # CSP: style-src
 # The HTTP Content-Security-Policy (CSP) style-src directive specifies valid sources for stylesheets.

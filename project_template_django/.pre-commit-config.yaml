@@ -77,6 +77,7 @@ repos:
         django-template-partials,
         django_tailwind_cli,
         django_browser_reload,
+        django_htmx,
         psycopg,
         psycopg-binary,
         jinja2,

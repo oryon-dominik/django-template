@@ -71,7 +71,7 @@ CORS_ALLOW_METHODS = [
 # Content-Security-Policy: https://www.w3.org/TR/CSP/
 # See https://django-csp.readthedocs.io/en/latest/configuration.html
 # Using: https://github.com/mozilla/django-csp
-CSP_CONNECT_SRC = ("'none'",)
+CSP_CONNECT_SRC = ("'self'",)
 CSP_DEFAULT_SRC = ("'none'",)
 CSP_STYLE_SRC = (
     "'unsafe-inline'",
@@ -121,6 +121,13 @@ NOTEBOOK_ARGUMENTS = [  # to run the notebook with django 3 async set env DJANGO
 def show_toolbar(request):  # pylint: disable=unused-argument
     return False  # True
 
+
+# If DEBUG is True and Internal IPs set to an non-empty list/tuple
+# template-tag debug will be populated. We use that for loading htmx-debug as well.
+INTERNAL_IPS = (
+    "127.0.0.1",
+    # ...
+)
 
 if DEBUG:
     DEBUG_TOOLBAR_PATCH_SETTINGS = False

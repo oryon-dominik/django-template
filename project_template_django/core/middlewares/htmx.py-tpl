@@ -1,0 +1,32 @@
+from urllib.parse import urlparse
+
+
+class LoginRequiredHTMXRedirectMiddleware:
+    """
+    Handles an HTMX request that returns a 302 status code, indicating a likely login requirement.
+
+    Behavior:
+    - Sets the HX-Redirect header with the 'next' query parameter, directing to the original request's origin.
+    - Modifies the response status code to 204 (No Content) for htmx to obey the HX-Redirect header.
+    """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        # Code to be executed for each request before
+        # the view (and later middleware) are called.
+
+        response = self.get_response(request)
+
+        if request.headers.get("HX-Request") == "true" and response.status_code == 302:
+            if ref_header := request.headers.get("Referer", ""):
+                referer = urlparse(ref_header)
+                querystring = f"?next={referer.path}"
+            else:
+                querystring = ""
+
+            redirect = urlparse(response["location"])
+            response.status_code = 204
+            response.headers["HX-Redirect"] = f"{redirect.path}{querystring}"
+        return response

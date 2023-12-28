@@ -1,0 +1,57 @@
+import httpx
+
+from django.conf import settings
+from django.core.management.base import BaseCommand, CommandError
+
+from ...inout import files
+
+
+class Command(BaseCommand):
+    help = "Update htmx to latest version from unpkg.com"
+
+    def add_arguments(self, parser):
+        parser.add_argument("--to", action="store", dest="to", default="latest", help="e.g. 1.0.1")
+
+    def handle(self, *args, **options):
+        """
+        Overwrite the handle method to re-do
+        """
+        # options
+        to = options.get("to", False)
+        if not to:
+            raise CommandError("Please specify a version to update to.")
+
+        files = [
+            # Core htmx library
+            "htmx.min.js",  # minified for production
+            "htmx.js",  # unminified to be readable during development
+            # Extensions: see https://htmx.org/extensions/
+            # Debugging extension to include debugging info in development.
+            "ext/debug.js",
+            # Event header extension to include serialized event headers in the requests
+            "ext/event-header.js",
+            # Alpine morph extension which is necessary to retain Alpine state
+            # when you have entire Alpine components swapped by htmx
+            "ext/alpine-morph.js",
+        ]
+        for file in files:
+            success = download_htmx_file_from_unpkg(version=to, name=file)
+            if not success:
+                raise CommandError(f"Error while updating {file}.")
+
+        self.stdout.write(self.style.SUCCESS("Successfully updated htmx."))
+
+
+def download_htmx_file_from_unpkg(version: str, name: str) -> bool:
+    try:
+        r = httpx.get(f"https://unpkg.com/htmx.org@{version}/dist/{name}", follow_redirects=True)
+        r.raise_for_status()
+    except httpx.HTTPError as e:
+        raise CommandError(f"Error while downloading {name}: {e}")
+
+    content = r.content.decode()
+    if name.endswith(".min.js"):
+        # fix line-ending, otherwise pre-commit has to.
+        content = f"{content}\n"
+
+    return files.write_to_disk(path=settings.BASE_DIR / "assets" / "js" / "htmx" / name, content=f"{content}")

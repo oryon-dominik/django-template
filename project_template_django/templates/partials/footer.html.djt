@@ -1,0 +1,3 @@
+{% partialdef copyright %}
+<!-- Copyright --><div class="copyright">&copy; 2024</div>
+{% endpartialdef %}

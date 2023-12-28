@@ -32,6 +32,7 @@ DJANGO_APPS: list[str] = [
 ]
 THIRD_PARTY_APPS: list[str] = [
     "template_partials",
+    "django_htmx",
     "crispy_forms",
     "crispy_tailwind",
     "django_extensions",
