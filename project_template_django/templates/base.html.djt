@@ -1,10 +1,19 @@
+<!DOCTYPE html>
+
 {% load tailwind_cli %}
 {% load django_htmx %}
 {% load partials %}
 {% load static %}
-<!DOCTYPE html>
 
-<html lang="de" class="h-full text-base antialiased leading-tight">
+<html
+  lang="de"
+  class="h-full text-base antialiased leading-tight"
+  x-data="{
+      darkMode: localStorage.getItem('darkMode')
+      || localStorage.setItem('darkMode', 'system')}"
+  x-init="$watch('darkMode', val => localStorage.setItem('darkMode', val))"
+  x-bind:class="{'dark': darkMode === 'dark' || (darkMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)}"
+  >
 
 {% comment %} htmx -> defer=continue loading the page whilst downloading the htmx js files {% endcomment %}
 <script nonce="{{request.csp_nonce}}" src="{% static 'js/htmx/htmx.min.js' %}" defer></script>
@@ -13,6 +22,7 @@
   <script nonce="{{request.csp_nonce}}" src="{% static 'js/htmx/ext/debug.js' %}" defer></script>
 {% endif %}
 {% django_htmx_script %}
+<script nonce="{{request.csp_nonce}}" src="{% static 'js/alpinejs/cdn.min.js' %}" defer></script>
 
 <head>
   <meta charset="utf-8">

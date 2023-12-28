@@ -1,0 +1,51 @@
+import httpx
+
+from django.conf import settings
+from django.core.management.base import BaseCommand, CommandError
+
+from ...inout import files
+
+
+class Command(BaseCommand):
+    help = "Update alpine to latest version from unpkg.com"
+
+    def add_arguments(self, parser):
+        parser.add_argument("--to", action="store", dest="to", default="latest", help="e.g. 1.0.1")
+
+    def handle(self, *args, **options):
+        """
+        Overwrite the handle method to re-do
+        """
+        # options
+        to = options.get("to", False)
+        if not to:
+            raise CommandError("Please specify a version to update to.")
+
+        files = [
+            # Core alpine library
+            "cdn.min.js",  # minified for production
+            "cdn.js",  # unminified to be readable during development
+        ]
+        for file in files:
+            success = download_alpine_file_from_unpkg(version=to, name=file)
+            if not success:
+                raise CommandError(f"Error while updating {file}.")
+
+        self.stdout.write(self.style.SUCCESS("Successfully updated alpine.js."))
+
+
+def download_alpine_file_from_unpkg(version: str, name: str) -> bool:
+    try:
+        r = httpx.get(f"https://unpkg.com/alpinejs@{version}/dist/{name}", follow_redirects=True)
+        r.raise_for_status()
+    except httpx.HTTPError as e:
+        raise CommandError(f"Error while downloading {name}: {e}")
+
+    content = r.content.decode()
+    if name in [
+        "cdn.min.js",
+    ]:
+        # fix line-ending, otherwise pre-commit has to.
+        content = f"{content}\n"
+
+    return files.write_to_disk(path=settings.BASE_DIR / "assets" / "js" / "alpinejs" / name, content=f"{content}")

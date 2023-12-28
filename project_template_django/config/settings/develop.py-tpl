@@ -126,6 +126,7 @@ def show_toolbar(request):  # pylint: disable=unused-argument
 # template-tag debug will be populated. We use that for loading htmx-debug as well.
 INTERNAL_IPS = (
     "127.0.0.1",
+    "localhost",
     # ...
 )
 
