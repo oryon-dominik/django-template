@@ -35,7 +35,8 @@
   {% endcomment %}
   <meta name="robots" content={% block meta_robots %}"noindex, nofollow"{% endblock meta_robots %}>
 
-  <link rel="icon" href={% block meta_favicon %}"{% static 'images/favicon.ico' %}"{% endblock meta_favicon %}>
+  {% comment %} The favicon is preferably directly served by django (core.views.generics.favicon) {% endcomment %}
+  {% comment %} <link rel="icon" href={% block meta_favicon %}"{% static 'images/favicon.ico' %}"{% endblock meta_favicon %}> {% endcomment %}
 
   {# Fonts #}
   {% block meta_fonts %}{% comment %} <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> {% endcomment %}{% endblock meta_fonts %}
