@@ -15,6 +15,9 @@ def favicon(request: HttpRequest) -> HttpResponse | FileResponse:
     Inspired by: https://twitter.com/LeaVerou/status/1241619866475474946
 
     (Choose an emoji by pressing special-key + . (dot) in your IDE and copy it into the svg-text.)
+
+    If there are more issues with the favicon (resolutions on apple etc..), see:
+    https://adamj.eu/tech/2022/01/18/how-to-add-a-favicon-to-your-django-site/
     """
     # Or return the file response instead of the svg:
     # from django.conf import settings
