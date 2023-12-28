@@ -1,6 +1,16 @@
 import pytest
 
+from django.test import Client
+
 from test.clients import RestClient
+
+
+@pytest.fixture
+def client() -> Client:
+    """
+    Django test client.
+    """
+    return Client()
 
 
 @pytest.fixture

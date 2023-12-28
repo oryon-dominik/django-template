@@ -1,0 +1,30 @@
+from django.http import FileResponse, HttpRequest, HttpResponse
+from django.views.decorators.cache import cache_control
+from django.views.decorators.http import require_GET
+
+
+FAVICON_CACHE_TIME = 60 * 60 * 24  # one day
+
+
+@require_GET
+@cache_control(max_age=FAVICON_CACHE_TIME, immutable=True, public=True)
+def favicon(request: HttpRequest) -> HttpResponse | FileResponse:
+    """
+    Staticfiles can only serve /assets/favicon.ico, whilst the favicon needs to be served at exactly /favicon.ico.
+
+    Inspired by: https://twitter.com/LeaVerou/status/1241619866475474946
+
+    (Choose an emoji by pressing special-key + . (dot) in your IDE and copy it into the svg-text.)
+    """
+    # Or return the file response instead of the svg:
+    # from django.conf import settings
+    # file = (settings.ROOT_DIR / "assets" / "images" / "favicon.ico").open("rb")
+    # return FileResponse(file)
+    return HttpResponse(
+        content=(
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">'
+            '<text y=".9em" font-size="90">🌈</text>'
+            "</svg>"
+        ),
+        content_type="image/svg+xml",
+    )

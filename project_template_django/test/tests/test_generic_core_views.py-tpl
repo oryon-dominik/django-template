@@ -1,0 +1,15 @@
+from http import HTTPStatus
+
+import pytest
+
+
+@pytest.mark.django_db
+def test_favicon_get(client):
+    response = client.get("/favicon.ico")
+    assert response.status_code == HTTPStatus.OK
+    assert response["Cache-Control"] == "max-age=86400, immutable, public"
+    # If you want to return the file instead of the svg:
+    # assert response["Content-Type"] == "image/x-icon"
+    # assert response["Content-Type"] == "image/png"
+    assert response["Content-Type"] == "image/svg+xml"
+    assert len(response.getvalue()) > 0

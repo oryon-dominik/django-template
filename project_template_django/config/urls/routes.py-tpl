@@ -23,6 +23,7 @@ from django.urls import (
 )
 
 from core.typehints.generic import URLType
+from core.views.generics import favicon
 
 from . import converters
 
@@ -40,6 +41,8 @@ urlpatterns: list[URLType] = [
     # path("", TemplateView.as_view(template_name="base.html"), {"TITLE": settings.PROJECT_TITLE}),
     # path(settings.ADMIN_URL, admin.site.urls),
     # path("", include("apps.users.urls", namespace="users")),
+    # Staticfiles can only serve /assets/favicon.ico, whilst the favicon needs to be served at exactly /favicon.ico.
+    path("favicon.ico", favicon),
 ] + [  # the project-specific urlpatterns
     # path("", include("apps.things.urls", namespace="things")),
 ]  # type: ignore[assignment]
