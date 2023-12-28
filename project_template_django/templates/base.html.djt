@@ -4,7 +4,7 @@
 {% load static %}
 <!DOCTYPE html>
 
-<html lang="de" class="h-full text-base antialiased leading-tight bg-neutral-950">
+<html lang="de" class="h-full text-base antialiased leading-tight">
 
 {% comment %} htmx -> defer=continue loading the page whilst downloading the htmx js files {% endcomment %}
 <script nonce="{{request.csp_nonce}}" src="{% static 'js/htmx/htmx.min.js' %}" defer></script>
@@ -61,7 +61,7 @@
 
   <!-- Header -->
   {% block header %}
-  <header id="header" class={% block header_classes %}"header"{% endblock header_classes %}>
+  <header id="header">
     <!--Main Navigation-->
     <nav id="navigation">
       {% block navigation %}{% endblock navigation %}
