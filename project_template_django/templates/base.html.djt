@@ -60,9 +60,9 @@
 
   <!-- Header -->
   {% block header %}
-  <header class={% block header_classes %}"header"{% endblock header_classes %}>
+  <header id="header" class={% block header_classes %}"header"{% endblock header_classes %}>
     <!--Main Navigation-->
-    <nav class="navigation">
+    <nav id="navigation">
       {% block navigation %}{% endblock navigation %}
     </nav>
   </header>
@@ -82,22 +82,22 @@
 
   <!-- Main Container -->
   {% block body %}
-  <div class="container">
+  <container id="body">
     {% block outer_content %}
-    <div class="content" id="content">
+    <content id="content">
       {% block content %}
       {% endblock content %}
       {% block extra_content %}
       {% endblock extra_content %}
     </div>
     {% endblock outer_content %}
-  </div>
+  </container>
   {% endblock body %}
 
   <!-- Footer -->
   {% block footer %}
-  <footer class="footer">
-  {% include "partials/footer.html.djt#copyright" %}
+  <footer id="footer">
+    {% include "partials/footer.html.djt#copyright" %}
   </footer>
   {% endblock footer %}
 
