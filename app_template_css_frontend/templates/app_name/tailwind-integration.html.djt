@@ -1,4 +1,4 @@
-{% extends 'INSERT_APP_NAME_HERE/base.html.djt' %}
+{% extends 'INSERT_APP_NAME_HERE/base.djt.html' %}
 
 {% block header %}
 
