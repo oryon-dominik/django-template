@@ -1,0 +1,29 @@
+{% include "partials/darkmode.djt.html" %}
+
+<div class="flex lg:hidden">
+  <!-- Mobile menu button -->
+  <button 
+    type="button"
+    x-on:click="openMobileMenu = ! openMobileMenu"
+    class="relative inline-flex items-center justify-center p-2 rounded-md text-zinc-400 hover:bg-zinc-700 hover:text-zinc-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-zinc-50" aria-controls="mobile-menu" aria-expanded="false"
+  >
+    <span class="absolute -inset-0.5"></span>
+    <span class="sr-only">Open main menu</span>
+      {% comment %} Icon when menu is closed.
+      Menu open: "hidden", Menu closed: "block" {% endcomment %}
+    <svg :class="openMobileMenu ? 'hidden' : 'block'" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+    </svg>
+      {% comment %} Icon when menu is open.
+      Menu open: "block", Menu closed: "hidden" {% endcomment %}
+    <svg :class="openMobileMenu ? 'block' : 'hidden'" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  </button>
+</div>
+
+{% if request.user.is_authenticated %}
+<a href="{% url 'users:logout' %}" class="block px-4 py-2 text-sm text-zinc-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Sign in</a>
+{% else %}
+<a href="{% url 'users:login' %}" class="px-3 py-2 ml-3 text-sm font-medium bg-orange-800 rounded-md hover:bg-green-400 text-zinc-50">Sign out</a>
+{% endif %}

@@ -1,14 +1,13 @@
-<!--Main Navigation-->
-<nav id="navigation">
+<nav id="navigation" class="bg-zinc-900">
   {% block navigation %}
+  <div x-data="{ openMobileMenu: false }">
 
-  {% include "partials/darkmode.djt.html" %}
-  {% if request.user.is_authenticated %}
-  {{ request.user.username }}
-  <a href="{% url 'users:logout' %}">Abmelden</a>
-  {% else %}
-  Bitte authentifizieren
-  {% endif %}
+    <!-- Desktop menu, hidden on smaller screens. -->
+    {% include "headers/desktop-navigation-and-user-menu.djt.html" %}
 
+    <!-- Mobile menu, show/hide based on menu state. -->
+    {% include "headers/mobile-navigation-and-user-menu.djt.html" %}
+
+  </div>
   {% endblock navigation %}
 </nav>
