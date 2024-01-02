@@ -1,0 +1,14 @@
+<!--Main Navigation-->
+<nav id="navigation">
+  {% block navigation %}
+
+  {% include "partials/darkmode.djt.html" %}
+  {% if request.user.is_authenticated %}
+  {{ request.user.username }}
+  <a href="{% url 'users:logout' %}">Abmelden</a>
+  {% else %}
+  Bitte authentifizieren
+  {% endif %}
+
+  {% endblock navigation %}
+</nav>

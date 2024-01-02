@@ -1,1 +1,4 @@
 /* custom css overwrites */
+
+/* alpine-js cloaks are invisible to the user until alpine is ready */
+[x-cloak] { display: none !important; }

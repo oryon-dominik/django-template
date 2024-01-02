@@ -5,34 +5,32 @@
 {% load partials %}
 {% load static %}
 
-<html
-  lang="de"
-  class="h-full text-base antialiased leading-tight"
-  x-data="{
-      darkMode: localStorage.getItem('darkMode')
-      || localStorage.setItem('darkMode', 'system')}"
-  x-init="$watch('darkMode', val => localStorage.setItem('darkMode', val))"
-  x-bind:class="{'dark': darkMode === 'dark' || (darkMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)}"
-  >
-
-{% comment %} htmx -> defer=continue loading the page whilst downloading the htmx js files {% endcomment %}
-<script nonce="{{request.csp_nonce}}" src="{% static 'js/htmx/htmx.min.js' %}" defer></script>
-<script nonce="{{request.csp_nonce}}" src="{% static 'js/htmx/ext/event-header.js' %}" defer></script>
-{% if debug %}
-  <script nonce="{{request.csp_nonce}}" src="{% static 'js/htmx/ext/debug.js' %}" defer></script>
-{% endif %}
-{% django_htmx_script %}
-<script nonce="{{request.csp_nonce}}" src="{% static 'js/alpinejs/cdn.min.js' %}" defer></script>
+<html lang="de" class="h-full text-base antialiased leading-tight">
 
 <head>
+  {% block header_javascript %}
+  {% comment %} Load DarkMode directly into the HEAD to avoid FOUC (Flash of Unstyled Content) {% endcomment %}
+  <script nonce="{{request.csp_nonce}}" src="{% static 'js/darkmode-toggle.js' %}"></script>
+  {% endblock header_javascript %}
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- https://htmx.org/docs/#config -->
+  {% comment %} https://htmx.org/docs/#config {% endcomment %}
   <meta name="htmx-config" content={% block htmx_config %}'{"historyCacheSize": 10}'{% endblock htmx_config %}>
 
-  {% comment %} Descriptions should be unique for each page. Don't be longer than 160 characters. {% endcomment %}
-  <meta name="description" content={% block meta_description %}""{% endblock meta_description %}>
+  {% comment %} SEO: Descriptions should be unique for each page. Don't be longer than 160 characters. {% endcomment %}
+  <meta name="description" content={% block meta_description %}"The hockey companion."{% endblock meta_description %}>
+
+  {% comment %} htmx -> defer=continue loading the page whilst downloading the htmx js files {% endcomment %}
+  <script nonce="{{request.csp_nonce}}" src="{% static 'js/htmx/htmx.min.js' %}" defer></script>
+  <script nonce="{{request.csp_nonce}}" src="{% static 'js/htmx/ext/event-header.js' %}" defer></script>
+  {% if debug %}
+    <script nonce="{{request.csp_nonce}}" src="{% static 'js/htmx/ext/debug.js' %}" defer></script>
+  {% endif %}
+  {% django_htmx_script %}
+
+  <script nonce="{{request.csp_nonce}}" src="{% static 'js/alpinejs/cdn.min.js' %}" defer></script>
 
   {% comment %}
   https://developers.google.com/search/docs/advanced/robots/robots_meta_tag
@@ -46,52 +44,56 @@
   <meta name="robots" content={% block meta_robots %}"noindex, nofollow"{% endblock meta_robots %}>
 
   {% comment %} The favicon is preferably directly served by django (core.views.generics.favicon) {% endcomment %}
-  {% comment %} <link rel="icon" href={% block meta_favicon %}"{% static 'images/favicon.ico' %}"{% endblock meta_favicon %}> {% endcomment %}
-
-  {# Fonts #}
-  {% block meta_fonts %}{% comment %} <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> {% endcomment %}{% endblock meta_fonts %}
+  {% comment %} <link rel="icon" href={% block meta_favicon %}"/favicon.ico"{% endblock meta_favicon %}> {% endcomment %}
+  {% block meta_fonts %}
+  {% comment %} <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> {% endcomment %}
+  {% endblock meta_fonts %}
 
   {% block css %}
   <link rel="stylesheet" href="{% static 'css/reset.css' %}">
   {% tailwind_css %}
   <link rel="stylesheet" href="{% static 'css/INSERT_PROJECT_NAME_HERE.css' %}">
   {% endblock css %}
+
   {% block extra_css %}
   {% endblock extra_css %}
 
   {% block header_javascript %}
   {% endblock header_javascript %}
 
-  {% comment %} Titles should be unique for each page. Don't be longer than 60 characters. {% endcomment %}
+  {% comment %} SEO: Titles should be unique for each page. Don't be longer than 60 characters. {% endcomment %}
   <title>{% block title %}{{ settings.TITLE }}{% endblock title %}{% block extra_title %}{% endblock extra_title %}</title>
 
 </head>
 
-<body class={% block body_classes %}"flex flex-col min-h-full"{% endblock body_classes %}>
+<body class={% block body_classes %}"
+  flex
+  flex-col
+  min-h-full
+  text-zinc-900
+  dark:text-zinc-100
+  bg-zinc-50
+  dark:bg-zinc-950
+  transition-colors duration-700
+"{% endblock body_classes %}>
 
-  <!-- Header -->
   {% block header %}
   <header id="header">
-    <!--Main Navigation-->
-    <nav id="navigation">
-      {% block navigation %}{% endblock navigation %}
-    </nav>
+    {% include "headers/header-with-navigation.djt.html" %}
   </header>
   {% endblock header %}
 
-  <!-- Messages -->
   {% block messages %}
-  <div class="messages">
+  <messages class="messages">
     {% if messages %}
     {% for message in messages %}
       {% if message.tags %}{{ message.tags }}{% endif %}
         {{ message }}
     {% endfor %}
     {% endif %}
-  </div>
+  </messages>
   {% endblock messages %}
 
-  <!-- Main Container -->
   {% block body %}
   <container id="body">
     {% block outer_content %}
@@ -100,25 +102,22 @@
       {% endblock content %}
       {% block extra_content %}
       {% endblock extra_content %}
-    </div>
+    </content>
     {% endblock outer_content %}
   </container>
   {% endblock body %}
 
-  <!-- Footer -->
   {% block footer %}
   <footer id="footer">
     {% include "partials/footer.djt.html#copyright" %}
   </footer>
   {% endblock footer %}
 
-{% block footer_javascript %}
-{% comment %} TODO: add alpine.js (in the header?!)   {% endcomment %}
-{% comment %} <script defer nonce="{{request.csp_nonce}}" src="{% static 'js/INSERT_PROJECT_NAME_HERE.js' %}"></script> {% endcomment %}
-
-{% endblock footer_javascript %}
-{% block extra_footer_javascript %}
-{% endblock extra_footer_javascript %}
+  {% block footer_javascript %}
+  {% comment %} <script defer nonce="{{request.csp_nonce}}" src="{% static 'js/INSERT_PROJECT_NAME_HERE.js' %}"></script> {% endcomment %}
+  {% endblock footer_javascript %}
+  {% block extra_footer_javascript %}
+  {% endblock extra_footer_javascript %}
 
 </body>
 

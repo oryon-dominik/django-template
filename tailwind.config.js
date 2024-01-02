@@ -32,10 +32,52 @@ const getTemplateFiles = () => {
 };
 
 module.exports = {
-  content: [].concat(getTemplateFiles()),
+  content: [
+    "./assets/js/darkmode-toggle.js",
+  ].concat(getTemplateFiles()),
   theme: {
-    extend: {},
+    // existing colors might be overwritten easily.
+    // colors: {
+    //   transparent: 'transparent',
+    //   current: 'currentColor',
+    //   'white': '#ffffff',
+    //   'tahiti': {
+    //     light: '#67e8f9',
+    //     DEFAULT: '#06b6d4',
+    //     dark: '#0e7490',
+    //     100: '#cffafe',
+    //     200: '#a5f3fc',
+    //     300: '#67e8f9',
+    //     400: '#22d3ee',
+    //     500: '#06b6d4',
+    //     600: '#0891b2',
+    //     700: '#0e7490',
+    //     800: '#155e75',
+    //     900: '#164e63',
+    //   },
+    // },
+    extend: {
+      // Use your own custom colors or patch a shade of an existing color.
+      // Hint: for an intuitive approach use HSL and just change the lightness to get better gradients -> https://hslpicker.com/
+      colors: {
+        // Palette 5 of refactoringui.com/book
+        // bluegrey: {
+        //   50: '#F0F4F8',
+        //   100: '#D9E2EC',
+        //   200: '#BCCCDC',
+        //   300: '#9FB3C8',
+        //   400: '#829AB1',
+        //   500: '#627D98',
+        //   600: '#486581',
+        //   700: '#334E68',
+        //   800: '#243B53',
+        //   900: '#102A43',
+        //   950: '#020a12',
+        // }
+      }
+    },
   },
+  darkMode: 'class',
   plugins: [
     require("@tailwindcss/typography"),
     require("@tailwindcss/forms"),

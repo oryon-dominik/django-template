@@ -1,0 +1,6 @@
+<div class="relative inline-flex items-center gap-2 mr-2 sm:pb-2">
+  {# Dark mode switch button - the page's default is set in assets/js/darkmode-toggle.js #}
+  <button x-data @click="$store.theme.toggle()">
+    <span x-html="$store.theme.dark ? toLightMode : toDarkMode"></span>
+  </button>
+</div>
