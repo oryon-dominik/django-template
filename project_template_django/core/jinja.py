@@ -17,7 +17,7 @@ for a few options:
 
 Render the tag in your base template. It can go anywhere, but it's best just before </body>:
 
-    {{ django_browser_reload_script() }}
+    {% verbatim %}{{ django_browser_reload_script }}{% endverbatim %}
 
     <img src="{{ static('path/to/company-logo.png') }}" alt="Company Logo">
     <a href="{{ url('admin:index') }}">Administration</a>
