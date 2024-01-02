@@ -16,9 +16,7 @@ faker.seed(settings.TEST_FAKER_SEED)  # type: ignore[misc]
 
 
 def generic_user_factory(
-    first_name: str = "",
-    last_name: str = "",
-    username: str = "",
+    name: str = "",
     email: str = "",
     password: str = "",
     is_staff: bool = False,
@@ -28,20 +26,22 @@ def generic_user_factory(
     User factory.
     Produces a generic "the user" fixture.
     """
-    first_name = first_name if first_name else faker.first_name()
-    last_name = last_name if last_name else faker.last_name()
+    name = name if name else f"{faker.first_name()} {faker.last_name()}"
     password = (
         password
         if password
         else faker.password(length=36, special_chars=True, digits=True, upper_case=True, lower_case=True)
     )
-    username = username if username else f"{last_name.lower()}-{first_name.lower()}"
-    email = email if email else f"{last_name.lower()}.{first_name.lower()}@{faker.domain_name()}"
+    try:
+        first_name, last_name = name.split(" ")
+        mailname = f"{last_name.lower()}.{first_name.lower()}"
+    except ValueError:
+        mailname = name.lower()
+
+    email = email if email else f"{mailname}@{faker.domain_name()}"
 
     user = get_user_model().objects.create(
-        first_name=first_name,
-        last_name=last_name,
-        username=username,
+        name=name,
         email=email,
         is_staff=is_staff,
         is_active=is_active,
@@ -52,9 +52,7 @@ def generic_user_factory(
 
 
 def admin_user_factory(
-    first_name: str = "",
-    last_name: str = "",
-    username: str = "",
+    name: str = "",
     email: str = "",
     password: str = "",
     is_staff: bool = False,
@@ -65,9 +63,7 @@ def admin_user_factory(
     Produces an adminuser fixture
     """
     user: AdminUserType = generic_user_factory(
-        first_name=first_name,
-        last_name=last_name,
-        username=username,
+        name=name,
         email=email,
         password=password,
         is_staff=is_staff,
