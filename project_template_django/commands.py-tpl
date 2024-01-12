@@ -105,6 +105,7 @@ def create_vital_files_and_directories(production: bool = False):
     logs = CWD / "logs"
     media = CWD / "media"
     temp = CWD / "temp"
+    databases = CWD / "databases"
 
     if not production:
         # files
@@ -116,7 +117,7 @@ def create_vital_files_and_directories(production: bool = False):
 
     _ = [
         path.mkdir(parents=True, exist_ok=True)  # type: ignore[func-returns-value]
-        for path in (logs, media, assets, database, temp)
+        for path in (logs, media, assets, databases, temp)
     ]
 
 
