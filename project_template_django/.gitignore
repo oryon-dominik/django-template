@@ -11,7 +11,7 @@
 .idea/
 
 # Database
-database/
+databases/
 # don't ignore migrations
 !**/migrations/__init__.py
 
