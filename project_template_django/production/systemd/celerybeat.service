@@ -1,4 +1,4 @@
-# celerybeat.service
+# {{ project_name }} celerybeat.service
 #
 # For spawning a web application celery task manager as a systemd service.
 #
@@ -13,18 +13,18 @@ StartLimitIntervalSec=0
 
 [Service]
 Type=simple
-WorkingDirectory=/app
+WorkingDirectory=/apps/{{ project_name }}/src/
 
 User=root
 Group=root
 EnvironmentFile=/app/envs/production.env
 ExecStartPre=
-ExecStart=/opt/poetry/bin/poetry run celery --app config.celeryapp beat --loglevel=INFO
-ExecReload=/opt/poetry/bin/poetry run celery --app config.celeryapp beat --loglevel=INFO
+ExecStart=/apps/{{ project_name }}/src/.venv/bin/celery --app config.celeryapp beat --loglevel=INFO
+ExecReload=/apps/{{ project_name }}/src/.venv/bin/celery --app config.celeryapp beat --loglevel=INFO
 
-PIDFile=/app/celerybeat.pid
+PIDFile=/apps/{{ project_name }}/celerybeat.pid
 ExecStop=/bin/kill --signal TERM $MAINPID
-ExecStopPost=/bin/rm --force '/app/celerybeat.pid'
+ExecStopPost=/bin/rm --force '/apps/{{ project_name }}/celerybeat.pid'
 
 Restart=always
 RestartSec=5
