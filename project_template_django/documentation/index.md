@@ -4,6 +4,7 @@
 
 [project's tree structure](./structure.md)  
 [releases how to](./releases.md)
+[collaboration guidelines](./releases.md)
 
 [clone-and-ssh](./documentation/for-developers/clone-and-ssh.md)  
 [how-to-develop](./documentation/for-developers/how-to-develop.md)  

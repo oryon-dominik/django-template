@@ -1,6 +1,6 @@
 # How to pytest
 
-Run [pytest](https://docs.pytest.org/) tests with `pytest` in the root directory of the project (and active venv - otherwise it's `poetry run pytest`).  
+Run [pytest](https://docs.pytest.org/) tests with `pytest` in the root directory of the project (active venv).  
 
 On first run initialize cassette files with `pytest --vcr-record=once`.  
 

@@ -7,7 +7,7 @@ in `.pre-commit-config.yaml`. Adding them to the project will ensure that the
 code is formatted and linted before committing. Repeat the installation
 everytime you re-create the venv  
 
-    poetry run pre-commit install
+    pre-commit install
 
 
 ## used hooks
