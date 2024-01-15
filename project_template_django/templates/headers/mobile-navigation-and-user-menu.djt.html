@@ -4,9 +4,9 @@
   <div class="text-base font-medium text-zinc-50">{{ request.user.name }}</div>
   <div class="text-sm font-medium text-zinc-400">{{ request.user.email }}</div>
 {% include "partials/darkmode.djt.html" %}
-  <a href="{% url 'users:logout' %}" class="block px-3 py-2 text-base font-medium rounded-md text-zinc-400 hover:bg-zinc-700 hover:text-zinc-50">Sign out</a>
+  <a href="{% url 'accounts:logout' %}" class="block px-3 py-2 text-base font-medium rounded-md text-zinc-400 hover:bg-zinc-700 hover:text-zinc-50">Sign out</a>
 {% else %}
   
-  <a href="{% url 'users:login' %}" class="block px-3 py-2 text-base font-medium rounded-md text-zinc-400 hover:bg-zinc-700 hover:text-zinc-50">Login</a>
+  <a href="{% url 'accounts:login' %}" class="block px-3 py-2 text-base font-medium rounded-md text-zinc-400 hover:bg-zinc-700 hover:text-zinc-50">Login</a>
 {% endif %}
 </div>

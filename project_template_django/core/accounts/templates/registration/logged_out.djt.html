@@ -1,0 +1,11 @@
+{% extends "base.djt.html" %}
+
+{% block content %}
+
+<p>{% translate "Thanks for spending some quality time with the web site today." %}</p>
+
+<p><a href="{% url 'accounts:login' %}">Log in again</a></p>
+
+  TODO: log out button or modal or similar activating djangos logout functionality..
+
+{% endblock content %}

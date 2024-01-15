@@ -1,0 +1,10 @@
+{% extends "base.djt.html" %}
+
+{% block content %}
+
+  <form id="logout-form" method="post" action="{% url 'accounts:logout' %}">
+    {% csrf_token %}
+    <button type="submit">Log out</button>
+  </form>
+
+{% endblock content %}

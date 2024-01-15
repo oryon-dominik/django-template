@@ -9,9 +9,9 @@
 # project specific apps
 CORE_APPS: list[str] = [
     "core.app.CoreConfig",
-    # To replace with a the custom userapp -> comment "core.users" out & comment in
-    # apps.users.apps.UsersConfig in LOCAL_APPS
-    "core.users",
+    # To replace with a the custom userapp -> comment "core.accounts" out & comment in
+    # apps.accounts.apps.AccountsConfig in LOCAL_APPS
+    "core.accounts",
 ]
 PROJECT_APPS: list[str] = [
     # "apps.things.apps.ThingsConfig",
@@ -19,7 +19,7 @@ PROJECT_APPS: list[str] = [
 # custom apps for all projects
 LOCAL_APPS: list[str] = [
     # custom apps
-    # "apps.users.apps.UsersConfig",
+    # "apps.accounts.apps.AccountsConfig",
 ]
 DJANGO_APPS: list[str] = [
     # default django-apps

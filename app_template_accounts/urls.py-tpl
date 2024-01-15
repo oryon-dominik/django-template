@@ -1,5 +1,5 @@
 from core.typehints.generic import URLType
 
 
-app_name = "users"
+app_name = "accounts"
 urlpatterns: list[URLType] = []

@@ -1,3 +1,5 @@
+import unicodedata
+
 from django.contrib.auth.models import PermissionsMixin as AuthPermissionsMixin
 from django.contrib.auth.models import AbstractBaseUser as DjangoAbstractBaseUser
 from django.core.mail import send_mail
@@ -21,6 +23,7 @@ class CoreAbstractBaseUser(  # type: ignore # BUG: https://github.com/typeddjang
     admin-compliant permissions.
 
     email and password are required. Other fields are optional.
+    Username has been removed completely.
     """
 
     objects = CoreUserManager()
@@ -59,8 +62,15 @@ class CoreAbstractBaseUser(  # type: ignore # BUG: https://github.com/typeddjang
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
 
     def clean(self):
-        super().clean()
+        setattr(self, self.EMAIL_FIELD, self.normalize_username(self.get_email()))
         self.email = self.__class__.objects.normalize_email(self.email)  # type: ignore[attr-defined]
+
+    def get_email(self):
+        """Return the email for this User."""
+        return getattr(self, self.EMAIL_FIELD)
+
+    def natural_key(self):
+        return (self.get_email(),)
 
     def get_full_name(self):
         return self.name.strip()
@@ -86,15 +96,19 @@ class CoreAbstractBaseUser(  # type: ignore # BUG: https://github.com/typeddjang
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
     def __str__(self):
-        return self.email
-
-    @property
-    def username(self):
-        return self.email
+        return self.get_email()
 
     class Meta:
         abstract = True
         default_manager_name = "objects"
+
+    @classmethod
+    def normalize_email(cls, email):
+        return (
+            unicodedata.normalize("NFKC", email)
+            if isinstance(email, str)
+            else email
+        )
 
 
 class CoreAbstractUser(CoreAbstractBaseUser):
@@ -103,10 +117,11 @@ class CoreAbstractUser(CoreAbstractBaseUser):
         ADMIN = "adm", "Admin"  # dev only
         API = "api", "Api User"
 
+    verified = models.BooleanField(default=False)
     role = models.CharField(max_length=3, choices=Roles.choices, default=Roles.INCOMPLETE)
 
     def get_absolute_url(self):
-        return reverse("users:detail", kwargs={"username": self.username})
+        return reverse("accounts:detail", kwargs={"email": self.email})
 
     @property
     def url(self):

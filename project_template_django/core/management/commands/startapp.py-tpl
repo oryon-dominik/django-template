@@ -87,7 +87,7 @@ class Command(startapp.Command):
         except ImportError:
             pass
         else:
-            if name != "users":
+            if name != "accounts":
                 # ! Monkey patch to allow another custom users app
                 raise CommandError(
                     "'{name}' conflicts with the name of an existing Python "

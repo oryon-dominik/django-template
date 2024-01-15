@@ -35,9 +35,9 @@ W001 = django_core_checks.Warning(
 )
 
 W002 = django_core_checks.Warning(
-    "The initial migration for your custom users app in `apps.users` is inconsistent with"
-    " `core.users.migrations.0001_initial`, which should be applied first."
-    " Hint: copy `core.users.migrations.0001_initial` to your users app as initial migration.",
+    "The initial migration for your custom users app in `apps.accounts` is inconsistent with"
+    " `core.accounts.migrations.0001_initial`, which should be applied first."
+    " Hint: copy `core.accounts.migrations.0001_initial` to your users app as initial migration.",
     id="core.W002",
 )
 
@@ -58,12 +58,12 @@ def check_email_backend(app_configs, **kwargs):
 @django_core_checks.register(Tags.migrations, deploy=False)
 def check_user_migrations(app_configs, **kwargs):
     """
-    Ensure custom users migration (if exists) matches core.users.migrations.0001_initial.
+    Ensure custom users migration (if exists) matches core.accounts.migrations.0001_initial.
     """
     warnings = []
-    custom_users_app = settings.APPS_DIR / "users" / "migrations" / "0001_initial.py"
-    core_users_app = settings.ROOT_DIR / "core" / "users" / "migrations" / "0001_initial.py"
-    assert core_users_app.exists(), "core.users.migrations.0001_initial.py does not exist, this should not happen."
+    custom_users_app = settings.APPS_DIR / "accounts" / "migrations" / "0001_initial.py"
+    core_users_app = settings.ROOT_DIR / "core" / "accounts" / "migrations" / "0001_initial.py"
+    assert core_users_app.exists(), "core.accounts.migrations.0001_initial.py does not exist, this should not happen."
     if custom_users_app.exists() and custom_users_app.read_text() != core_users_app.read_text():
         warnings.append(W002)
     return warnings
