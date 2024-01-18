@@ -1,4 +1,4 @@
-<nav id="navigation" class="bg-zinc-900">
+<nav id="navigation" class="pl-2 justify-self-start bg-zinc-900">
   {% block navigation %}
   <div x-data="{ openMobileMenu: false }">
 
@@ -17,3 +17,11 @@
   </div>
   {% endblock navigation %}
 </nav>
+<headline class="w-full h-10 px-4 text-start">
+  {% block headline %}
+  <h1 class="py-2 text-3xl font-bold text-transparent uppercase bg-gradient-to-r from-zinc-500 to-zinc-950 bg-clip-text">
+    INSERT_PROJECT_NAME_HERE
+  </h1>
+  {% endblock %}
+</headline>
+<user class="pr-2">USER{# TODO: include 'user profile and login' components #}</user>

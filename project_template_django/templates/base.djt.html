@@ -20,7 +20,7 @@
   <meta name="htmx-config" content={% block htmx_config %}'{"historyCacheSize": 10}'{% endblock htmx_config %}>
 
   {% comment %} SEO: Descriptions should be unique for each page. Don't be longer than 160 characters. {% endcomment %}
-  <meta name="description" content={% block meta_description %}"The hockey companion."{% endblock meta_description %}>
+  <meta name="description" content={% block meta_description %}"INSERT_PROJECT_NAME_HERE"{% endblock meta_description %}>
 
   {% comment %} htmx -> defer=continue loading the page whilst downloading the htmx js files {% endcomment %}
   <script nonce="{{request.csp_nonce}}" src="{% static 'js/htmx/htmx.min.js' %}" defer></script>
@@ -66,6 +66,7 @@
 
 </head>
 
+{# The body class is the only place where definition of the basic-colors is allowed inside the base-template. Other colors -> see components. #}
 <body class={% block body_classes %}"
   flex
   flex-col
@@ -78,7 +79,7 @@
 "{% endblock body_classes %}>
 
   {% block header %}
-  <header id="header">
+  <header id="header" class="sticky top-0 z-50 flex flex-row items-center justify-between w-full h-10 bg-white">
     {% include "headers/header-with-navigation.djt.html" %}
   </header>
   {% endblock header %}
@@ -95,7 +96,7 @@
   {% endblock messages %}
 
   {% block body %}
-  <container id="body">
+  <container id="body" class="flex items-center grow">
     {% block outer_content %}
     <content id="content">
       {% block content %}
@@ -108,7 +109,7 @@
   {% endblock body %}
 
   {% block footer %}
-  <footer id="footer">
+  <footer id="footer" class="sticky bottom-0 z-50 w-full h-10 p-0 -mt-10">
     {% include "partials/footer.djt.html#copyright" %}
   </footer>
   {% endblock footer %}
