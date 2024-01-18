@@ -2,6 +2,10 @@
   {% block navigation %}
   <div x-data="{ openMobileMenu: false }">
 
+    {% comment %} TODO: Okay, wherever the navigation menu items will be added
+    to .. they definitely need the hx-boost="true" attribute, if they just want
+    to replace the body without re-loading everything inside the head. {% endcomment %}
+
     <!-- Desktop menu, hidden on smaller screens. -->
     {% include "headers/desktop-navigation-and-user-menu.djt.html" %}
 
