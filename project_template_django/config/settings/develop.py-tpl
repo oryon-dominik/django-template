@@ -74,13 +74,26 @@ CORS_ALLOW_METHODS = [
 CSP_CONNECT_SRC = ("'self'",)
 CSP_DEFAULT_SRC = ("'none'",)
 CSP_STYLE_SRC = (
-    "'unsafe-inline'",
+    "'unsafe-inline'",  # ! Tailwind needs unsafe-inline
     "'self'",
-    # "https://fonts.googleapis.com/",
+    # f"{PROJECT_URL}",
+    # "fonts.googleapis.com",
 )
 CSP_FONT_SRC = ("'self'",)  # "fonts.gstatic.com")
 CSP_IMG_SRC = ("'self'",)
-CSP_SCRIPT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = (
+    "'self'",
+    # Alpine and tailwind both need unsafe-inline.
+    # Alpine-js needs unsafe-eval.
+    # Alpine.js [offers a mitigation for unsafe-eval](https://alpinejs.dev/advanced/csp)
+    # this is not yet implemented and you will loose some features.
+    "'unsafe-inline'",
+    "'unsafe-eval'",
+    # f"{PROJECT_URL}",
+    # "cdn.tailwindcss.com",  # tailwind
+    # "cdn.jsdelivr.net",  # alpine
+    # "unpkg.com",  # htmx
+)
 
 
 # -----------------------------------------------------------------------------

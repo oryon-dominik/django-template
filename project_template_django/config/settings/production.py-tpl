@@ -138,6 +138,16 @@ CSP_FONT_SRC = ("'self'",)  # 'fonts.gstatic.com')
 # only URLs loaded directly into <script> elements, but also things like inline script event handlers (onclick) and
 # XSLT stylesheets which can trigger script execution.
 CSP_SCRIPT_SRC = ("'self'", PROJECT_URL)
+CSP_SCRIPT_SRC = (
+    "'self'",
+    # Alpine and tailwind both need unsafe-inline CSP.
+    # Alpine-js needs unsafe-eval as well.
+    # Alpine.js [offers a mitigation for unsafe-eval](https://alpinejs.dev/advanced/csp)
+    # this is not yet implemented and you will loose some features of alpine.
+    "'unsafe-inline'",
+    "'unsafe-eval'",
+    f"{PROJECT_URL}",
+)
 # CSP: worker-src
 # The HTTP Content-Security-Policy (CSP) worker-src directive specifies valid sources for Workers or SharedWorkers.
 CSP_WORKER_SRC = ("'self'",)
