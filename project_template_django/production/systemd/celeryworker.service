@@ -1,4 +1,4 @@
-# celeryworker.service
+# {{ project_name }} celeryworker.service
 #
 # For spawning a web application celery task manager as a systemd service.
 #
@@ -13,14 +13,14 @@ StartLimitIntervalSec=0
 
 [Service]
 Type=simple
-WorkingDirectory=/app
+WorkingDirectory=/apps/{{ project_name }}/src
 
 User=root
 Group=root
-EnvironmentFile=/app/envs/production.env
-# TBD: is --uid=app correct or is this root?
-ExecStart=/opt/poetry/bin/poetry run celery --app config.celeryapp worker --loglevel=INFO --queues {{ project_name }},celery --uid=app --hostname worker-%%h
-ExecReload=/opt/poetry/bin/poetry run celery --app config.celeryapp worker --loglevel=INFO --queues {{ project_name }},celery --uid=app --hostname worker-%%h
+EnvironmentFile=/apps/{{ project_name }}/envs/production.env
+# TBD: is --uid={{ project_name }} correct or is this root?
+ExecStart=/apps/{{ project_name }}/src/.venv/bin/celery --app config.celeryapp worker --loglevel=INFO --queues {{ project_name }},celery --uid={{ project_name }} --hostname worker-%%h
+ExecReload=/apps/{{ project_name }}/src/.venv/bin/celery --app config.celeryapp worker --loglevel=INFO --queues {{ project_name }},celery --uid={{ project_name }} --hostname worker-%%h
 
 Restart=always
 RestartSec=5

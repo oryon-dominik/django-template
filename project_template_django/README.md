@@ -47,7 +47,7 @@ python manage.py createcachetable
 pytest
 
 # create a testuser
-poetry run python manage.py shell
+python manage.py shell
 $ from django.contrib.auth import get_user_model
 $ email = "test@example.com"
 $ User = get_user_model()
@@ -90,8 +90,8 @@ using aliases defined in `config/contributors/aliases.json` from the contributor
 
 ### Setup the project
 
-    poetry run python commands.py setup
-    poetry run python manage.py migrate
+    python commands.py setup
+    python manage.py migrate
 
 
 ### Deployment
@@ -106,7 +106,7 @@ in `.pre-commit-config.yaml`. Adding them to the project will ensure that the
 code is formatted and linted before committing. Repeat the installation
 everytime you re-create the venv  
 
-    poetry run pre-commit install
+    pre-commit install
 
 TODO: reactivate pyupgrade after the support for typing.Optional is added in 1.0 of typer
 
@@ -115,29 +115,29 @@ TODO: reactivate pyupgrade after the support for typing.Optional is added in 1.0
 
 Run [pytest](https://docs.pytest.org/).
 
-    poetry run pytest
+    pytest
 
 
 ### Linter
 
 Lint with [ruff](https://github.com/charliermarsh/ruff) and [flake8](https://github.com/PyCQA/flake8).
 
-    poetry run ruff check .
-    poetry run flake8
+    ruff check .
+    flake8
 
 
 ### Formatter
 
 Autoformatting is enforced with industry-standard [black](https://github.com/psf/black).
 
-    poetry run black --check .
+    black --check .
 
 
 ### Type checker
 
 Static type checking can be checked with [mypy](https://mypy-lang.org/).
 
-    poetry run mypy --config-file pyproject.toml .
+    mypy --config-file pyproject.toml .
 
 To let the mypy daemon (dmypy) work with your ide, install the following packages in the env, that is used by your ide:
 

@@ -6,8 +6,13 @@
 # -----------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#auth-user-model
 # -> auth.User if you don't want to use the customized userapp. Remember to
-# also inactivate the users app in INSTALLED_APPS. BEFORE you do any migrations.
-AUTH_USER_MODEL = "users.User"
+# also inactivate the core.accounts app in INSTALLED_APPS. BEFORE you do any migrations.
+AUTH_USER_MODEL = "accounts.User"
+
+AUTHENTICATION_BACKENDS = [
+    # "django.contrib.auth.backends.ModelBackend",
+    "core.accounts.backends.CoreModelBackend",
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#auth-password-validators

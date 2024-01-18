@@ -1,4 +1,4 @@
-# celeryflower.service
+# {{ project_name }} celeryflower.service
 #
 # For spawning a web application celery task manager as a systemd service.
 #
@@ -13,18 +13,18 @@ StartLimitIntervalSec=0
 
 [Service]
 Type=simple
-WorkingDirectory=/app
+WorkingDirectory=/apps/{{ project_name }}/src
 
 User=root
 Group=root
-EnvironmentFile=/app/envs/production.env
+EnvironmentFile=/apps/{{ project_name }}/envs/production.env
 ExecStartPre=
 # FIXME: replace flower credentials with correct variables and let this run from a script in the app
-ExecStart=/opt/poetry/bin/poetry run celery flower \
+ExecStart=/apps/{{ project_name }}/src/.venv/bin/celery flower \
     --app=config.celeryapp \
     --broker="${CELERY_BROKER_URL}" \
     --basic_auth="${CELERY_FLOWER_USER}:${CELERY_FLOWER_PASSWORD}"
-ExecReload=/opt/poetry/bin/poetry run celery flower \
+ExecReload=/apps/{{ project_name }}/src/.venv/bin/celery flower \
     --app=config.celeryapp \
     --broker="${CELERY_BROKER_URL}" \
     --basic_auth="${CELERY_FLOWER_USER}:${CELERY_FLOWER_PASSWORD}"

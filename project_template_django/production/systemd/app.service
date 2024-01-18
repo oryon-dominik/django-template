@@ -1,4 +1,4 @@
-# app.service
+# {{ project_name }}.service
 #
 # For spawning a web application as a systemd service.
 #
@@ -13,14 +13,14 @@ StartLimitIntervalSec=0
 
 [Service]
 Type=simple
-WorkingDirectory=/app
+WorkingDirectory=/apps/{{ project_name }}/src
 
 User=root
 Group=root
-EnvironmentFile=/app/envs/production.env
+EnvironmentFile=/apps/{{ project_name }}/envs/production.env
 ExecStartPre=
-ExecStart=/opt/poetry/bin/poetry run gunicorn config.wsgi:application
-ExecReload=/opt/poetry/bin/poetry run gunicorn config.wsgi:application
+ExecStart=/apps/{{ project_name }}/src/.venv/bin/gunicorn config.wsgi:application
+ExecReload=/apps/{{ project_name }}/src/.venv/bin/gunicorn config.wsgi:application
 
 Restart=always
 RestartSec=5

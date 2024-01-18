@@ -1,0 +1,66 @@
+"""
+Class-based password reset views
+- PasswordResetView sends the mail
+- PasswordResetDoneView shows a success message for the above
+- PasswordResetConfirmView checks the link the user clicked and
+    prompts for a new password
+- PasswordResetCompleteView shows a success message for the above
+"""
+from django.contrib.auth import views
+
+
+class CoreLogoutView(views.LogoutView):
+    """
+    Log out the user and display the 'You are logged out' message.
+    Controlling the template
+    """
+    template_name = "registration/logged_out.djt.html"
+
+
+class CorePasswordResetView(views.PasswordResetView):
+    """
+    Display the "Password reset e-mail sent" page.
+    Controlling the template
+    """
+    template_name = "registration/password_reset_email.djt.html"
+    subject_template_name = "registration/password_reset_subject.txt"
+
+
+class CorePasswordResetDoneView(views.PasswordResetDoneView):
+    """
+    Display the "Password reset sent" page.
+    Controlling the template
+    """
+    template_name = "registration/password_reset_done.djt.html"
+
+
+class CorePasswordResetConfirmView(views.PasswordResetConfirmView):
+    """
+    Display the "Password reset complete" page.
+    Controlling the template
+    """
+    template_name = "registration/password_reset_confirm.djt.html"
+
+
+class CoreasswordResetCompleteView(views.PasswordResetCompleteView):
+    """
+    Display the "Password reset complete" page.
+    Controlling the template
+    """
+    template_name = "registration/password_reset_complete.djt.html"
+
+
+class CorePasswordChangeView(views.PasswordChangeView):
+    """
+    Display the "Password change" page.
+    Controlling the template
+    """
+    template_name = "registration/password_change_form.djt.html"
+
+
+class CorePasswordChangeDoneView(views.PasswordChangeDoneView):
+    """
+    Display the "Password change successful" page.
+    Controlling the template
+    """
+    template_name = "registration/password_change_done.djt.html"

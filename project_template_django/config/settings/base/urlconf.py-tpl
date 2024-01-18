@@ -8,11 +8,11 @@
 ADMIN_URL = "hidden-admin-{{ project_name }}"
 
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#login-redirect-url
-LOGIN_REDIRECT_URL = "api:api-root"  # "users:redirect"
-LOGOUT_REDIRECT_URL = "api:api-root"  # "users:login"
-# LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "accounts:redirect"  # "api:api-root"
+LOGOUT_REDIRECT_URL = "accounts:login"  # "api:api-root"
+LOGIN_REDIRECT_URL = "/"  # "accounts:detail" | "api:api-root"
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#login-url
-LOGIN_URL = "api:api-root"  # "users:login"
+LOGIN_URL = "accounts:login"  # "api:api-root"
 
 ROOT_URLCONF = "config.urls.routes"
 API_BASE_URL: str = "api"

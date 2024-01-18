@@ -40,7 +40,9 @@ urlpatterns: list[URLType] = [
     # ! defining Views directly in the urls.py (like the line below) is an anti-pattern. We"ll keep it here for simplicity for now.
     # path("", TemplateView.as_view(template_name="home.djt.html"), {"TITLE": settings.PROJECT_TITLE}),
     # path(settings.ADMIN_URL, admin.site.urls),
-    # path("", include("apps.users.urls", namespace="users")),
+    # Custom users app or the core users app.
+    # path("", include("apps.accounts.urls", namespace="accounts")),
+    # path("", include("core.accounts.urls", namespace="accounts")),
     # Staticfiles can only serve /assets/favicon.ico, whilst the favicon needs to be served at exactly /favicon.ico.
     path("favicon.ico", favicon),
 ] + [  # the project-specific urlpatterns
