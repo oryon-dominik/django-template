@@ -159,8 +159,6 @@ optional = false
 [tool.poetry.group.environment.dependencies]
 environs = "^9.5.0"
 rich = "^13.6.0"
-# TODO: Add textual, when the terminalui is finished.
-# textual = "^0.38.1"
 doppler-env = "^0.3.1"
 
 [tool.poetry.group.gittools]

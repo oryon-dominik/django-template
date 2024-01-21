@@ -225,7 +225,7 @@ def default(
     version: Optional[bool] = typer.Option(  # pylint: disable=unused-argument
         # BUG: replace Optional with bool | None, when a typer release merges
         # the pull request for modern Typehints -> also re-activate
-        # pre-commit-hook 'pyupgrade', that is currently deactivated bedause of
+        # pre-commit-hook 'pyupgrade', that is currently deactivated because of
         # this bug.
         None,
         "--version",
@@ -283,19 +283,10 @@ def doppler():
 
 
 @cli.command()
-def tui():
-    """Run the TUI app"""
-    # from terminalui import terminalui  # pylint: disable=import-outside-toplevel
-    # app = terminalui.TerminalUserInterface()
-    # app.run()
-    # sys.exit(app.return_code or 0)
-    # raise NotImplementedError("The TUI is not yet implemented.")
-    ...
-
-
-@cli.command()
 def celery(
-    mode: str = "develop",  # BUG: typer does not accept Literals yet (otherwise this would be "DjangoMode")
+    mode: str = "develop",
+    # BUG: typer does not accept Literals yet (otherwise this would be "DjangoMode")
+    # -> https://github.com/tiangolo/typer/pull/669
     config: str = "config.celeryapp",
     worker: bool = False,
     beat: bool = False,
