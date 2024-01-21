@@ -4,6 +4,7 @@
 # -----------------------------------------------------------------------------
 # DATABASES
 # https://docs.djangoproject.com/en/{{ doc_version }}/ref/settings/#databases
+import re
 from environs import Env
 
 
@@ -16,19 +17,29 @@ def define_databases(env: Env) -> dict:
     # pylint: disable=possibly-unused-variable
     # --- POSTGRES ----------------------------------------------------------------
     # POSTGRES_DB = env.str("POSTGRES_DB", default="{{ project_name }}")
-    # POSTGRES_USER = env.str("POSTGRES_USER")
-    # POSTGRES_PASSWORD = env.str("POSTGRES_PASSWORD")
-    # POSTGRES_HOST = env.str("POSTGRES_HOST")
-    # POSTGRES_PORT = env.int("POSTGRES_PORT")
-    # POSTGRES_OPTIONS = env.str("POSTGRES_OPTIONS", default="")
+    POSTGRES_USER = env.str("POSTGRES_USER")
+    POSTGRES_PASSWORD = env.str("POSTGRES_PASSWORD")
+    POSTGRES_HOST = env.str("POSTGRES_HOST")
+    POSTGRES_PORT = env.int("POSTGRES_PORT")
+    POSTGRES_OPTIONS = env.str("POSTGRES_OPTIONS", default="")
     # POSTGRES_CONNECTION_STRING = (
     #     f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
     #     + f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}{POSTGRES_OPTIONS}"
     # )
+    # TODO: Test if these regexes really work for all connection strings.
     # DATABASE_URL = env.str("DATABASE_URL", default=POSTGRES_CONNECTION_STRING)
-    # TODO: parse DATABASE_URL or connection string params to reverse engineer
-    # the default options, to be able to setup with the single string
-
+    # POSTGRES_USER = user_match.group(1) if (
+    #     user_match := re.search(r"(?:postgres|psql|postgresql):\/\/([^:]+)", DATABASE_URL)
+    # ) else POSTGRES_USER
+    # POSTGRES_PASSWORD = password_match.group(1) if (
+    #     password_match := re.search(r":\/\/[^:]+:([^@]+)", DATABASE_URL)
+    # ) else POSTGRES_PASSWORD
+    # POSTGRES_HOST = host_match.group(1) if (host_match := re.search(r"@([^:\/]+)", DATABASE_URL)) else POSTGRES_HOST
+    # POSTGRES_PORT = port_match.group(1) if (port_match := re.search(r":(\d+)\/", DATABASE_URL) else POSTGRES_PORT
+    # POSTGRES_DB = name_match.group(2) if (name_match := re.search(r"\/([^\/\?]+)", DATABASE_URL)) else POSTGRES_DB
+    # POSTGRES_OPTIONS = options_match.group(1) if (
+    #     options_match := re.search(r"\?(.+)", DATABASE_URL)
+    # ) else POSTGRES_OPTIONS
     # DATABASES = {
     #     "default": {
     #         "HOST": POSTGRES_HOST,
@@ -37,7 +48,7 @@ def define_databases(env: Env) -> dict:
     #         "USER": POSTGRES_USER,
     #         "PASSWORD": POSTGRES_PASSWORD,
     #         "ENGINE": "django.db.backends.postgresql",
-    #         # see notes om connections: https://docs.djangoproject.com/en/{{ docs_version }}/ref/databases/#general-notes
+    #         # see notes on connections: https://docs.djangoproject.com/en/{{ docs_version }}/ref/databases/#general-notes
     #         "CONN_MAX_AGE": 0,
     #         # "CONN_HEALTH_CHECKS": False,
     #         "OPTIONS": {"sslmode": "prefer"},
