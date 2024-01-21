@@ -19,7 +19,7 @@ ENV \
     # Turns off buffering for easier container logging
     PYTHONUNBUFFERED=1 \
     # venv path
-    VENV_PATH="/opt/venvs" \
+    VENV_PATH="/opt/python/venvs" \
     # -- pip ENVS
     # https://pip.pypa.io/en/stable/topics/configuration/#environment-variables
     # Disable the cache.
@@ -29,7 +29,8 @@ ENV \
     # -- poetry ENVS
     # https://python-poetry.org/docs/configuration/#using-environment-variables
     # Poetry home directory will live in `/opt`.
-    POETRY_HOME="/opt/poetry" \
+    POETRY_HOME="/opt/python/poetry" \
+    POETRY_CACHE="/opt/python/cache" \
     # Create virtual environment in the project's root `.venv`
     POETRY_VIRTUALENVS_IN_PROJECT=true \
     # Do not create virtual environment if it does not exist
@@ -53,6 +54,11 @@ WORKDIR /app
 
 # Install all non optional dependency-groups
 RUN poetry install --sync
+
+# TBD: create a special user for the app?
+# RUN adduser --disabled-password --gecos '' app
+# USER app
+# TBD: chown the appdir?
 
 # Run entrypoint.sh
 # ENTRYPOINT ["/app/entrypoint.sh"]
