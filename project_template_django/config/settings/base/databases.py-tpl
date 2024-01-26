@@ -36,7 +36,7 @@ def define_databases(env: Env) -> dict:
     # ) else POSTGRES_PASSWORD
     # POSTGRES_HOST = host_match.group(1) if (host_match := re.search(r"@([^:\/]+)", DATABASE_URL)) else POSTGRES_HOST
     # POSTGRES_PORT = port_match.group(1) if (port_match := re.search(r":(\d+)\/", DATABASE_URL) else POSTGRES_PORT
-    # POSTGRES_DB = name_match.group(2) if (name_match := re.search(r"\/([^\/\?]+)", DATABASE_URL)) else POSTGRES_DB
+    # POSTGRES_DB = name_match.group(1) if (name_match := re.search(r"/(\w+)\?", DATABASE_URL)) else POSTGRES_DB
     # POSTGRES_OPTIONS = options_match.group(1) if (
     #     options_match := re.search(r"\?(.+)", DATABASE_URL)
     # ) else POSTGRES_OPTIONS
