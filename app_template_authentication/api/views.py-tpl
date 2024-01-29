@@ -45,6 +45,8 @@ class AuthTokenLogin(APIView):
             return Response({"error": MSG_AUTHENTICATION_FAILED}, status=status.HTTP_401_UNAUTHORIZED)
         if user.is_active is False:
             return Response({"error": MSG_AUTHENTICATION_FAILED}, status=status.HTTP_401_UNAUTHORIZED)
+        if user.verified is False:
+            return Response({"error": MSG_AUTHENTICATION_FAILED}, status=status.HTTP_401_UNAUTHORIZED)
         if user.check_password(password) is False:
             return Response({"error": MSG_AUTHENTICATION_FAILED}, status=status.HTTP_401_UNAUTHORIZED)
 

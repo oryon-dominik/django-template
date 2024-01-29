@@ -97,6 +97,7 @@ from .users import (
     AUTH_USER_MODEL,
     AUTH_PASSWORD_MINIMUM_LENGTH,
     AUTH_PASSWORD_VALIDATORS,
+    AUTHENTICATION_BACKENDS,
 )
 
 # -----------------------------------------------------------------------------

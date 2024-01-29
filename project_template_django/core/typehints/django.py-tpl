@@ -3,7 +3,11 @@ from typing import TypeAlias
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
 
-class AbstractBaseUserWithPermissionsType(PermissionsMixin, AbstractBaseUser):  # type: ignore[misc]
+class CoreAbstractBaseUser(AbstractBaseUser):
+    verified: bool
+
+
+class AbstractBaseUserWithPermissionsType(PermissionsMixin, CoreAbstractBaseUser):  # type: ignore[misc]
     """
     The adminuser is atleast an AbstractBaseUserWithPermissions
     - has an email field
@@ -16,5 +20,5 @@ class AbstractBaseUserWithPermissionsType(PermissionsMixin, AbstractBaseUser):  
         abstract = True
 
 
-UserType: TypeAlias = AbstractBaseUser
+UserType: TypeAlias = CoreAbstractBaseUser
 AdminUserType: TypeAlias = AbstractBaseUserWithPermissionsType

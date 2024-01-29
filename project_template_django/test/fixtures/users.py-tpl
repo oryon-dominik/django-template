@@ -81,11 +81,11 @@ def unverified_user(valid_password):
 
 
 @pytest.fixture
-def active_admin_user(valid_password):
+def valid_admin_user(valid_password):
     """
-    Yields from adminuser factory. Activation is enforced explicitly.
+    Yields from adminuser factory. Activation & Verification are enforced explicitly.
     """
-    user = users.admin_user_factory(is_active=True, is_staff=True, password=valid_password)
+    user = users.admin_user_factory(is_active=True, verified=True, is_staff=True, password=valid_password)
     yield user
     get_user_model().objects.get(email=user.email).delete()  # type: ignore[no-untyped-call]
 

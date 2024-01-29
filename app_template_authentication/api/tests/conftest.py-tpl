@@ -8,10 +8,13 @@ from test.fixtures.authentication import (  # noqa # pylint: disable=unused-impo
 )
 from test.fixtures.clients import rest_client as client  # noqa # pylint: disable=unused-import
 from test.fixtures.users import (  # noqa # pylint: disable=unused-import
-    valid_password,
-    wrong_password,
-    invalid_password,
+    valid_admin_user,
     active_user,
+    invalid_password,
     inactive_user,
-    active_admin_user,
+    unverified_user,
+    valid_password,
+    valid_user,
+    verified_user,
+    wrong_password,
 )
