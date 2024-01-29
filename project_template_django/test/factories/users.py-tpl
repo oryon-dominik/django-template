@@ -21,6 +21,7 @@ def generic_user_factory(
     password: str = "",
     is_staff: bool = False,
     is_active: bool = False,
+    verified: bool = False,
 ) -> UserType:
     """
     User factory.
@@ -45,6 +46,7 @@ def generic_user_factory(
         email=email,
         is_staff=is_staff,
         is_active=is_active,
+        verified=verified,
     )
     user.set_password(raw_password=password)
     user.save()
@@ -57,6 +59,7 @@ def admin_user_factory(
     password: str = "",
     is_staff: bool = False,
     is_active: bool = False,
+    verified: bool = False,
 ) -> AdminUserType:
     """
     AdminUser factory.
@@ -68,6 +71,7 @@ def admin_user_factory(
         password=password,
         is_staff=is_staff,
         is_active=is_active,
+        verified=verified,
     )  # type: ignore[assignment]
     user.is_superuser = True
     user.save()

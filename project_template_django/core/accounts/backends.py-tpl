@@ -9,6 +9,13 @@ class CoreModelBackend(ModelBackend):
     Authenticates against settings.AUTH_USER_MODEL. Via email.
     """
 
+    def user_can_authenticate(self, user):
+        """
+        Reject users with is_active=False or verified=False.
+        ! User models that don't have these attributes are forbidden.
+        """
+        return getattr(user, "is_active", False) and getattr(user, "verified", False)
+
     def authenticate(self, request, email=None, password=None, **kwargs):
         if email is None:
             email = kwargs.get(UserModel.EMAIL_FIELD)  # type: ignore

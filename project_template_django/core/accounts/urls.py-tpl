@@ -1,4 +1,5 @@
 from django.contrib.auth import views as auth_views
+from django.conf import settings
 from django.urls import path
 
 from . import forms
@@ -32,3 +33,24 @@ urlpatterns = [
         name="password-reset-complete"
     ),
 ]
+
+
+if hasattr(settings, "DJANGO_RUNS_IN_TESTMODE"):
+    """
+    EXAMPLE PROTECTED VIEW below
+    """
+    from django.http import JsonResponse
+    from django.contrib.auth.mixins import LoginRequiredMixin
+    from django.views.generic import View
+
+    class ProtectedView(LoginRequiredMixin, View):
+        def get(self, request, format=None):
+            """
+            Return a list of all planets.
+            """
+            planets = ["mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune"]
+            return JsonResponse({"planets": planets})
+
+    urlpatterns += [
+        path("accounts/protectiontest/", ProtectedView.as_view(), name="protectiontest"),
+    ]

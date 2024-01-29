@@ -42,7 +42,7 @@ class CorePasswordResetConfirmView(views.PasswordResetConfirmView):
     template_name = "registration/password_reset_confirm.djt.html"
 
 
-class CoreasswordResetCompleteView(views.PasswordResetCompleteView):
+class CorePasswordResetCompleteView(views.PasswordResetCompleteView):
     """
     Display the "Password reset complete" page.
     Controlling the template

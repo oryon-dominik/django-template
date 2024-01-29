@@ -32,7 +32,8 @@ def invalid_password() -> str:
 @pytest.fixture
 def user(valid_password):
     """
-    Yields from user factory.
+    Yields from user factory, using all defaults.
+    Not active, not verified.
     """
     user = users.generic_user_factory(password=valid_password)
     yield user
@@ -40,7 +41,17 @@ def user(valid_password):
 
 
 @pytest.fixture
-def verified_user(valid_password):
+def valid_user(valid_password):
+    """
+    Yields from user factory. Activation & Verification are enforced explicitly.
+    """
+    user = users.generic_user_factory(is_active=True, verified=True, password=valid_password)
+    yield user
+    get_user_model().objects.get(email=user.email).delete()  # type: ignore[no-untyped-call]
+
+
+@pytest.fixture
+def active_user(valid_password):
     """
     Yields from user factory. Activation is enforced explicitly.
     """
@@ -50,17 +61,37 @@ def verified_user(valid_password):
 
 
 @pytest.fixture
-def verified_admin_user(valid_password):
+def verified_user(valid_password):
     """
-    Yields from adminuser factory. Activation is enforced explicitly.
+    Yields from user factory. Verification is enforced explicitly.
     """
-    user = users.admin_user_factory(is_active=True, is_staff=True, password=valid_password)
+    user = users.generic_user_factory(verified=True, password=valid_password)
     yield user
     get_user_model().objects.get(email=user.email).delete()  # type: ignore[no-untyped-call]
 
 
 @pytest.fixture
 def unverified_user(valid_password):
+    """
+    Yields from user factory. Verification is forbidden explicitly.
+    """
+    user = users.generic_user_factory(verified=False, password=valid_password)
+    yield user
+    get_user_model().objects.get(email=user.email).delete()  # type: ignore[no-untyped-call]
+
+
+@pytest.fixture
+def valid_admin_user(valid_password):
+    """
+    Yields from adminuser factory. Activation & Verification are enforced explicitly.
+    """
+    user = users.admin_user_factory(is_active=True, verified=True, is_staff=True, password=valid_password)
+    yield user
+    get_user_model().objects.get(email=user.email).delete()  # type: ignore[no-untyped-call]
+
+
+@pytest.fixture
+def inactive_user(valid_password):
     """
     Yields from user factory. User is explicitly de-activated.
     """

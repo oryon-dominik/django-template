@@ -18,8 +18,8 @@ def test_token_prefix_is_bearer():
 
 
 @pytest.mark.django_db(transaction=True)
-def test_obtain_token_with_valid_credentials_succeeds_and_token_is_valid(client, verified_user, valid_password: str):
-    payload = {"email": f"{verified_user.email}", "password": valid_password}
+def test_obtain_token_with_valid_credentials_succeeds_and_token_is_valid(client, valid_user, valid_password: str):
+    payload = {"email": f"{valid_user.email}", "password": valid_password}
 
     url = f"/{settings.API_BASE_URL}/auth/token/"
     response = client.post(url, data=payload)
@@ -51,7 +51,7 @@ def test_obtain_token_with_valid_credentials_succeeds_and_token_is_valid(client,
     access_token_payload: dict = jwt.decode(
         token=access_token, key=settings.SECRET_KEY, algorithms=[tokens.DEFAULT_JWT_TOKEN_ALGORITHM]
     )
-    assert access_token_payload["sub"] == verified_user.email
+    assert access_token_payload["sub"] == valid_user.email
     assert access_token_payload["zoneinfo"] == settings.TIME_ZONE
     assert (
         access_token_payload["exp"]
@@ -64,7 +64,7 @@ def test_obtain_token_with_valid_credentials_succeeds_and_token_is_valid(client,
     refresh_token_payload: dict = jwt.decode(
         token=refresh_token, key=settings.SECRET_KEY, algorithms=[tokens.DEFAULT_JWT_TOKEN_ALGORITHM]
     )
-    assert refresh_token_payload["sub"] == verified_user.email
+    assert refresh_token_payload["sub"] == valid_user.email
     assert refresh_token_payload["zoneinfo"] == settings.TIME_ZONE
     assert (
         refresh_token_payload["exp"]
@@ -74,12 +74,12 @@ def test_obtain_token_with_valid_credentials_succeeds_and_token_is_valid(client,
 
 
 @pytest.mark.django_db
-def test_login_with_valid_credentials_gains_access(client, verified_user, valid_password: str):
+def test_login_with_valid_credentials_gains_access(client, valid_user, valid_password: str):
     # Check that the user cannot access the protected endpoint without being authorized at all
     response = client.get(f"/{settings.API_BASE_URL}/protectiontest/")
     assert response.status_code == 401
     # Obtain an access token
-    login_payload = {"email": f"{verified_user.email}", "password": valid_password}
+    login_payload = {"email": f"{valid_user.email}", "password": valid_password}
     login_response = client.post(f"/{settings.API_BASE_URL}/auth/token/", json=login_payload)
     assert login_response.status_code == 200
     # Try to access a protected endpoint with authorized user
@@ -90,12 +90,12 @@ def test_login_with_valid_credentials_gains_access(client, verified_user, valid_
 
 
 @pytest.mark.django_db
-def test_login_with_valid_credentials_and_missing_permissions_fails(client, verified_user, valid_password: str):
+def test_login_with_valid_credentials_and_missing_permissions_fails(client, valid_user, valid_password: str):
     # Check that the user cannot access the protected endpoint without being authorized at all
     response = client.get(f"/{settings.API_BASE_URL}/adminprotectiontest/")
     assert response.status_code == 401
     # Obtain an access token
-    login_payload = {"email": f"{verified_user.email}", "password": valid_password}
+    login_payload = {"email": f"{valid_user.email}", "password": valid_password}
     login_response = client.post(f"/{settings.API_BASE_URL}/auth/token/", json=login_payload)
     assert login_response.status_code == 200
     # Try to access a protected endpoint with authorized user
@@ -107,14 +107,14 @@ def test_login_with_valid_credentials_and_missing_permissions_fails(client, veri
 
 
 @pytest.mark.django_db
-def test_login_with_valid_credentials_and_correct_permissions_succeeds(
-    client, verified_admin_user, valid_password: str
+def test_admin_login_with_valid_credentials_and_correct_permissions_succeeds(
+    client, valid_admin_user, valid_password: str
 ):
     # Check that the user cannot access the protected endpoint without being authorized at all
     response = client.get(f"/{settings.API_BASE_URL}/adminprotectiontest/")
     assert response.status_code == 401
     # Obtain an access token
-    login_payload = {"email": f"{verified_admin_user.email}", "password": valid_password}
+    login_payload = {"email": f"{valid_admin_user.email}", "password": valid_password}
     login_response = client.post(f"/{settings.API_BASE_URL}/auth/token/", json=login_payload)
     assert login_response.status_code == 200
     # Try to access a protected endpoint with authorized user
@@ -128,9 +128,9 @@ def test_login_with_valid_credentials_and_correct_permissions_succeeds(
 
 
 @pytest.mark.django_db
-def test_verify_access_token_succeeds(client, verified_user, valid_password: str):
+def test_verify_access_token_succeeds(client, valid_user, valid_password: str):
     # Obtain an access token
-    login_payload = {"email": f"{verified_user.email}", "password": valid_password}
+    login_payload = {"email": f"{valid_user.email}", "password": valid_password}
     login_response = client.post(f"/{settings.API_BASE_URL}/auth/token/", json=login_payload)
     assert login_response.status_code == 200
     # Verify the token
@@ -141,14 +141,14 @@ def test_verify_access_token_succeeds(client, verified_user, valid_password: str
 
 
 @pytest.mark.django_db
-def test_verify_access_token_succeeds_fails_with_user_deactivated(client, verified_user, valid_password: str):
+def test_verify_access_token_succeeds_fails_with_user_deactivated(client, valid_user, valid_password: str):
     # Obtain an access token
-    login_payload = {"email": f"{verified_user.email}", "password": valid_password}
+    login_payload = {"email": f"{valid_user.email}", "password": valid_password}
     login_response = client.post(f"/{settings.API_BASE_URL}/auth/token/", json=login_payload)
     assert login_response.status_code == 200
     # Deactivate the user
-    verified_user.is_active = False
-    verified_user.save()
+    valid_user.is_active = False
+    valid_user.save()
     # Verify the token
     token = login_response.cookies["Authentication"].value.removeprefix(f"{tokens.DEFAULT_JWT_TOKEN_PREFIX} ")
     headers = {"Authorization": f"Bearer {token}"}
@@ -157,8 +157,24 @@ def test_verify_access_token_succeeds_fails_with_user_deactivated(client, verifi
 
 
 @pytest.mark.django_db
-def test_obtain_token_with_invalid_credentials_fails(client, verified_user, invalid_password: str):
-    payload = {"email": verified_user.email, "password": invalid_password}
+def test_verify_access_token_succeeds_fails_with_user_inverified(client, valid_user, valid_password: str):
+    # Obtain an access token
+    login_payload = {"email": f"{valid_user.email}", "password": valid_password}
+    login_response = client.post(f"/{settings.API_BASE_URL}/auth/token/", json=login_payload)
+    assert login_response.status_code == 200
+    # Deactivate the user
+    valid_user.verified = False
+    valid_user.save()
+    # Verify the token
+    token = login_response.cookies["Authentication"].value.removeprefix(f"{tokens.DEFAULT_JWT_TOKEN_PREFIX} ")
+    headers = {"Authorization": f"Bearer {token}"}
+    response = client.post(f"/{settings.API_BASE_URL}/auth/token/verify/", headers=headers)
+    assert response.status_code == 401
+
+
+@pytest.mark.django_db
+def test_obtain_token_with_invalid_credentials_fails(client, valid_user, invalid_password: str):
+    payload = {"email": valid_user.email, "password": invalid_password}
     url = f"/{settings.API_BASE_URL}/auth/token/"
     response = client.post(url, json=payload)
     assert response.status_code == 401
@@ -166,7 +182,37 @@ def test_obtain_token_with_invalid_credentials_fails(client, verified_user, inva
 
 
 @pytest.mark.django_db
-def test_obtain_token_with_inactive_user_fails(client, unverified_user, valid_password: str):
+def test_obtain_token_with_active_user_fails(client, active_user, valid_password: str):
+    """
+    Active or Verified should not be enough, both should be required
+    """
+    payload = {"email": active_user.email, "password": valid_password}
+    response = client.post(f"/{settings.API_BASE_URL}/auth/token/", json=payload)
+    assert response.status_code == 401
+    assert response.json()["error"] == MSG_AUTHENTICATION_FAILED
+
+
+@pytest.mark.django_db
+def test_obtain_token_with_inactive_user_fails(client, inactive_user, valid_password: str):
+    payload = {"email": inactive_user.email, "password": valid_password}
+    response = client.post(f"/{settings.API_BASE_URL}/auth/token/", json=payload)
+    assert response.status_code == 401
+    assert response.json()["error"] == MSG_AUTHENTICATION_FAILED
+
+
+@pytest.mark.django_db
+def test_obtain_token_with_verified_user_fails(client, verified_user, valid_password: str):
+    """
+    Active or Verified should not be enough, both should be required
+    """
+    payload = {"email": verified_user.email, "password": valid_password}
+    response = client.post(f"/{settings.API_BASE_URL}/auth/token/", json=payload)
+    assert response.status_code == 401
+    assert response.json()["error"] == MSG_AUTHENTICATION_FAILED
+
+
+@pytest.mark.django_db
+def test_obtain_token_with_unverified_user_fails(client, unverified_user, valid_password: str):
     payload = {"email": unverified_user.email, "password": valid_password}
     response = client.post(f"/{settings.API_BASE_URL}/auth/token/", json=payload)
     assert response.status_code == 401
@@ -175,10 +221,10 @@ def test_obtain_token_with_inactive_user_fails(client, unverified_user, valid_pa
 
 @pytest.mark.django_db
 def test_obtain_a_fresh_access_token_with_invalid_refresh_token_fails(
-    client, invalid_refresh_token, verified_user, valid_password: str
+    client, invalid_refresh_token, valid_user, valid_password: str
 ):
     # Obtain an access token
-    login_payload = {"email": f"{verified_user.email}", "password": valid_password}
+    login_payload = {"email": f"{valid_user.email}", "password": valid_password}
     login_response = client.post(f"/{settings.API_BASE_URL}/auth/token/", json=login_payload)
     assert login_response.status_code == 200
     payload = {"refresh": invalid_refresh_token}
@@ -187,9 +233,9 @@ def test_obtain_a_fresh_access_token_with_invalid_refresh_token_fails(
 
 
 @pytest.mark.django_db
-def test_access_with_expired_access_token_fails(client, verified_user, valid_password: str):
+def test_access_with_expired_access_token_fails(client, valid_user, valid_password: str):
     # Obtain an access token
-    login_payload = {"email": f"{verified_user.email}", "password": valid_password}
+    login_payload = {"email": f"{valid_user.email}", "password": valid_password}
     now = timezone.now()
     login_response = client.post(f"/{settings.API_BASE_URL}/auth/token/", json=login_payload)
     assert login_response.status_code == 200
@@ -203,9 +249,9 @@ def test_access_with_expired_access_token_fails(client, verified_user, valid_pas
 
 
 @pytest.mark.django_db
-def test_obtain_a_fresh_access_token_with_valid_refresh_token_succeeds(client, verified_user, valid_password: str):
+def test_obtain_a_fresh_access_token_with_valid_refresh_token_succeeds(client, valid_user, valid_password: str):
     # Obtain an access token
-    login_payload = {"email": f"{verified_user.email}", "password": valid_password}
+    login_payload = {"email": f"{valid_user.email}", "password": valid_password}
     now = timezone.now()
     login_response = client.post(f"/{settings.API_BASE_URL}/auth/token/", json=login_payload)
     assert login_response.status_code == 200
@@ -241,7 +287,7 @@ def test_obtain_a_fresh_access_token_with_valid_refresh_token_succeeds(client, v
     access_token_payload: dict = jwt.decode(
         token=access_token, key=settings.SECRET_KEY, algorithms=[tokens.DEFAULT_JWT_TOKEN_ALGORITHM]
     )
-    assert access_token_payload["sub"] == verified_user.email
+    assert access_token_payload["sub"] == valid_user.email
     assert access_token_payload["zoneinfo"] == settings.TIME_ZONE
     assert (
         access_token_payload["exp"]
@@ -254,7 +300,7 @@ def test_obtain_a_fresh_access_token_with_valid_refresh_token_succeeds(client, v
     refresh_token_payload: dict = jwt.decode(
         token=refresh_token, key=settings.SECRET_KEY, algorithms=[tokens.DEFAULT_JWT_TOKEN_ALGORITHM]
     )
-    assert refresh_token_payload["sub"] == verified_user.email
+    assert refresh_token_payload["sub"] == valid_user.email
     assert refresh_token_payload["zoneinfo"] == settings.TIME_ZONE
     assert (
         refresh_token_payload["exp"]
@@ -264,9 +310,9 @@ def test_obtain_a_fresh_access_token_with_valid_refresh_token_succeeds(client, v
 
 
 @pytest.mark.django_db
-def test_obtain_a_fresh_access_token_with_expired_refresh_token_fails(client, verified_user, valid_password: str):
+def test_obtain_a_fresh_access_token_with_expired_refresh_token_fails(client, valid_user, valid_password: str):
     # Obtain an access token
-    login_payload = {"email": f"{verified_user.email}", "password": valid_password}
+    login_payload = {"email": f"{valid_user.email}", "password": valid_password}
 
     now = timezone.now()
     login_response = client.post(f"/{settings.API_BASE_URL}/auth/token/", json=login_payload)
@@ -283,9 +329,9 @@ def test_obtain_a_fresh_access_token_with_expired_refresh_token_fails(client, ve
 
 
 @pytest.mark.django_db
-def test_just_login_with_refresh_token_as_access_token_fails(client, verified_user, valid_password: str):
+def test_just_login_with_refresh_token_as_access_token_fails(client, valid_user, valid_password: str):
     # Obtain an access token
-    login_payload = {"email": f"{verified_user.email}", "password": valid_password}
+    login_payload = {"email": f"{valid_user.email}", "password": valid_password}
     login_response = client.post(f"/{settings.API_BASE_URL}/auth/token/", json=login_payload)
     assert login_response.status_code == 200
     # login with refresh token as access token
@@ -296,9 +342,9 @@ def test_just_login_with_refresh_token_as_access_token_fails(client, verified_us
 
 
 @pytest.mark.django_db
-def test_cant_refresh_with_accesstoken(client, verified_user, valid_password: str):
+def test_cant_refresh_with_accesstoken(client, valid_user, valid_password: str):
     # Obtain the access token
-    login_payload = {"email": f"{verified_user.email}", "password": valid_password}
+    login_payload = {"email": f"{valid_user.email}", "password": valid_password}
     login_response = client.post(f"/{settings.API_BASE_URL}/auth/token/", json=login_payload)
     assert login_response.status_code == 200
 
@@ -315,9 +361,9 @@ def test_cant_refresh_with_accesstoken(client, verified_user, valid_password: st
 
 
 @pytest.mark.django_db
-def test_cant_access_after_logout(client, verified_user, valid_password: str):
+def test_cant_access_after_logout(client, valid_user, valid_password: str):
     # Obtain the access token
-    login_payload = {"email": f"{verified_user.email}", "password": valid_password}
+    login_payload = {"email": f"{valid_user.email}", "password": valid_password}
     login_response = client.post(f"/{settings.API_BASE_URL}/auth/token/", json=login_payload)
     assert login_response.status_code == 200
 
@@ -339,9 +385,9 @@ def test_cant_access_after_logout(client, verified_user, valid_password: str):
 
 
 @pytest.mark.django_db
-def test_cant_refresh_after_logout_with_wrong_payload(client, verified_user, valid_password: str):
+def test_cant_refresh_after_logout_with_wrong_payload(client, valid_user, valid_password: str):
     # Obtain the access token
-    login_payload = {"email": f"{verified_user.email}", "password": valid_password}
+    login_payload = {"email": f"{valid_user.email}", "password": valid_password}
     now = timezone.now()
     login_response = client.post(f"/{settings.API_BASE_URL}/auth/token/", json=login_payload)
     auth_cookie: cookies.Morsel = login_response.cookies["Authentication"]
@@ -365,7 +411,7 @@ def test_cant_refresh_after_logout_with_wrong_payload(client, verified_user, val
         # create another valid token
         new_token = tokens.jwt_token(
             tokentype="refresh",
-            email=verified_user.email,
+            email=valid_user.email,
             now=timezone.now(),
             expires_in=tokens.DEFAULT_JWT_TOKEN_ACCESS_EXPIRATION_MINUTES,
         )
@@ -378,13 +424,13 @@ def test_cant_refresh_after_logout_with_wrong_payload(client, verified_user, val
 
 
 @pytest.mark.django_db
-def test_cant_refresh_after_logout_with_payload(client, verified_user, valid_password: str):
+def test_cant_refresh_after_logout_with_payload(client, valid_user, valid_password: str):
     # Obtain the access token
-    login_payload = {"email": f"{verified_user.email}", "password": valid_password}
+    login_payload = {"email": f"{valid_user.email}", "password": valid_password}
     login_response = client.post(f"/{settings.API_BASE_URL}/auth/token/", json=login_payload)
     assert login_response.status_code == 200
     # Logout
-    payload = {"email": f"{verified_user.email}", "refresh": login_response.json()["refresh"]}
+    payload = {"email": f"{valid_user.email}", "refresh": login_response.json()["refresh"]}
 
     response = client.post(f"/{settings.API_BASE_URL}/auth/token/logout/", json=payload)
     assert response.status_code == 200

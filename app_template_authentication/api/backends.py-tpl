@@ -14,7 +14,6 @@ MSG_AUTHENTICATION_FAILED = "Authentication failed"
 MSG_VERIFICATION_FAILED = "Verification failed"
 
 
-
 class JWTAuthentication(authentication.BaseAuthentication):
     """
     All authentication classes should extend BaseAuthentication.
@@ -68,7 +67,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
             assert user is not None
         except AssertionError:
             raise credentials_exception
-        if not user.is_active:
+        if not (user.verified and user.is_active):
             raise credentials_exception
         return user, token
 

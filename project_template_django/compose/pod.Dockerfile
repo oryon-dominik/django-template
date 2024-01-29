@@ -48,7 +48,7 @@ RUN echo "export PATH=${PATH}" >> /root/.bashrc
 RUN python -m pip install --upgrade pip \
     && curl -sSL https://install.python-poetry.org | python -
 
-COPY . /app
+COPY ./entrypoint.sh /app
 
 WORKDIR /app
 

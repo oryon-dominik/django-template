@@ -12,8 +12,8 @@ from test.fixtures.inout import (  # noqa # pylint: disable=unused-import
 )
 from test.fixtures.users import (  # noqa # pylint: disable=unused-import
     user,
-    verified_user,
-    unverified_user,
+    active_user,
+    inactive_user,
     valid_password,
 )
 from test.fixtures.vcr import (  # noqa # pylint: disable=unused-import

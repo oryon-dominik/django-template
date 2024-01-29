@@ -1,0 +1,108 @@
+import pytest
+from django.urls import reverse
+
+
+@pytest.mark.django_db
+def test_default_user_behaves_as_expected(user):
+    """
+    Test default behaviour of 'default' user fixture behaves as expected.
+    """
+    assert not user.is_active
+    assert not user.verified
+
+
+@pytest.mark.django_db
+def test_valid_user_behaves_as_expected(valid_user):
+    """
+    Test default behaviour of 'default' user fixture behaves as expected.
+    """
+    assert valid_user.is_active
+    assert valid_user.verified
+
+
+@pytest.mark.django_db
+def test_active_user_is_correct(active_user):
+    assert active_user.is_active
+    assert not active_user.verified
+
+
+@pytest.mark.django_db
+def test_inactive_user_is_correct(inactive_user):
+    assert not inactive_user.is_active
+    assert not inactive_user.verified
+
+
+@pytest.mark.django_db
+def test_verified_user_is_correct(verified_user):
+    assert verified_user.verified
+    assert not verified_user.is_active
+
+
+@pytest.mark.django_db
+def test_unverified_user_is_correct(unverified_user):
+    assert not unverified_user.verified
+    assert not unverified_user.is_active
+
+
+@pytest.mark.django_db
+def test_protected_view_unauthenticated_redirects(client):
+    url = reverse("accounts:protectiontest")
+    r = client.get(url)
+    assert r.status_code == 302
+    redirected_to = f"{reverse('accounts:login')}?next={url}"
+    assert r.url == redirected_to
+
+
+@pytest.mark.django_db
+def test_protected_view_valid_user_and_login_works(client, valid_user):
+    url = reverse("accounts:protectiontest")
+    client.force_login(user=valid_user)
+    r = client.get(url)
+    assert r.status_code == 200
+    assert r.json()["planets"] == ["mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune"]
+
+
+@pytest.mark.django_db
+def test_protected_view_active_user_is_not_enough(client, active_user):
+    """
+    Active or Verified should not be enough, both should be required
+    """
+    url = reverse("accounts:protectiontest")
+    client.force_login(user=active_user)
+    r = client.get(url)
+    assert r.status_code == 302
+    redirected_to = f"{reverse('accounts:login')}?next={url}"
+    assert r.url == redirected_to
+
+
+@pytest.mark.django_db
+def test_protected_view_does_not_work_with_inactive_user(client, inactive_user):
+    url = reverse("accounts:protectiontest")
+    client.force_login(user=inactive_user)
+    r = client.get(url)
+    assert r.status_code == 302
+    redirected_to = f"{reverse('accounts:login')}?next={url}"
+    assert r.url == redirected_to
+
+
+@pytest.mark.django_db
+def test_protected_view_verified_user_is_not_enough(client, verified_user):
+    """
+    Active or Verified should not be enough, both should be required
+    """
+    url = reverse("accounts:protectiontest")
+    client.force_login(user=verified_user)
+    r = client.get(url)
+    assert r.status_code == 302
+    redirected_to = f"{reverse('accounts:login')}?next={url}"
+    assert r.url == redirected_to
+
+
+@pytest.mark.django_db
+def test_protected_view_does_not_work_with_unverified_user(client, unverified_user):
+    url = reverse("accounts:protectiontest")
+    client.force_login(user=unverified_user)
+    r = client.get(url)
+    assert r.status_code == 302
+    redirected_to = f"{reverse('accounts:login')}?next={url}"
+    assert r.url == redirected_to
