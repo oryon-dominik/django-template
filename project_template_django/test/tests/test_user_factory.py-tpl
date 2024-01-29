@@ -2,13 +2,13 @@ import pytest
 
 
 @pytest.mark.django_db(transaction=True)
-def test_fixture_users_passwords_were_set_correctly(verified_user, unverified_user, valid_password):
-    assert verified_user.check_password(raw_password=valid_password), "Password shall be valid."
-    assert unverified_user.check_password(raw_password=valid_password), "Password shall be valid."
+def test_fixture_users_passwords_were_set_correctly(active_user, inactive_user, valid_password):
+    assert active_user.check_password(raw_password=valid_password), "Password shall be valid."
+    assert inactive_user.check_password(raw_password=valid_password), "Password shall be valid."
 
 
 @pytest.mark.django_db(transaction=True)
-def test_and_again_user_data(user, verified_user, unverified_user):
+def test_and_again_user_data(user, active_user, inactive_user):
     """The user fixture shall not be overwritten by other user fixtures."""
-    assert user.email != verified_user.email, "Emails shall be different."
-    assert user.email != unverified_user.email, "Emails shall be different."
+    assert user.email != active_user.email, "Emails shall be different."
+    assert user.email != inactive_user.email, "Emails shall be different."

@@ -5,10 +5,13 @@
 from test.fixtures.users import (  # noqa # pylint: disable=unused-import
     user,
     active_user,
+    verified_user,
+    unverified_user,
     inactive_user,
     valid_password,
+    valid_user,
 )
-from test.fixtures.vcr import (  # noqa # pylint: disable=unused-import
-    vcr_config,
-    vcr_cassette_dir,
+
+from test.fixtures.clients import (  # noqa # pylint: disable=unused-import
+    client,
 )

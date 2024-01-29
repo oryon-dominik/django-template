@@ -11,7 +11,7 @@ from core.cypher import tokens
 
 
 @pytest.fixture
-def invalid_refresh_token(verified_user) -> Generator[tokens.JWTAccessToken, None, None]:
+def invalid_refresh_token(active_user) -> Generator[tokens.JWTAccessToken, None, None]:
     """
     Encode a new refresh token with an invalid secret key.
     """
@@ -19,7 +19,7 @@ def invalid_refresh_token(verified_user) -> Generator[tokens.JWTAccessToken, Non
     claims = {
         "iss": settings.PROJECT_FQDN,
         "exp": now + timedelta(minutes=tokens.DEFAULT_JWT_TOKEN_REFRESH_EXPIRATION_MINUTES),
-        "sub": verified_user.email,
+        "sub": active_user.email,
         "iat": now,
         "zoneinfo": settings.TIME_ZONE,
     }
@@ -33,7 +33,7 @@ def invalid_refresh_token(verified_user) -> Generator[tokens.JWTAccessToken, Non
 
 
 @pytest.fixture
-def valid_refresh_token(verified_user) -> Generator[tokens.JWTAccessToken, None, None]:
+def valid_refresh_token(active_user) -> Generator[tokens.JWTAccessToken, None, None]:
     """
     Encode a new refresh token with a valid secret key.
     """
@@ -41,7 +41,7 @@ def valid_refresh_token(verified_user) -> Generator[tokens.JWTAccessToken, None,
     claims = {
         "iss": settings.PROJECT_FQDN,
         "exp": now + timedelta(minutes=tokens.DEFAULT_JWT_TOKEN_REFRESH_EXPIRATION_MINUTES),
-        "sub": verified_user.email,
+        "sub": active_user.email,
         "iat": now,
         "zoneinfo": settings.TIME_ZONE,
     }
