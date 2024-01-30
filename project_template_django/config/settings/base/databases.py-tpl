@@ -101,34 +101,46 @@ def define_databases(env: Env) -> dict:
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# REDIS_OPTIONS = {
+#     "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#     # http://niwinz.github.io/django-redis/latest/#_memcached_exceptions_behavior,
+#     "IGNORE_EXCEPTIONS": True,  # mimics memcache behavior.
+#     # connection pool kwargs to configure the use of certificates
+#     "CONNECTION_POOL_KWARGS": {
+#         # "ssl_cert_reqs": None
+#         # 'ssl_ca_certs': REDIS_CA_FILE,
+#         # 'ssl_certfile': REDIS_CERT_FILE,
+#         # 'ssl_keyfile': REDIS_KEY_FILE,
+#     },
+# }
+
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "unique-snowflake-{{ project_name }}--cache",
-    },
-    "redis": {
-        "LOCATION": "unique-snowflake-{{ project_name }}--locmem-fake-redis-cache",
+        "LOCATION": "{{ project_name }}--default-cache",
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         # "BACKEND": "django_redis.cache.RedisCache",
-        # "OPTIONS": {
-        #     "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        #     # http://niwinz.github.io/django-redis/latest/#_memcached_exceptions_behavior,
-        #     "IGNORE_EXCEPTIONS": True,  # mimics memcache behavior.
-        #     # connection pool kwargs to configure the use of certificates
-        #     "CONNECTION_POOL_KWARGS": {
-        #         # "ssl_cert_reqs": None
-        #         # 'ssl_ca_certs': REDIS_CA_FILE,
-        #         # 'ssl_certfile': REDIS_CERT_FILE,
-        #         # 'ssl_keyfile': REDIS_KEY_FILE,
-        #     },
+        # "OPTIONS": REDIS_OPTIONS,
+    },
+    "sessions": {
+        "LOCATION": "{{ project_name }}--sessions-cache",
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        # "BACKEND": "django_redis.cache.RedisCache",
+        # "OPTIONS": REDIS_OPTIONS,
+    },
+    "redis": {
+        "LOCATION": "{{ project_name }}--locmem-fake-redis-cache",
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        # "BACKEND": "django_redis.cache.RedisCache",
+        # "OPTIONS": REDIS_OPTIONS,
         # },
     },
     "jwt-blacklist": {
+        "LOCATION": "{{ project_name }}--blacklisted-jwts-cache",
         # ! this is not thread-safe and not recommended, if you use multiple workers
         # 'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         # ! this is slow in production. Maybe use redis or memcached
         "BACKEND": "django.core.cache.backends.db.DatabaseCache",
         # "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "blacklisted_jwts_cache",
+        # "OPTIONS": REDIS_OPTIONS,
     },
 }
