@@ -24,3 +24,21 @@ Have a look at the config files (postgres 15)
 
     docker exec -it {{ project_name }}_postgres cat /var/lib/postgresql/data/postgresql.conf
     docker exec -it {{ project_name }}_postgres cat /var/lib/postgresql/data/pg_hba.conf
+
+
+## add an extension
+
+Create an empty migration. Then add the extension to the migration file.
+```bash
+python manage.py makemigrations chat --name postgres_extension_pgvector --empty
+```
+
+```python
+from django.contrib.postgres.operations import CreateExtension
+# Some of the extensions are available in django.contrib.postgres.operations as direct imports.
+
+operations = [
+    CreateExtension('pgvector'),
+]
+```
+Migrate :)
