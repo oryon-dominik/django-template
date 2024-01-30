@@ -107,10 +107,9 @@ CACHES = {
         "LOCATION": "unique-snowflake-{{ project_name }}--cache",
     },
     "redis": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         "LOCATION": "unique-snowflake-{{ project_name }}--locmem-fake-redis-cache",
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         # "BACKEND": "django_redis.cache.RedisCache",
-        # "LOCATION": "",
         # "OPTIONS": {
         #     "CLIENT_CLASS": "django_redis.client.DefaultClient",
         #     # http://niwinz.github.io/django-redis/latest/#_memcached_exceptions_behavior,
@@ -129,6 +128,7 @@ CACHES = {
         # 'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         # ! this is slow in production. Maybe use redis or memcached
         "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        # "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "blacklisted_jwts_cache",
     },
 }
