@@ -28,6 +28,9 @@ Have a look at the config files (postgres 15)
 
 ## add an extension
 
+Ensure your migrations are installed in the postgres system. For some you need an updated `Dockerfile`.
+sometimes it's as easy as just replacing the baseimages in the compose files with `image: pgvector/pgvector:pg16`.
+
 Create an empty migration. Then add the extension to the migration file.
 ```bash
 python manage.py makemigrations chat --name postgres_extension_pgvector --empty
