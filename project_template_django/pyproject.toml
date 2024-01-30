@@ -186,14 +186,14 @@ exclude = [
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "config.settings.test"
 # The addopts enforces calling single tests with: pytest apps/myapp/tests.py::test_mytest
-addopts = "-m 'not slow' -p no:warnings --instafail --vcr-record=none --cov --"
+addopts = "-m 'not slow' -p no:warnings --basetemp=./temp --instafail --vcr-record=none --cov --"
 python_files = "tests.py test_*.py *_tests.py"
 norecursedirs = ".git staticfiles docs assets logs media notebooks temp"
 xfail_strict = true
 
 [tool.coverage.run]
 branch = true
-source = ["apps"]
+source = ["apps"]  # + ["core"]
 omit = ["apps/*/tests/*", "apps/*/migrations/*"]
 command_line = "-m pytest"
 

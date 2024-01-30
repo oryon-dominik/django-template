@@ -2,6 +2,14 @@
 # so, ignore linting errors for unused imports
 # ruff: noqa: F401
 
+from test.fixtures.inout import (  # noqa # pylint: disable=unused-import
+    tempdir,
+    filledtempdir,
+    testfile,
+    testfile_with_syntax_error,
+    testcontent,
+    testcontent_with_syntax_error,
+)
 from test.fixtures.users import (  # noqa # pylint: disable=unused-import
     user,
     active_user,

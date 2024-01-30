@@ -1,0 +1,70 @@
+import shutil
+from pathlib import Path
+from typing import NamedTuple
+
+import pytest
+
+
+class TempfileContainer(NamedTuple):
+    """Container for a temporary file."""
+
+    path: Path
+    content: str
+
+
+
+@pytest.fixture
+def tempdir(tmp_path):
+    """
+    Create a temporary directory for testing.
+    Defaults: to settings / BASE_DIR / "./temp" (via pyproject.toml).
+    """
+    yield tmp_path
+    # Delete everything reachable from the directory "tmp_path".
+    # "tmp_path" should be a pytest dir inside the systems default temporary directory.
+    # CAUTION:  This is dangerous! For example, if tmp_path == Path('/'),
+    # it could delete all of your files.
+    shutil.rmtree(tmp_path, ignore_errors=True)
+
+
+@pytest.fixture
+def filledtempdir(tempdir):
+    """Add some files and folders to a temporary directory."""
+    # Create some temporary files
+    file1 = tempdir / "file1.txt"
+    file2 = tempdir / "file2.txt"
+    file1.touch()
+    file2.touch()
+
+    # # Create a subdirectory
+    sub_dir = tempdir / "sub"
+    sub_dir.mkdir()
+
+    # # Create a file inside the subdirectory
+    sub_file = sub_dir / "file.txt"
+    sub_file.touch()
+    yield tempdir
+
+
+@pytest.fixture
+def testcontent():
+    yield "Hello {% verbatim %}{{ name }}{% endverbatim %}"
+
+
+@pytest.fixture
+def testcontent_with_syntax_error():
+    yield "Hello {% verbatim %}{{ name }{% endverbatim %}"
+
+
+@pytest.fixture
+def testfile(tmp_path_factory, testcontent):
+    testfile = tmp_path_factory.mktemp("test_files").joinpath("test.txt")
+    testfile.write_text(testcontent)
+    yield TempfileContainer(path=testfile, content=testcontent)
+
+
+@pytest.fixture
+def testfile_with_syntax_error(tmp_path_factory, testcontent_with_syntax_error):
+    testfile = tmp_path_factory.mktemp("test_files").joinpath("test.txt")
+    testfile.write_text(testcontent_with_syntax_error)
+    yield TempfileContainer(path=testfile, content=testcontent_with_syntax_error)

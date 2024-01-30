@@ -1,0 +1,61 @@
+from pathlib import Path
+
+import pytest
+
+from core.inout import files
+
+
+def test_read_from_disk_existing_file(testfile):
+    content = files.read_from_disk(testfile.path)
+    assert content == testfile.content
+
+
+def test_read_from_disk_nonexisting_file():
+    with pytest.raises(FileNotFoundError, match=r"does not exist."):
+        files.read_from_disk(Path("non_existing_file.txt"))
+    content = files.read_from_disk(Path("non_existing_file.tex"), panic=False)
+    assert content == ""
+
+
+def test_write_to_disk(tempdir, testcontent):
+    file_path = tempdir / "test.txt"
+    success = files.write_to_disk(file_path, testcontent)
+    assert success
+    assert file_path.exists()
+    assert file_path.read_text() == testcontent
+
+
+def test_unlink_existing_file(tempdir):
+    file_path = tempdir / "test.txt"
+    file_path.touch()
+    assert file_path.exists()
+    success = files.unlink(file_path)
+    assert success
+    assert not file_path.exists()
+
+
+def test_unlink_nonexisting_file(tempdir):
+    file_path = tempdir / Path("non_existing_file.txt")
+    with pytest.raises(FileNotFoundError, match=r"An OS error occurred while deleting the file."):
+        files.unlink(file_path)
+    success = files.unlink(file_path, panic=False)
+    assert not success
+
+
+def test_jinja_replace_context_success(testfile):
+    # Test jinja_replace_context function with successful jinja rendering
+    context = {"name": "Alice"}
+    success = files.jinja_replace_context(path=testfile.path, context=context)
+    assert success
+    content = testfile.path.read_text()
+    assert testfile.content.replace("{% verbatim %}{{ name }}{% endverbatim %}", context["name"]) in content
+
+
+def test_jinja_replace_context_syntax_error(testfile_with_syntax_error):
+    # Test jinja_replace_context function with jinja syntax error
+    context = {"name": "Alice"}
+    success = files.jinja_replace_context(path=testfile_with_syntax_error.path, context=context)
+    assert not success
+    content = testfile_with_syntax_error.path.read_text()
+    assert testfile_with_syntax_error.content.replace("{% verbatim %}{{ name }}{% endverbatim %}", context["name"]) == content
+    assert context["name"] not in content

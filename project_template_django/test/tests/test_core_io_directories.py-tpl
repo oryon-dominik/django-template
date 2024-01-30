@@ -1,0 +1,78 @@
+import pytest
+
+from core.inout import directories
+
+
+def test_delete_tree(filledtempdir):
+    assert filledtempdir.exists()
+    assert filledtempdir.parent.exists()
+    # Delete the entire directory
+    directories.delete_tree(filledtempdir)
+    # # Assert that the directory and all its contents are deleted
+    assert not filledtempdir.exists()
+
+
+def test_delete_folder(filledtempdir, caplog):
+    # Try to delete the folder.
+    with pytest.raises(ValueError, match=r"is not empty."):
+        directories.delete_folder(filledtempdir)
+    assert "is not empty" in caplog.text
+
+    subdir = filledtempdir / "sub"
+    # Delete the folder and its contents.
+    (subdir / "file.txt").unlink()
+    directories.delete_folder(subdir)
+    # Assert that the folder is deleted
+    assert not subdir.exists()
+
+
+def test_delete_folder_nonexistent_panic(tempdir, caplog):
+    # Try to delete a folder that does not exist
+    folder = tempdir / "nonexistent"
+    with pytest.raises(FileNotFoundError, match=r"does not exist."):
+        directories.delete_folder(folder)
+    # Assert that a FileNotFoundError is logged
+    assert "does not exist" in caplog.text
+
+
+def test_delete_folder_nonexistent_nopanic(tempdir, caplog):
+    # Try to delete a folder that does not exist
+    folder = tempdir / "nonexistent"
+    # Try to delete a folder that does not exist, but with panic=False
+    directories.delete_folder(folder, panic=False)
+    # Assert that a FileNotFoundError is logged
+    assert "does not exist" in caplog.text
+
+
+def test_delete_folder_not_directory(tempdir, caplog):
+    # Create a file instead of a folder
+    file = tempdir / "file.txt"
+    file.touch()
+    # Try to delete the file
+    with pytest.raises(ValueError, match=r"is not a directory."):
+        directories.delete_folder(file)
+    # Assert that a ValueError is logged
+    assert "is not a directory" in caplog.text
+
+
+def test_temporary_directory(tempdir):
+    # Create a TemporaryDirectory
+    new = tempdir / "new"
+    with directories.TemporaryDirectory(directory=new) as temp_dir_path:
+        # Assert that the temporary directory is created
+        assert temp_dir_path.exists()
+        assert temp_dir_path.is_dir()
+        assert temp_dir_path.parent == new
+        assert new.exists()
+
+    # Assert that the temporary directory is deleted
+    assert not temp_dir_path.exists()
+
+
+def test_temporary_directory_with_keep(tempdir):
+    # Create a TemporaryDirectory with keep=True
+    with directories.TemporaryDirectory(directory=tempdir, keep=True) as temp_dir_path:
+        # Assert that the temporary directory is created
+        assert temp_dir_path.exists()
+    # Assert that the temporary directory is not deleted
+    assert temp_dir_path.exists()
