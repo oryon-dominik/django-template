@@ -29,7 +29,7 @@ Have a look at the config files (postgres 15)
 ## add an extension
 
 Ensure your migrations are installed in the postgres system. For some you need an updated `Dockerfile`.
-sometimes it's as easy as just replacing the baseimages in the compose files with `image: pgvector/pgvector:pg16`.
+sometimes it's as easy as just replacing the baseimages in the compose files with `image: ankane/pgvector`.
 
 Create an empty migration. Then add the extension to the migration file.
 ```bash
@@ -41,7 +41,7 @@ from django.contrib.postgres.operations import CreateExtension
 # Some of the extensions are available in django.contrib.postgres.operations as direct imports.
 
 operations = [
-    CreateExtension('pgvector'),
+    CreateExtension('vector'),
 ]
 ```
 Migrate :)
