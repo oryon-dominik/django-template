@@ -93,9 +93,9 @@
   {% endblock messages %}
 
   {% block body %}
-  <container id="body" class="flex items-center grow">
+  <container id="body" class="flex grow">
     {% block outer_content %}
-    <content id="content">
+    <content id="content" class="flex grow">
       {% block content %}
       {% endblock content %}
       {% block extra_content %}
