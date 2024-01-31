@@ -2,7 +2,7 @@ projects:
   - name: '{{ project_name }}' # Name may contain lowercase letters, spaces, numbers, hyphens, and underscores
     description: '{{ project_name }} description'
 
-    # probably all dotenv examples should be here.. and setup develop and prod envs, manually add the secrets on doppler after 
+    # probably all dotenv examples should be here.. and setup develop and prod envs, manually add the secrets on doppler after
 
     # List of totally customizable environments, e.g Test, Stage, QA, CI-CD
     environments:
