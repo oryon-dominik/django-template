@@ -83,6 +83,9 @@ from .static import (
 from .sessions import (
     SESSION_EXPIRE_AT_BROWSER_CLOSE,
     SESSION_COOKIE_AGE,
+    SESSION_CACHE_ALIAS,
+    SESSION_ENGINE,
+    SESSION_COOKIE_HTTPONLY,
 )
 from .templates import TEMPLATES
 from .urlconf import (

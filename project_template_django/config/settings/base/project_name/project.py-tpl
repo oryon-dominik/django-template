@@ -27,3 +27,10 @@ def define_project(env: Env) -> dict:
     # ! shall not return the env, we didn't want to modify
     del env
     return locals()
+
+
+# Should be typed and initialized here, to be available in the whole project (because imported in __init__.py)
+PROJECT_FQDN: ParseResult = ParseResult("", "", "", "", "", "")
+PROJECT_FRONTEND_FQDN: ParseResult = ParseResult("", "", "", "", "", "")
+PROJECT_URL: str = ""
+PROJECT_DOMAIN: str = ""
