@@ -8,10 +8,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 
 """
-
-
-from urllib.parse import ParseResult
-
 from .environment.setup import prepare  # noqa: F403 NOSONAR
 from .base import *  # noqa: E402 F403 NOSONAR  pylint: disable=unused-wildcard-import,wildcard-import
 
@@ -31,13 +27,6 @@ DEBUG = False
 # See: https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#secret-key
 # Raises ImproperlyConfigured exception if DJANGO_SECRET_KEY not in os.environ
 SECRET_KEY = env.str("DJANGO_SECRET_KEY")
-
-
-# =====PROJECT-SPECIFIC-SETTINGS===============================================
-# add project specific production settings here
-PROJECT_FQDN: ParseResult = env.url("PROJECT_FQDN")
-PROJECT_URL: str = PROJECT_FQDN.geturl()
-PROJECT_DOMAIN: str = PROJECT_FQDN.netloc.split(":")[0]
 
 # Production checklist:
 # See https://docs.djangoproject.com/en/{{ doc_version }}/howto/deployment/checklist/

@@ -1,0 +1,29 @@
+# -- Modular settings ---------------------------------------------------------
+# These settings are imported in the __init__.py of the base directory explicitly.
+# To add a new setting, also edit the __init__.py
+# -----------------------------------------------------------------------------
+# PROJECT
+
+from urllib.parse import ParseResult
+
+from environs import Env
+
+
+def define_project(env: Env) -> dict:
+    """
+    Define some project variables.
+    will be read from .env files or the environment provided.
+    """
+    # =====PROJECT-SPECIFIC-SETTINGS===============================================
+    # add project specific production settings here
+    PROJECT_FQDN: ParseResult = env.url("PROJECT_FQDN")
+    PROJECT_FRONTEND_FQDN: ParseResult = env.url("PROJECT_FRONTEND_FQDN", default="http://localhost:3000")
+    PROJECT_URL: str = PROJECT_FQDN.geturl()
+    PROJECT_DOMAIN: str = PROJECT_FQDN.netloc.split(":")[0]
+
+    # pylint: enable=invalid-name
+    # pylint: enable=possibly-unused-variable
+
+    # ! shall not return the env, we didn't want to modify
+    del env
+    return locals()
