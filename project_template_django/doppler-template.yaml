@@ -58,6 +58,7 @@ projects:
         # ssl may be terminated by nginx or caddy, then this is false
         DJANGO_SECURE_SSL_REDIRECT: 'false'
         DJANGO_DEBUG: 'true'
+        REDIS_PASSWORD: 'secret'
         # -----------------------------------------------------------------------------
       test:
         PROJECT_FQDN: 'http://localhost:8000'
@@ -92,6 +93,7 @@ projects:
         DJANGO_CORS_ALLOW_ALL_ORIGINS: 'true'
         # ssl may be terminated by nginx or caddy, then this is false
         DJANGO_SECURE_SSL_REDIRECT: 'false'
+        REDIS_PASSWORD: 'secret'
       staging:
         PROJECT_FQDN: ''
         PROJECT_FRONTEND_FQDN: ''
@@ -112,6 +114,7 @@ projects:
         DJANGO_DEBUG: 'false'
         # ssl may be terminated by nginx or caddy, then this is false
         DJANGO_SECURE_SSL_REDIRECT: 'true'
+        REDIS_PASSWORD: 'secret'
       production:
         DEPLOYMENT_TOKEN: ''
         PROJECT_FQDN: ''
@@ -133,3 +136,4 @@ projects:
         DJANGO_DEBUG: 'false'
         # ssl may be terminated by nginx or caddy, then this is false
         DJANGO_SECURE_SSL_REDIRECT: 'true'
+        REDIS_PASSWORD: ''
