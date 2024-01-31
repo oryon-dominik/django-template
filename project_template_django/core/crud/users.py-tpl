@@ -8,6 +8,6 @@ UserModel = get_user_model()
 
 def get_user_by_email(email: str) -> UserType | None:
     try:
-        return UserModel.objects.get(email=email)
+        return UserModel.objects.get(email=email)  # type: ignore[assignment,return-value]
     except UserModel.DoesNotExist:
         return None
