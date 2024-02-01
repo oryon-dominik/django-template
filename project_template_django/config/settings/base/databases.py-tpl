@@ -17,11 +17,11 @@ def define_databases(env: Env) -> dict:
     # pylint: disable=possibly-unused-variable
     # --- POSTGRES ----------------------------------------------------------------
     # POSTGRES_DB = env.str("POSTGRES_DB", default="{{ project_name }}")
-    POSTGRES_USER = env.str("POSTGRES_USER")
-    POSTGRES_PASSWORD = env.str("POSTGRES_PASSWORD")
-    POSTGRES_HOST = env.str("POSTGRES_HOST")
-    POSTGRES_PORT = env.int("POSTGRES_PORT")
-    POSTGRES_OPTIONS = env.str("POSTGRES_OPTIONS", default="")
+    # POSTGRES_USER = env.str("POSTGRES_USER")
+    # POSTGRES_PASSWORD = env.str("POSTGRES_PASSWORD")
+    # POSTGRES_HOST = env.str("POSTGRES_HOST")
+    # POSTGRES_PORT = env.int("POSTGRES_PORT")
+    # POSTGRES_OPTIONS = env.str("POSTGRES_OPTIONS", default="")
     # POSTGRES_CONNECTION_STRING = (
     #     f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
     #     + f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}{POSTGRES_OPTIONS}"
@@ -93,6 +93,16 @@ def define_databases(env: Env) -> dict:
     # ! shall not return the env, we didn't want to modify
     del env
     return locals()
+
+
+# Should be typed and initialized here (will be overwritten!), to be available
+# in the whole project [mypy] (because imported in __init__.py)
+# POSTGRES_DB: str = "{{ project_name }}"
+# POSTGRES_USER: str = ""
+# POSTGRES_PASSWORD: str = ""
+# POSTGRES_HOST: str = ""
+# POSTGRES_PORT: int = 0
+# POSTGRES_OPTIONS: str = ""
 
 
 # -----------------------------------------------------------------------------
