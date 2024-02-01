@@ -133,9 +133,9 @@ CSP_SCRIPT_SRC = (
     # Alpine-js needs unsafe-eval as well.
     # Alpine.js [offers a mitigation for unsafe-eval](https://alpinejs.dev/advanced/csp)
     # this is not yet implemented and you will loose some features of alpine.
-    "'unsafe-inline'",
+    # "'unsafe-inline'",
     "'unsafe-eval'",
-    f"{PROJECT_URL}",
+    # f"{PROJECT_URL}",
 )
 # CSP: worker-src
 # The HTTP Content-Security-Policy (CSP) worker-src directive specifies valid sources for Workers or SharedWorkers.

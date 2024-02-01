@@ -28,18 +28,22 @@ def define_databases(env: Env) -> dict:
     # )
     # TODO: Test if these regexes really work for all connection strings.
     # DATABASE_URL = env.str("DATABASE_URL", default=POSTGRES_CONNECTION_STRING)
-    # POSTGRES_USER = user_match.group(1) if (
-    #     user_match := re.search(r"(?:postgres|psql|postgresql):\/\/([^:]+)", DATABASE_URL)
-    # ) else POSTGRES_USER
-    # POSTGRES_PASSWORD = password_match.group(1) if (
-    #     password_match := re.search(r":\/\/[^:]+:([^@]+)", DATABASE_URL)
-    # ) else POSTGRES_PASSWORD
+    # POSTGRES_USER = (
+    #     user_match.group(1)
+    #     if (user_match := re.search(r"(?:postgres|psql|postgresql):\/\/([^:]+)", DATABASE_URL))
+    #     else POSTGRES_USER
+    # )
+    # POSTGRES_PASSWORD = (
+    #     password_match.group(1)
+    #     if (password_match := re.search(r":\/\/[^:]+:([^@]+)", DATABASE_URL))
+    #     else POSTGRES_PASSWORD
+    # )
     # POSTGRES_HOST = host_match.group(1) if (host_match := re.search(r"@([^:\/]+)", DATABASE_URL)) else POSTGRES_HOST
     # POSTGRES_PORT = port_match.group(1) if (port_match := re.search(r":(\d+)\/", DATABASE_URL) else POSTGRES_PORT
     # POSTGRES_DB = name_match.group(1) if (name_match := re.search(r"/(\w+)\?", DATABASE_URL)) else POSTGRES_DB
-    # POSTGRES_OPTIONS = options_match.group(1) if (
-    #     options_match := re.search(r"\?(.+)", DATABASE_URL)
-    # ) else POSTGRES_OPTIONS
+    # POSTGRES_OPTIONS = (
+    #     options_match.group(1) if (options_match := re.search(r"\?(.+)", DATABASE_URL)) else POSTGRES_OPTIONS
+    # )
     # DATABASES = {
     #     "default": {
     #         "HOST": POSTGRES_HOST,

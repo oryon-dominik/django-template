@@ -40,6 +40,11 @@ except ImportError:
 from .databases import (
     DEFAULT_AUTO_FIELD,
     CACHES,
+    POSTGRES_USER,
+    POSTGRES_PASSWORD,
+    POSTGRES_HOST,
+    POSTGRES_PORT,
+    POSTGRES_OPTIONS,
 )
 from .gateway import WSGI_APPLICATION
 from .internationalization import (
