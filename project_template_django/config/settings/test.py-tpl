@@ -41,7 +41,7 @@ CORS_ALLOW_METHODS = list(default_methods)
 
 INSTALLED_APPS += []  # type: ignore[name-defined] # pylint: disable=undefined-variable # noqa
 
-CACHES["jwt-blacklist"]["BACKEND"] = "django.core.cache.backends.locmem.LocMemCache"
+CACHES["jwt-blacklist"]["BACKEND"] = "django.core.cache.backends.locmem.LocMemCache"  # type: ignore[index]
 
 # redis url is dependant on the environment
 # pylint: disable=undefined-variable
