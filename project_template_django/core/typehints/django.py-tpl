@@ -7,11 +7,9 @@ class CoreAbstractBaseUser(AbstractBaseUser):
     verified: bool
 
 
-class AbstractBaseUserWithPermissionsType(PermissionsMixin, CoreAbstractBaseUser):  # type: ignore[misc]
+class CoreAbstractAdminBaseUser(PermissionsMixin, CoreAbstractBaseUser):  # type: ignore[misc]
     """
-    The adminuser is atleast an AbstractBaseUserWithPermissions
-    - has an email field
-    - and neccessary permissions.
+    The adminuser is atleast an CoreAbstractBaseUser with Permissions
     """
 
     ...
@@ -21,4 +19,4 @@ class AbstractBaseUserWithPermissionsType(PermissionsMixin, CoreAbstractBaseUser
 
 
 UserType: TypeAlias = CoreAbstractBaseUser
-AdminUserType: TypeAlias = AbstractBaseUserWithPermissionsType
+AdminUserType: TypeAlias = CoreAbstractAdminBaseUser

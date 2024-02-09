@@ -39,8 +39,13 @@ def setup_base_settings_for(env: Env) -> tuple[Env, dict]:
     """
     # lazy import to avoid circular imports
     from ..base.databases import define_databases  # pylint: disable=relative-beyond-top-level,import-outside-toplevel
+    from ..base.{{ project_name }}.project import define_project  # pylint: disable=relative-beyond-top-level,import-outside-toplevel
 
+    project: dict = define_project(env=env)
     databases: dict = define_databases(env=env)
     # merge settings that use environment variables
-    settings = {**databases}
+    settings = {
+        **databases,
+        **project,
+    }
     return env, settings

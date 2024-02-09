@@ -6,3 +6,10 @@
 #     from .foo import BAR  # noqa # pylint: disable=unused-import
 # except ImportError:
 #     pass
+
+from .project import (
+    PROJECT_FQDN,
+    PROJECT_FRONTEND_FQDN,
+    PROJECT_URL,
+    PROJECT_DOMAIN,
+)

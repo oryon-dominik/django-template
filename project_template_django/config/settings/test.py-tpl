@@ -8,10 +8,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 
 """
-
-
-from urllib.parse import ParseResult
-
 from corsheaders.defaults import default_methods
 
 from .environment.setup import prepare  # noqa: F403 NOSONAR
@@ -26,13 +22,6 @@ locals().update(settings)
 
 
 SECRET_KEY = env.str("DJANGO_SECRET_KEY", default="{{ secret_key }}")
-
-# =====PROJECT-SPECIFIC-SETTINGS===============================================
-# add project specific production settings here
-PROJECT_FQDN: ParseResult = env.url("PROJECT_FQDN")
-PROJECT_FRONTEND_FQDN: ParseResult = env.url("PROJECT_FRONTEND_FQDN", default="http://localhost:3000")
-PROJECT_URL: str = PROJECT_FQDN.geturl()
-PROJECT_DOMAIN: str = PROJECT_FQDN.netloc.split(":")[0]
 
 # Production checklist:
 # See https://docs.djangoproject.com/en/{{ docs_version }}/howto/deployment/checklist/
@@ -52,7 +41,7 @@ CORS_ALLOW_METHODS = list(default_methods)
 
 INSTALLED_APPS += []  # type: ignore[name-defined] # pylint: disable=undefined-variable # noqa
 
-CACHES["jwt-blacklist"]["BACKEND"] = "django.core.cache.backends.locmem.LocMemCache"
+CACHES["jwt-blacklist"]["BACKEND"] = "django.core.cache.backends.locmem.LocMemCache"  # type: ignore[index]
 
 # redis url is dependant on the environment
 # pylint: disable=undefined-variable

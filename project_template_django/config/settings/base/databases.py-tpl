@@ -17,29 +17,33 @@ def define_databases(env: Env) -> dict:
     # pylint: disable=possibly-unused-variable
     # --- POSTGRES ----------------------------------------------------------------
     # POSTGRES_DB = env.str("POSTGRES_DB", default="{{ project_name }}")
-    POSTGRES_USER = env.str("POSTGRES_USER")
-    POSTGRES_PASSWORD = env.str("POSTGRES_PASSWORD")
-    POSTGRES_HOST = env.str("POSTGRES_HOST")
-    POSTGRES_PORT = env.int("POSTGRES_PORT")
-    POSTGRES_OPTIONS = env.str("POSTGRES_OPTIONS", default="")
+    # POSTGRES_USER = env.str("POSTGRES_USER")
+    # POSTGRES_PASSWORD = env.str("POSTGRES_PASSWORD")
+    # POSTGRES_HOST = env.str("POSTGRES_HOST")
+    # POSTGRES_PORT = env.int("POSTGRES_PORT")
+    # POSTGRES_OPTIONS = env.str("POSTGRES_OPTIONS", default="")
     # POSTGRES_CONNECTION_STRING = (
     #     f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
     #     + f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}{POSTGRES_OPTIONS}"
     # )
     # TODO: Test if these regexes really work for all connection strings.
     # DATABASE_URL = env.str("DATABASE_URL", default=POSTGRES_CONNECTION_STRING)
-    # POSTGRES_USER = user_match.group(1) if (
-    #     user_match := re.search(r"(?:postgres|psql|postgresql):\/\/([^:]+)", DATABASE_URL)
-    # ) else POSTGRES_USER
-    # POSTGRES_PASSWORD = password_match.group(1) if (
-    #     password_match := re.search(r":\/\/[^:]+:([^@]+)", DATABASE_URL)
-    # ) else POSTGRES_PASSWORD
+    # POSTGRES_USER = (
+    #     user_match.group(1)
+    #     if (user_match := re.search(r"(?:postgres|psql|postgresql):\/\/([^:]+)", DATABASE_URL))
+    #     else POSTGRES_USER
+    # )
+    # POSTGRES_PASSWORD = (
+    #     password_match.group(1)
+    #     if (password_match := re.search(r":\/\/[^:]+:([^@]+)", DATABASE_URL))
+    #     else POSTGRES_PASSWORD
+    # )
     # POSTGRES_HOST = host_match.group(1) if (host_match := re.search(r"@([^:\/]+)", DATABASE_URL)) else POSTGRES_HOST
     # POSTGRES_PORT = port_match.group(1) if (port_match := re.search(r":(\d+)\/", DATABASE_URL) else POSTGRES_PORT
     # POSTGRES_DB = name_match.group(1) if (name_match := re.search(r"/(\w+)\?", DATABASE_URL)) else POSTGRES_DB
-    # POSTGRES_OPTIONS = options_match.group(1) if (
-    #     options_match := re.search(r"\?(.+)", DATABASE_URL)
-    # ) else POSTGRES_OPTIONS
+    # POSTGRES_OPTIONS = (
+    #     options_match.group(1) if (options_match := re.search(r"\?(.+)", DATABASE_URL)) else POSTGRES_OPTIONS
+    # )
     # DATABASES = {
     #     "default": {
     #         "HOST": POSTGRES_HOST,
@@ -95,40 +99,62 @@ def define_databases(env: Env) -> dict:
     return locals()
 
 
+# Should be typed and initialized here (will be overwritten!), to be available
+# in the whole project [mypy] (because imported in __init__.py)
+# POSTGRES_DB: str = "{{ project_name }}"
+# POSTGRES_USER: str = ""
+# POSTGRES_PASSWORD: str = ""
+# POSTGRES_HOST: str = ""
+# POSTGRES_PORT: int = 0
+# POSTGRES_OPTIONS: str = ""
+
+
 # -----------------------------------------------------------------------------
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# REDIS_OPTIONS = {
+#     "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#     # http://niwinz.github.io/django-redis/latest/#_memcached_exceptions_behavior,
+#     "IGNORE_EXCEPTIONS": True,  # mimics memcache behavior.
+#     # connection pool kwargs to configure the use of certificates
+#     "CONNECTION_POOL_KWARGS": {
+#         # "ssl_cert_reqs": None
+#         # 'ssl_ca_certs': REDIS_CA_FILE,
+#         # 'ssl_certfile': REDIS_CERT_FILE,
+#         # 'ssl_keyfile': REDIS_KEY_FILE,
+#     },
+# }
+
 CACHES = {
     "default": {
+        "LOCATION": "{{ project_name }}--default-cache",
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "unique-snowflake-{{ project_name }}--cache",
+        # "BACKEND": "django_redis.cache.RedisCache",
+        # "OPTIONS": REDIS_OPTIONS,
+    },
+    "sessions": {
+        "LOCATION": "{{ project_name }}--sessions-cache",
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        # "BACKEND": "django_redis.cache.RedisCache",
+        # "OPTIONS": REDIS_OPTIONS,
     },
     "redis": {
+        "LOCATION": "{{ project_name }}--locmem-fake-redis-cache",
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "unique-snowflake-{{ project_name }}--locmem-fake-redis-cache",
         # "BACKEND": "django_redis.cache.RedisCache",
-        # "LOCATION": "",
-        # "OPTIONS": {
-        #     "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        #     # http://niwinz.github.io/django-redis/latest/#_memcached_exceptions_behavior,
-        #     "IGNORE_EXCEPTIONS": True,  # mimics memcache behavior.
-        #     # connection pool kwargs to configure the use of certificates
-        #     "CONNECTION_POOL_KWARGS": {
-        #         # "ssl_cert_reqs": None
-        #         # 'ssl_ca_certs': REDIS_CA_FILE,
-        #         # 'ssl_certfile': REDIS_CERT_FILE,
-        #         # 'ssl_keyfile': REDIS_KEY_FILE,
-        #     },
+        # "OPTIONS": REDIS_OPTIONS,
         # },
     },
     "jwt-blacklist": {
+        "LOCATION": "{{ project_name }}--blacklisted-jwts-cache",
         # ! this is not thread-safe and not recommended, if you use multiple workers
         # 'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         # ! this is slow in production. Maybe use redis or memcached
         "BACKEND": "django.core.cache.backends.db.DatabaseCache",
-        "LOCATION": "blacklisted_jwts_cache",
+        # "BACKEND": "django_redis.cache.RedisCache",
+        # "OPTIONS": REDIS_OPTIONS,
     },
 }

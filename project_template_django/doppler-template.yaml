@@ -2,7 +2,7 @@ projects:
   - name: '{{ project_name }}' # Name may contain lowercase letters, spaces, numbers, hyphens, and underscores
     description: '{{ project_name }} description'
 
-    # probably all dotenv examples should be here.. and setup develop and prod envs, manually add the secrets on doppler after 
+    # probably all dotenv examples should be here.. and setup develop and prod envs, manually add the secrets on doppler after
 
     # List of totally customizable environments, e.g Test, Stage, QA, CI-CD
     environments:
@@ -38,7 +38,7 @@ projects:
         # these settings get injected into the postgres docker, before you build
         # if you change them, you need to rebuild the postgres docker (and remove the old volume)
         # docker volume rm {{ project_name }}_postgres_data
-        POSTGRES_USER: '{{ project_name }}devuser'
+        POSTGRES_USER: '{{ project_name }}devdbuser'
         POSTGRES_PASSWORD: 'develop'
         POSTGRES_DB: '{{ project_name }}devdb'
         POSTGRES_OPTIONS: '?sslmode=prefer'
@@ -58,6 +58,7 @@ projects:
         # ssl may be terminated by nginx or caddy, then this is false
         DJANGO_SECURE_SSL_REDIRECT: 'false'
         DJANGO_DEBUG: 'true'
+        REDIS_PASSWORD: 'secret'
         # -----------------------------------------------------------------------------
       test:
         PROJECT_FQDN: 'http://localhost:8000'
@@ -73,7 +74,7 @@ projects:
         # these settings get injected into the postgres docker, before you build
         # if you change them, you need to rebuild the postgres docker (and remove the old volume)
         # docker volume rm {{ project_name }}_postgres_data
-        POSTGRES_USER: '{{ project_name }}devuser'
+        POSTGRES_USER: '{{ project_name }}devdbuser'
         POSTGRES_PASSWORD: 'develop'
         POSTGRES_DB: '{{ project_name }}devdb'
         POSTGRES_OPTIONS: '?sslmode=prefer'
@@ -92,6 +93,7 @@ projects:
         DJANGO_CORS_ALLOW_ALL_ORIGINS: 'true'
         # ssl may be terminated by nginx or caddy, then this is false
         DJANGO_SECURE_SSL_REDIRECT: 'false'
+        REDIS_PASSWORD: 'secret'
       staging:
         PROJECT_FQDN: ''
         PROJECT_FRONTEND_FQDN: ''
@@ -99,7 +101,7 @@ projects:
         DJANGO_ALLOW_ASYNC_UNSAFE: 'false'
         DJANGO_SECRET_KEY: '{{ secret_key }}'
         DJANGO_ADMIN_URL: 'admin/'
-        POSTGRES_USER: '{{ project_name }}staginguser'
+        POSTGRES_USER: '{{ project_name }}stagingdbuser'
         POSTGRES_PASSWORD: 'staging'
         POSTGRES_DB: '{{ project_name }}stagingdb'
         POSTGRES_OPTIONS: '?sslmode=prefer'
@@ -112,6 +114,7 @@ projects:
         DJANGO_DEBUG: 'false'
         # ssl may be terminated by nginx or caddy, then this is false
         DJANGO_SECURE_SSL_REDIRECT: 'true'
+        REDIS_PASSWORD: 'secret'
       production:
         DEPLOYMENT_TOKEN: ''
         PROJECT_FQDN: ''
@@ -120,7 +123,7 @@ projects:
         DJANGO_ALLOW_ASYNC_UNSAFE: 'false'
         DJANGO_SECRET_KEY: ''
         DJANGO_ADMIN_URL: ''
-        POSTGRES_USER: '{{ project_name }}produser'
+        POSTGRES_USER: '{{ project_name }}proddbuser'
         POSTGRES_PASSWORD: ''
         POSTGRES_DB: '{{ project_name }}proddb'
         POSTGRES_OPTIONS: '?sslmode=prefer'
@@ -133,3 +136,4 @@ projects:
         DJANGO_DEBUG: 'false'
         # ssl may be terminated by nginx or caddy, then this is false
         DJANGO_SECURE_SSL_REDIRECT: 'true'
+        REDIS_PASSWORD: ''

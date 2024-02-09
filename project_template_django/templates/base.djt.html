@@ -9,20 +9,20 @@
 
 <head>
   {% block header_javascript %}
-  {% comment %} Load DarkMode directly into the HEAD to avoid FOUC (Flash of Unstyled Content) {% endcomment %}
+  {# Load DarkMode directly into the HEAD to avoid FOUC (Flash of Unstyled Content) #}
   <script nonce="{{request.csp_nonce}}" src="{% static 'js/darkmode-toggle.js' %}"></script>
   {% endblock header_javascript %}
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  {% comment %} https://htmx.org/docs/#config {% endcomment %}
+  {# https://htmx.org/docs/#config #}
   <meta name="htmx-config" content={% block htmx_config %}'{"historyCacheSize": 10}'{% endblock htmx_config %}>
 
-  {% comment %} SEO: Descriptions should be unique for each page. Don't be longer than 160 characters. {% endcomment %}
+  {# SEO: Descriptions should be unique for each page. Don't be longer than 160 characters. #}
   <meta name="description" content={% block meta_description %}"INSERT_PROJECT_NAME_HERE"{% endblock meta_description %}>
 
-  {% comment %} htmx -> defer=continue loading the page whilst downloading the htmx js files {% endcomment %}
+  {# htmx -> defer=continue loading the page whilst downloading the htmx js files #}
   <script nonce="{{request.csp_nonce}}" src="{% static 'js/htmx/htmx.min.js' %}" defer></script>
   <script nonce="{{request.csp_nonce}}" src="{% static 'js/htmx/ext/event-header.js' %}" defer></script>
   {% if debug %}
@@ -43,10 +43,10 @@
   {% endcomment %}
   <meta name="robots" content={% block meta_robots %}"noindex, nofollow"{% endblock meta_robots %}>
 
-  {% comment %} The favicon is preferably directly served by django (core.views.generics.favicon) {% endcomment %}
-  {% comment %} <link rel="icon" href={% block meta_favicon %}"/favicon.ico"{% endblock meta_favicon %}> {% endcomment %}
+  {# The favicon is preferably directly served by django (core.views.generics.favicon) #}
+  {# <link rel="icon" href={% block meta_favicon %}"/favicon.ico"{% endblock meta_favicon %}> #}
   {% block meta_fonts %}
-  {% comment %} <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> {% endcomment %}
+  {# <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> #}
   {% endblock meta_fonts %}
 
   {% block css %}
@@ -58,7 +58,7 @@
   {% block extra_css %}
   {% endblock extra_css %}
 
-  {% comment %} SEO: Titles should be unique for each page. Don't be longer than 60 characters. {% endcomment %}
+  {# SEO: Titles should be unique for each page. Don't be longer than 60 characters. #}
   <title>{% block title %}{{ settings.TITLE }}{% endblock title %}{% block extra_title %}{% endblock extra_title %}</title>
 
 </head>
@@ -93,9 +93,9 @@
   {% endblock messages %}
 
   {% block body %}
-  <container id="body" class="flex items-center grow">
+  <container id="body" class="flex grow">
     {% block outer_content %}
-    <content id="content">
+    <content id="content" class="flex grow">
       {% block content %}
       {% endblock content %}
       {% block extra_content %}
@@ -112,7 +112,7 @@
   {% endblock footer %}
 
   {% block footer_javascript %}
-  {% comment %} <script defer nonce="{{request.csp_nonce}}" src="{% static 'js/INSERT_PROJECT_NAME_HERE.js' %}"></script> {% endcomment %}
+  {# <script defer nonce="{{request.csp_nonce}}" src="{% static 'js/INSERT_PROJECT_NAME_HERE.js' %}"></script> #}
   {% endblock footer_javascript %}
   {% block extra_footer_javascript %}
   {% endblock extra_footer_javascript %}

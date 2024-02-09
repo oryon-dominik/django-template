@@ -41,7 +41,7 @@ def generic_user_factory(
 
     email = email if email else f"{mailname}@{faker.domain_name()}"
 
-    user = get_user_model().objects.create(
+    user = get_user_model().objects.create(  # type: ignore[assignment]
         name=name,
         email=email,
         is_staff=is_staff,
