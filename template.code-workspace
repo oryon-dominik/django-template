@@ -33,7 +33,9 @@
 
             // nice to have
             // "stkb.rewrap",
+            // "aaron-bond.better-comments",
             // "Gruntfuggly.todo-tree",
+            // "bierner.markdown-footnotes",
         ]
     },
     "settings": {
