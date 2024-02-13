@@ -15,7 +15,7 @@ Preferrably use this notebook in the `vscode` directly.
 ## Develop with me
 
 The more complex introduction in how to setup the django environment for the notebook.
-works with the `browser`, `shell_plus`, for projects `using docker` and directly in `vscode`.
+works with the `browser`, `shell_plus`, for projects `using podman` and directly in `vscode`.
 
 You can also attach the debugger to the notebook.
 
