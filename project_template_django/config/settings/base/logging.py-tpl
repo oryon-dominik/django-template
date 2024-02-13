@@ -82,7 +82,7 @@ LOGGING: dict = {
             "class": "rich.logging.RichHandler",
             "formatter": "rich",
             "level": "DEBUG",
-            # "propagate": False,  # do not propagate to the parent logger (console)
+            # "propagate": False,  # do not propagate to the parent logger (console), rich does not support it yet
         },
         "requests_file": {
             "level": "INFO",
