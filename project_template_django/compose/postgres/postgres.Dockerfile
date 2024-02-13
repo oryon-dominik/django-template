@@ -1,6 +1,6 @@
 FROM postgres:15
 
-COPY init.sql /container-entrypoint-initdb.d/
+COPY init.sql /docker-entrypoint-initdb.d/
 COPY pg_hba.conf /opt/postgres/
 COPY postgresql.conf /opt/postgres/
 
