@@ -39,7 +39,7 @@ doppler setup
 # hint for custom settings: doppler configure set config=dev_snowflake
 
 cc init
-docker compose -f compose/postgres-and-redis.yml up
+podman compose -f containers/postgres-and-redis.yml up
 cc migrate
 python manage.py createcachetable
 
@@ -55,7 +55,7 @@ $ user = User.objects.create(username=email, email=email, is_active=True)
 $ user.set_password("test")
 $ user.save()
 
-docker compose -f compose/postgres-and-redis.yml up -d
+podman compose -f containers/postgres-and-redis.yml up -d
 python manage.py runserver
 ```
 
@@ -166,23 +166,23 @@ To let the mypy daemon (dmypy) work with your ide, install the following package
 See the [documentation on releases](./documentation/releases.md) for details.
 
 
-### postgresql via docker
+### containerized postgresql
 
 - [postgres](https://www.postgresql.org/)
-- [docker](https://www.docker.com/)
+- [podman](https://podman.io/)
 - [postgres image on dockerhub](https://hub.docker.com/_/postgres)
 
-You might want to use the postgres docker container inside `compose/postgres.yml`  
-Be aware that no other (local) postgres shall be running on the same port (`5432`), otherwise docker is known to introduce some hard to find conflicts - especially on windows machines using *wsl* as the hypervisor.  
+You might want to use the postgres container inside `containers/postgres.yml`  
+Be aware that no other (local) postgres shall be running on the same port (`5432`), otherwise the container is known to introduce some hard to find conflicts - especially on windows machines using *wsl* as the hypervisor.  
 
 Build and run
 
-    docker compose -f compose/postgres.yml build
-    docker compose -f compose/postgres.yml up
+    podman compose -f containers/postgres.yml build
+    podman compose -f containers/postgres.yml up
 
 Bash-shell to container
 
-    docker exec -it postgres /bin/bash
+    podman exec -it postgres /bin/bash
 
 Edit `pg_hba.conf`
 
@@ -191,23 +191,23 @@ Edit `pg_hba.conf`
 DB-shell
 
     # linux
-    docker compose run postgres psql -h localhost -U developer -d {{ project_name }}
+    podman compose run postgres psql -h localhost -U developer -d {{ project_name }}
     # windows
-    docker compose run postgres psql -h host.docker.internal -U developer -d {{ project_name }}
+    podman compose run postgres psql -h host.containers.internal -U developer -d {{ project_name }}
 
 
-### redis via docker
+### redis via podman
 
 - [redis](https://redis.io/)
 
 Build and run
 
-    docker compose -f compose/redis.yml build
-    docker compose -f compose/redis.yml up
+    podman compose -f containers/redis.yml build
+    podman compose -f containers/redis.yml up
 
 Redis-shell
 
-    docker exec -it {{ project_name }}_redis redis-cli
+    podman exec -it {{ project_name }}_redis redis-cli
 
         > auth <password>
         OK
@@ -216,12 +216,12 @@ Redis-shell
         PONG
 
 
-### postgres + redis via docker
+### postgres + redis via podman
 
 Build and run
 
-    docker compose -f compose/postgres-and-redis.yml build
-    docker compose -f compose/postgres-and-redis.yml up
+    podman compose -f containers/postgres-and-redis.yml build
+    podman compose -f containers/postgres-and-redis.yml up
 
 For single usage, combine the containers, you need -- the specific commands are still valid.
 

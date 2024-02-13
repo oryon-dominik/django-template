@@ -3,7 +3,7 @@
     {{ project_name }}/
     ├── apps/                       # django apps
     ├── assets/                     # assets & static files
-    ├── compose/                    # docker-compose files (postgres, ...)
+    ├── containers/                 # container-compose files (postgres, redis, k8s-pod ...)
     ├── config/                     # django project
     │   ├── settings/               # django settings
     │   │   ├── base/               # modularized base settings

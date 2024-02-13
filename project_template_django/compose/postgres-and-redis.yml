@@ -18,6 +18,8 @@ services:
   {{ project_name }}_redis:
     image: redis:7
     restart: always
+    volumes:
+      - {{ project_name }}_redis_data:/data
     ports:
       - "6379:6379"
     env_file:
@@ -32,7 +34,8 @@ services:
 volumes:
   {{ project_name }}_postgres_data:
     name: {{ project_name }}_postgres_data
-
+  {{ project_name }}_redis_data:
+    name: {{ project_name }}_redis_data
 
 networks:
   {{ project_name }}_network:
