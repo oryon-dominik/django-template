@@ -200,6 +200,10 @@
         },
         "notebook.output.textLineLimit": 300,
 
+        "djangointellisense.projectRoot": "${workspaceFolder}",
+        "djangointellisense.settingsModule": "config.settings.develop",
+        "djangointellisense.debugMessages": false,
+
         // better-comments
         "better-comments.tags": [
             {
