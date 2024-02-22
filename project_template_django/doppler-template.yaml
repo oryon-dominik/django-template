@@ -35,22 +35,22 @@ projects:
         # --- POSTGRES ----------------------------------------------------------------
         # postgres settings might be specific to a developer if you're using your own postgres instance
         # doppler configure set config=dev_aro
-        # these settings get injected into the postgres docker, before you build
-        # if you change them, you need to rebuild the postgres docker (and remove the old volume)
-        # docker volume rm {{ project_name }}_postgres_data
+        # these settings get injected into the postgres container, before you build
+        # if you change them, you need to rebuild the postgres container (and remove the old volume)
+        # podman volume rm {{ project_name }}_postgres_data
         POSTGRES_USER: '{{ project_name }}devdbuser'
         POSTGRES_PASSWORD: 'develop'
         POSTGRES_DB: '{{ project_name }}devdb'
         POSTGRES_OPTIONS: '?sslmode=prefer'
-        # this is used by django only, to change the port of the postgres docker, modify it's compose file
+        # this is used by django only, to change the port of the postgres container, modify it's compose file
         POSTGRES_PORT: '5432'
-        # docker host when also running in the docker network
+        # podman host when also running in the podman network
         # POSTGRES_HOST=postgres
-        # docker host on windows/mac
-        # POSTGRES_HOST=host.docker.internal
-        # docker host on linux
+        # podman host on windows/mac
+        # POSTGRES_HOST=host.containers.internal
+        # podman host on linux
         # POSTGRES_HOST=localhost
-        POSTGRES_HOST: 'host.docker.internal'
+        POSTGRES_HOST: 'host.containers.internal'
         VITE_APP_MODE: 'django'
         DJANGO_ALLOWED_HOSTS: '*'
         DJANGO_CORS_ALLOWED_ORIGINS: ''
@@ -71,22 +71,22 @@ projects:
         # --- POSTGRES ----------------------------------------------------------------
         # postgres settings might be specific to a developer if you're using your own postgres instance
         # doppler configure set config=dev_aro
-        # these settings get injected into the postgres docker, before you build
-        # if you change them, you need to rebuild the postgres docker (and remove the old volume)
-        # docker volume rm {{ project_name }}_postgres_data
+        # these settings get injected into the postgres container, before you build
+        # if you change them, you need to rebuild the postgres container (and remove the old volume)
+        # podman volume rm {{ project_name }}_postgres_data
         POSTGRES_USER: '{{ project_name }}devdbuser'
         POSTGRES_PASSWORD: 'develop'
         POSTGRES_DB: '{{ project_name }}devdb'
         POSTGRES_OPTIONS: '?sslmode=prefer'
-        # this is used by django only, to change the port of the postgres docker, modify it's compose file
+        # this is used by django only, to change the port of the postgres container, modify it's compose file
         POSTGRES_PORT: '5432'
-        # docker host when also running in the docker network
+        # podman host when also running in the podman network
         # POSTGRES_HOST=postgres
-        # docker host on windows/mac
-        # POSTGRES_HOST=host.docker.internal
-        # docker host on linux
+        # podman host on windows/mac
+        # POSTGRES_HOST=host.containers.internal
+        # podman host on linux
         # POSTGRES_HOST=localhost
-        POSTGRES_HOST: 'host.docker.internal'
+        POSTGRES_HOST: 'host.containers.internal'
         VITE_APP_MODE: 'django'
         DJANGO_ALLOWED_HOSTS: '*'
         DJANGO_CORS_ALLOWED_ORIGINS: ''

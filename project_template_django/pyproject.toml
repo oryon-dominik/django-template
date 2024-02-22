@@ -49,6 +49,7 @@ gitpython = "^3.1.31"
 tomlkit = "^0.11.8"
 jinja2 = "^3.1.2"
 contributors-txt = "^1.0.0"
+setproctitle = "^1.3.3"
 
 [tool.poetry.group.django]
 optional = false
@@ -273,6 +274,12 @@ ignore_missing_imports_per_module = true
 warn_unused_ignores = false
 namespace_packages = true
 explicit_package_bases = true
+# Always checking the untyped defs is so annoying, think about it in new
+# projects though. I'm against strict typing in Python in all cases.
+# Unit tests are the better way to ensure the code is working. 
+# So don't omit these.
+check_untyped_defs = false
+warn_untyped_defs = false
 plugins = ["mypy_django_plugin.main"] #, "mypy_drf_plugin.main"]
 
 [tool.django-stubs]
