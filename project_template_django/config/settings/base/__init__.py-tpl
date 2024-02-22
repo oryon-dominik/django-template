@@ -37,6 +37,16 @@ try:
 except ImportError:
     pass
 
+from .csp import (
+    CSP_DEFAULT_SRC,
+    CSP_CONNECT_SRC,
+    CSP_STYLE_SRC,
+    CSP_IMG_SRC,
+    CSP_FONT_SRC,
+    CSP_SCRIPT_SRC,
+    CSP_WORKER_SRC,
+)
+
 from .databases import (
     DEFAULT_AUTO_FIELD,
     CACHES,
