@@ -79,14 +79,14 @@ def write_to_disk(
         )
         return success
 
-    mode = "w" if content_type is str else "wb"
-
     if not isinstance(path, Path):
         guard.exception(exc=TypeError(f"Invalid type for path: {type(path)=}"), panic=panic, log_config=log_config)
         return success
 
+    mode = "w" if content_type is str else "wb"
+    kwargs = {"mode": mode, "encoding": encoding} if content_type is str else {"mode": mode}  # can't encode bytes
     try:
-        with open(file=path, mode=mode, encoding=encoding) as file:
+        with open(file=path, **kwargs) as file:  # type: ignore[call-overload]
             log.debug(f"INOUT.FILES.WRITE {len(content)=} {path=}", extra={"content": content, "path": path})
             file.write(content)
             success = True
