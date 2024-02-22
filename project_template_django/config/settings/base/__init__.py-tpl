@@ -47,6 +47,8 @@ from .databases import (
     POSTGRES_OPTIONS,
     REDIS_URL,
     REDIS_OPTIONS,
+    CELERY_BROKER_URL,
+    CELERY_RESULT_BACKEND,
 )
 from .gateway import WSGI_APPLICATION
 from .internationalization import (

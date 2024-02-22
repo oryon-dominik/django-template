@@ -135,7 +135,10 @@ def define_databases(env: Env) -> dict:
     #     },
     # }
 
-
+    # # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-broker_url
+    # CELERY_BROKER_URL = REDIS_URL  # type: ignore[name-defined] # noqa: F405
+    # # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_backend
+    # CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 
     # pylint: enable=invalid-name
     # pylint: enable=possibly-unused-variable
@@ -147,15 +150,17 @@ def define_databases(env: Env) -> dict:
 
 # Should be typed and initialized here (will be overwritten!), to be available
 # in the whole project [mypy] (because imported in __init__.py)
-# POSTGRES_DB: str = "{{ project_name }}"
-# POSTGRES_USER: str = ""
-# POSTGRES_PASSWORD: str = ""
-# POSTGRES_HOST: str = ""
-# POSTGRES_PORT: int = 0
-# POSTGRES_OPTIONS: str = ""
-# REDIS_URL: str = ""
-# CACHES: dict = {}
-# REDIS_OPTIONS: dict = {}
+POSTGRES_DB: str = "{{ project_name }}"
+POSTGRES_USER: str = ""
+POSTGRES_PASSWORD: str = ""
+POSTGRES_HOST: str = ""
+POSTGRES_PORT: int = 0
+POSTGRES_OPTIONS: str = ""
+REDIS_URL: str = ""
+CACHES: dict = {}
+REDIS_OPTIONS: dict = {}
+CELERY_BROKER_URL: str = ""
+CELERY_RESULT_BACKEND: str = ""
 
 # -----------------------------------------------------------------------------
 
