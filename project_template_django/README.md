@@ -34,6 +34,14 @@ irm get.scoop.sh | iex
 scoop bucket add doppler https://github.com/DopplerHQ/scoop-doppler.git
 doppler login
 doppler setup
+```
+
+```powershell
+# If nobody did it, import the settings to doppler
+doppler import
+```
+
+```powershell
 (doppler secrets download --format=json --no-file --config=dev | ConvertFrom-Json | ForEach-Object { $_.PSObject.Properties } | ForEach-Object { "$($_.Name)=$($_.Value)" }) -join "`n" | Out-File './envs/develop.env'
 (doppler secrets download --format=json --no-file --config=test | ConvertFrom-Json | ForEach-Object { $_.PSObject.Properties } | ForEach-Object { "$($_.Name)=$($_.Value)" }) -join "`n" | Out-File './envs/test.env'
 # hint for custom settings: doppler configure set config=dev_snowflake
