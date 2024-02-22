@@ -44,7 +44,13 @@ CELERY_BEAT_SCHEDULE: dict = {
 
 CELERY_TASK_DEFAULT_QUEUE = "celery"
 CELERY_ROUTES: dict = {
-    # "<queue-name>.*": {"queue": "<queue-name>"},  # general route for all tasks in apps...
-    # "<queue-name>.*": {"queue": "<queue-name>"},  # general route for all tasks in apps...
+    # "apps.*": {"queue": "{{ project_name }}"},  # general route for all tasknames starting with apps...
+    # "<queue-name>.*": {"queue": "<queue-name>"},  # custom task routing...
     # "debug.*": {"queue": "celery"},
 }
+
+# Find these defined in databases.py (they depend on the environment)
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-broker_url
+# CELERY_BROKER_URL = REDIS_URL  # type: ignore[name-defined] # noqa: F405
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_backend
+# CELERY_RESULT_BACKEND = CELERY_BROKER_URL
