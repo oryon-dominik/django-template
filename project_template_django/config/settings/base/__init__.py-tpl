@@ -46,6 +46,7 @@ from .databases import (
     POSTGRES_PORT,
     POSTGRES_OPTIONS,
     REDIS_URL,
+    REDIS_OPTIONS,
 )
 from .gateway import WSGI_APPLICATION
 from .internationalization import (

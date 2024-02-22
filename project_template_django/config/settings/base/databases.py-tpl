@@ -91,6 +91,19 @@ def define_databases(env: Env) -> dict:
     # )
     # del redisurlpass
 
+    # REDIS_OPTIONS = {
+    #     "CLIENT_CLASS": "django_redis.client.DefaultClient",
+    #     # http://niwinz.github.io/django-redis/latest/#_memcached_exceptions_behavior,
+    #     "IGNORE_EXCEPTIONS": True,  # mimics memcache behavior.
+    #     # connection pool kwargs to configure the use of certificates
+    #     "CONNECTION_POOL_KWARGS": {
+    #         # "ssl_cert_reqs": None
+    #         # 'ssl_ca_certs': REDIS_CA_FILE,
+    #         # 'ssl_certfile': REDIS_CERT_FILE,
+    #         # 'ssl_keyfile': REDIS_KEY_FILE,
+    #     },
+    # }
+
     # CACHES = {
     #     "default": {
     #         "LOCATION": REDIS_URL,
@@ -122,6 +135,8 @@ def define_databases(env: Env) -> dict:
     #     },
     # }
 
+
+
     # pylint: enable=invalid-name
     # pylint: enable=possibly-unused-variable
 
@@ -140,25 +155,13 @@ def define_databases(env: Env) -> dict:
 # POSTGRES_OPTIONS: str = ""
 # REDIS_URL: str = ""
 # CACHES: dict = {}
+# REDIS_OPTIONS: dict = {}
 
 # -----------------------------------------------------------------------------
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# REDIS_OPTIONS = {
-#     "CLIENT_CLASS": "django_redis.client.DefaultClient",
-#     # http://niwinz.github.io/django-redis/latest/#_memcached_exceptions_behavior,
-#     "IGNORE_EXCEPTIONS": True,  # mimics memcache behavior.
-#     # connection pool kwargs to configure the use of certificates
-#     "CONNECTION_POOL_KWARGS": {
-#         # "ssl_cert_reqs": None
-#         # 'ssl_ca_certs': REDIS_CA_FILE,
-#         # 'ssl_certfile': REDIS_CERT_FILE,
-#         # 'ssl_keyfile': REDIS_KEY_FILE,
-#     },
-# }
 
 CACHES = {
     "default": {
