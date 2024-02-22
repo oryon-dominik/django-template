@@ -279,7 +279,6 @@ explicit_package_bases = true
 # Unit tests are the better way to ensure the code is working. 
 # So don't omit these.
 check_untyped_defs = false
-warn_untyped_defs = false
 plugins = ["mypy_django_plugin.main"] #, "mypy_drf_plugin.main"]
 
 [tool.django-stubs]

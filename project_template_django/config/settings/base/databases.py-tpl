@@ -39,7 +39,7 @@ def define_databases(env: Env) -> dict:
     #     else POSTGRES_PASSWORD
     # )
     # POSTGRES_HOST = host_match.group(1) if (host_match := re.search(r"@([^:\/]+)", DATABASE_URL)) else POSTGRES_HOST
-    # POSTGRES_PORT = port_match.group(1) if (port_match := re.search(r":(\d+)\/", DATABASE_URL) else POSTGRES_PORT
+    # POSTGRES_PORT = port_match.group(1) if (port_match := re.search(r":(\d+)\/", DATABASE_URL)) else POSTGRES_PORT
     # POSTGRES_DB = name_match.group(1) if (name_match := re.search(r"/(\w+)\?", DATABASE_URL)) else POSTGRES_DB
     # POSTGRES_OPTIONS = (
     #     options_match.group(1) if (options_match := re.search(r"\?(.+)", DATABASE_URL)) else POSTGRES_OPTIONS
@@ -74,22 +74,53 @@ def define_databases(env: Env) -> dict:
     DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
     # --- REDIS ---------------------------------------------------------------
-    REDIS_PASSWORD = env.str("REDIS_PASSWORD", default="")
-    # Redis keys for SSL connections
-    # REDIS_KEY_FILE = '/path/to/client.key'
-    # REDIS_CERT_FILE = '/path/to/client.crt'
-    # REDIS_CA_FILE = '/path/to/CAcert.pem' or '/path/to/ca.crt'
-    redis_default = POSTGRES_HOST if "POSTGRES_HOST" in locals() else "localhost"  # type: ignore # noqa
-    REDIS_HOST = env.str("REDIS_HOST", default=redis_default)
-    REDIS_PORT = env.int("REDIS_PORT", default=6379)
-    REDIS_DATABASE_NAMESPACE = env.str("REDIS_DATABASE_NAMESPACE", default="0")
+    # REDIS_PASSWORD = env.str("REDIS_PASSWORD", default="")
+    # # Redis keys for SSL connections
+    # # REDIS_KEY_FILE = '/path/to/client.key'
+    # # REDIS_CERT_FILE = '/path/to/client.crt'
+    # # REDIS_CA_FILE = '/path/to/CAcert.pem' or '/path/to/ca.crt'
+    # redis_default = POSTGRES_HOST if "POSTGRES_HOST" in locals() else "localhost"  # type: ignore # noqa
+    # REDIS_HOST = env.str("REDIS_HOST", default=redis_default)
+    # REDIS_PORT = env.int("REDIS_PORT", default=6379)
+    # REDIS_DATABASE_NAMESPACE = env.str("REDIS_DATABASE_NAMESPACE", default="0")
 
-    redisurlpass = f":{REDIS_PASSWORD}@" if REDIS_PASSWORD else ""
-    REDIS_URL = env.str(
-        "REDIS_URL",
-        default=f"redis://{redisurlpass}{REDIS_HOST}:{REDIS_PORT}/{REDIS_DATABASE_NAMESPACE}"
-    )
-    del redisurlpass
+    # redisurlpass = f":{REDIS_PASSWORD}@" if REDIS_PASSWORD else ""
+    # REDIS_URL = env.str(
+    #     "REDIS_URL",
+    #     default=f"redis://{redisurlpass}{REDIS_HOST}:{REDIS_PORT}/{REDIS_DATABASE_NAMESPACE}"
+    # )
+    # del redisurlpass
+
+    # CACHES = {
+    #     "default": {
+    #         "LOCATION": REDIS_URL,
+    #         # "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    #         "BACKEND": "django_redis.cache.RedisCache",
+    #         # "OPTIONS": REDIS_OPTIONS,
+    #     },
+    #     "sessions": {
+    #         "LOCATION": REDIS_URL,
+    #         # "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    #         "BACKEND": "django_redis.cache.RedisCache",
+    #         # "OPTIONS": REDIS_OPTIONS,
+    #     },
+    #     "redis": {
+    #         "LOCATION": REDIS_URL,
+    #         # "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    #         "BACKEND": "django_redis.cache.RedisCache",
+    #         # "OPTIONS": REDIS_OPTIONS,
+    #         # },
+    #     },
+    #     "jwt-blacklist": {
+    #         "LOCATION": REDIS_URL,
+    #         # ! this is not thread-safe and not recommended, if you use multiple workers
+    #         # 'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    #         # ! this is slow in production. Maybe use redis or memcached
+    #         # "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+    #         "BACKEND": "django_redis.cache.RedisCache",
+    #         "OPTIONS": REDIS_OPTIONS,
+    #     },
+    # }
 
     # pylint: enable=invalid-name
     # pylint: enable=possibly-unused-variable
@@ -107,7 +138,8 @@ def define_databases(env: Env) -> dict:
 # POSTGRES_HOST: str = ""
 # POSTGRES_PORT: int = 0
 # POSTGRES_OPTIONS: str = ""
-
+# REDIS_URL: str = ""
+# CACHES: dict = {}
 
 # -----------------------------------------------------------------------------
 

@@ -50,7 +50,7 @@ projects:
         # POSTGRES_HOST=host.containers.internal
         # podman host on linux
         # POSTGRES_HOST=localhost
-        POSTGRES_HOST: 'host.containers.internal'
+        POSTGRES_HOST: 'localhost'
         VITE_APP_MODE: 'django'
         DJANGO_ALLOWED_HOSTS: '*'
         DJANGO_CORS_ALLOWED_ORIGINS: ''
@@ -86,7 +86,7 @@ projects:
         # POSTGRES_HOST=host.containers.internal
         # podman host on linux
         # POSTGRES_HOST=localhost
-        POSTGRES_HOST: 'host.containers.internal'
+        POSTGRES_HOST: 'localhost'
         VITE_APP_MODE: 'django'
         DJANGO_ALLOWED_HOSTS: '*'
         DJANGO_CORS_ALLOWED_ORIGINS: ''
