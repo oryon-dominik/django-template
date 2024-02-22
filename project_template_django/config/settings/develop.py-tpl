@@ -87,7 +87,7 @@ CSP_SCRIPT_SRC = (
 
 
 # -----------------------------------------------------------------------------
-CACHES["jwt-blacklist"]["BACKEND"] = "django.core.cache.backends.locmem.LocMemCache"  # type: ignore[index]
+# CACHES["jwt-blacklist"]["BACKEND"] = "django.core.cache.backends.locmem.LocMemCache"  # type: ignore[index]
 
 # redis url is dependant on the environment
 # pylint: disable=undefined-variable
