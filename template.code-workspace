@@ -36,6 +36,8 @@
             // "aaron-bond.better-comments",
             // "Gruntfuggly.todo-tree",
             // "bierner.markdown-footnotes",
+            // "bierner.markdown-checkbox",
+            // "bierner.markdown-mermaid",
         ]
     },
     "settings": {
