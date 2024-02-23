@@ -21,12 +21,7 @@ locals().update(settings)
 # ruff: noqa: F405
 
 
-SECRET_KEY = env.str("DJANGO_SECRET_KEY", default="{{ secret_key }}")
-
-# Production checklist:
-# See https://docs.djangoproject.com/en/{{ docs_version }}/howto/deployment/checklist/
-# =============================================================================
-
+SECRET_KEY = env.str("DJANGO_SECRET_KEY")
 
 # DEBUG
 # ------------------------------------------------------------------------------
@@ -40,17 +35,6 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_METHODS = list(default_methods)
 
 INSTALLED_APPS += []  # type: ignore[name-defined] # pylint: disable=undefined-variable # noqa
-
-# CACHES["jwt-blacklist"]["BACKEND"] = "django.core.cache.backends.locmem.LocMemCache"  # type: ignore[index]
-
-# redis url is dependant on the environment
-# pylint: disable=undefined-variable
-CACHES["redis"]["LOCATION"] = REDIS_URL  # type: ignore[index, name-defined] # noqa: F405
-# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-broker_url
-CELERY_BROKER_URL = REDIS_URL  # type: ignore[name-defined] # noqa: F405
-# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_backend
-CELERY_RESULT_BACKEND = CELERY_BROKER_URL
-# pylint: enable=undefined-variable
 
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#test-runner
 TEST_RUNNER = "test.runners.PytestTestRunner"

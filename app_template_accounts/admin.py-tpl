@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from core.users.admin import CoreUserAdmin
+from core.accounts.admin import CoreUserAdmin
 
 from .models import User
 

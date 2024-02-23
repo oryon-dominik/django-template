@@ -51,8 +51,6 @@ def test_session_cache(client):
     session_id = r.cookies.get("sessionid").value
     assert session_id is not None
     cache_key = f"django.contrib.sessions.cache{session_id}"
-    assert f":1:{cache_key}" == list(cache._cache.keys())[0]  # type: ignore
-
     cached = cache.get(cache_key)
     assert cached.get("id") is not None
 

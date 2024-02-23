@@ -1,5 +1,6 @@
+from core.accounts import urls as core_urls
 from core.typehints.generic import URLType
 
 
 app_name = "accounts"
-urlpatterns: list[URLType] = []
+urlpatterns: list[URLType] = [] + core_urls.urlpatterns  # type: ignore[assignment,operator]

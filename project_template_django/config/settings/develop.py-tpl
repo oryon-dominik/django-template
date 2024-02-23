@@ -57,47 +57,6 @@ CORS_ALLOW_METHODS = [
     # 'PUT',
 ]
 
-# Content-Security-Policy: https://www.w3.org/TR/CSP/
-# See https://django-csp.readthedocs.io/en/latest/configuration.html
-# Using: https://github.com/mozilla/django-csp
-CSP_CONNECT_SRC = ("'self'",)
-CSP_DEFAULT_SRC = ("'none'",)
-CSP_STYLE_SRC = (
-    "'unsafe-inline'",  # ! Tailwind needs unsafe-inline
-    "'self'",
-    # f"{PROJECT_URL}",
-    # "fonts.googleapis.com",
-)
-CSP_WORKER_SRC = ("'self'",)
-CSP_FONT_SRC = ("'self'",)  # "fonts.gstatic.com")
-CSP_IMG_SRC = ("'self'",)
-CSP_SCRIPT_SRC = (
-    "'self'",
-    # Alpine and tailwind both need unsafe-inline.
-    # Alpine-js needs unsafe-eval.
-    # Alpine.js [offers a mitigation for unsafe-eval](https://alpinejs.dev/advanced/csp)
-    # this is not yet implemented and you will loose some features.
-    "'unsafe-inline'",
-    "'unsafe-eval'",
-    # f"{PROJECT_URL}",
-    # "cdn.tailwindcss.com",  # tailwind
-    # "cdn.jsdelivr.net",  # alpine
-    # "unpkg.com",  # htmx
-)
-
-
-# -----------------------------------------------------------------------------
-# CACHES["jwt-blacklist"]["BACKEND"] = "django.core.cache.backends.locmem.LocMemCache"  # type: ignore[index]
-
-# redis url is dependant on the environment
-# pylint: disable=undefined-variable
-CACHES["redis"]["LOCATION"] = REDIS_URL  # type: ignore[index, name-defined] # noqa: F405
-# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-broker_url
-CELERY_BROKER_URL = REDIS_URL  # type: ignore[name-defined] # noqa: F405
-# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_backend
-CELERY_RESULT_BACKEND = CELERY_BROKER_URL
-# pylint: enable=undefined-variable
-
 # The logging-filter 'log_database_queries' will log to the file, if LOG_DATABASE is True
 # Turn it only on in develop
 LOG_DATABASE = False
