@@ -32,7 +32,7 @@ python commands.py up
 # Validate if everything works fine: run the tests.
 pytest
 
-# Add yourself to the contributors list.
+# Add yourself to the contributors list after you made your first commit.
 contributors-txt --aliases .\config\contributors\aliases.json
 ```
 
