@@ -108,6 +108,7 @@ TODOs: after setting up the template:
 - Comment out `"core.accounts"` in `CORE_APPS` in `config.settings.base.apps.py` (Line 14).
 - Comment in `"apps.accounts.apps.AccountsConfig",` in `LOCAL_APPS` in `config.settings.base.apps.py` (Line 26).
 - Comment in the apps routes to `urlpatterns` in `config.urls.routes.py` (line 42)
+- Delete the `__init__.py` in `core/accounts/migrations/` and run `python manage.py migrate`.
 
 ```bash
 python manage.py startapp --template https://github.com/oryon-dominik/django-template/releases/download/latest/app_template_accounts.zip --extension=py,md,toml,yaml,yml,env,service,conf,sql. --replace-html accounts
