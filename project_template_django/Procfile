@@ -5,3 +5,4 @@ web: gunicorn --config=config.gunicorn.py config.wsgi:application
 # celeryworker (windows): $env:DJANGO_SETTINGS_MODULE="config.settings.develop"; celery --app config.celeryapp worker --loglevel=INFO --queues celery,{{ project_name }} --hostname worker-%%h --pool solo
 # celerybeat (windows): $env:DJANGO_SETTINGS_MODULE="config.settings.develop"; celery --app config.celeryapp beat
 # celeryflower (windows): $env:DJANGO_SETTINGS_MODULE="config.settings.develop"; celery --broker=redis://:secret@host.containers.internal:6379/0 flower --basic_auth=floweruser:flowerpassword --app=config.celeryapp
+# celeryworker (mac): DJANGO_SETTINGS_MODULE=config.settings.develop; celery --app config.celeryapp worker --loglevel=INFO --queues celery,buddy --hostname worker-%%h --pool solo
