@@ -10,6 +10,7 @@ class TestSession(View):
     """
     EXAMPLE view using session store
     """
+
     def dispatch(self, request, *args, **kwargs):
         self.request.session.set_expiry(60 * 60 * 24)  # 1 day
         _id = self.request.session.get("id")
@@ -36,9 +37,7 @@ class TestAppConfig(AppConfig):
 app_name = "tests"
 
 urlpatterns = [
-    path(  # type: ignore[assignment,operator]
-        "test/session/", TestSession.as_view(), name="test-session"
-    ),
+    path("test/session/", TestSession.as_view(), name="test-session"),  # type: ignore[assignment,operator]
     path(  # type: ignore[assignment,operator]
         "test/session-new-id/", TestRecreateId.as_view(), name="test-session-new-id"
     ),

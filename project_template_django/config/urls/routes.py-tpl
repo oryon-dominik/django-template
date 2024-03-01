@@ -78,7 +78,7 @@ if settings.DEBUG:
     ]
 
 
-if hasattr(settings, "DJANGO_RUNS_IN_TESTMODE") and settings.DJANGO_RUNS_IN_TESTMODE:
+if settings.DJANGO_RUNS_IN_TESTMODE:
     settings.INSTALLED_APPS += ["test.tests.config.TestAppConfig"]
     urlpatterns += [
         path("", include("test.tests.config", namespace="tests")),
