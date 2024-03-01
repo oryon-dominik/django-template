@@ -1,4 +1,6 @@
 import pytest
+
+from django.conf import settings
 from django.urls import reverse
 
 
@@ -49,7 +51,8 @@ def test_protected_view_unauthenticated_redirects(client):
     url = reverse("accounts:protectiontest")
     r = client.get(url)
     assert r.status_code == 302
-    redirected_to = f"{reverse('accounts:login')}?next={url}"
+    logsout_to = f"{reverse(settings.LOGOUT_REDIRECT_URL).rstrip('/')}"
+    redirected_to = f"{logsout_to}{reverse(settings.LOGIN_REDIRECT_URL)}?next={url}"
     assert r.url == redirected_to
 
 
@@ -71,7 +74,8 @@ def test_protected_view_active_user_is_not_enough(client, active_user):
     client.force_login(user=active_user)
     r = client.get(url)
     assert r.status_code == 302
-    redirected_to = f"{reverse('accounts:login')}?next={url}"
+    logsout_to = f"{reverse(settings.LOGOUT_REDIRECT_URL).rstrip('/')}"
+    redirected_to = f"{logsout_to}{reverse(settings.LOGIN_REDIRECT_URL)}?next={url}"
     assert r.url == redirected_to
 
 
@@ -81,7 +85,8 @@ def test_protected_view_does_not_work_with_inactive_user(client, inactive_user):
     client.force_login(user=inactive_user)
     r = client.get(url)
     assert r.status_code == 302
-    redirected_to = f"{reverse('accounts:login')}?next={url}"
+    logsout_to = f"{reverse(settings.LOGOUT_REDIRECT_URL).rstrip('/')}"
+    redirected_to = f"{logsout_to}{reverse(settings.LOGIN_REDIRECT_URL)}?next={url}"
     assert r.url == redirected_to
 
 
@@ -94,7 +99,8 @@ def test_protected_view_verified_user_is_not_enough(client, verified_user):
     client.force_login(user=verified_user)
     r = client.get(url)
     assert r.status_code == 302
-    redirected_to = f"{reverse('accounts:login')}?next={url}"
+    logsout_to = f"{reverse(settings.LOGOUT_REDIRECT_URL).rstrip('/')}"
+    redirected_to = f"{logsout_to}{reverse(settings.LOGIN_REDIRECT_URL)}?next={url}"
     assert r.url == redirected_to
 
 
@@ -104,5 +110,6 @@ def test_protected_view_does_not_work_with_unverified_user(client, unverified_us
     client.force_login(user=unverified_user)
     r = client.get(url)
     assert r.status_code == 302
-    redirected_to = f"{reverse('accounts:login')}?next={url}"
+    logsout_to = f"{reverse(settings.LOGOUT_REDIRECT_URL).rstrip('/')}"
+    redirected_to = f"{logsout_to}{reverse(settings.LOGIN_REDIRECT_URL)}?next={url}"
     assert r.url == redirected_to
