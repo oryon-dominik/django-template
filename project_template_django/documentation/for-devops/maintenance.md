@@ -5,8 +5,11 @@
 1. ssh into the server
 
 ```bash
-ssh -i ./<path-to-key> <adminusername>@<server-host> -p <server-port>
+ssh -i <path-to-key> <adminusername>@<server-host> -p <server-port>
 ```
+
+For administative tasks the <adminusername> executes `sudo` commands.  
+The appuser `{{ project_name }}` is used to run the application. It has no privileges.
 
 2. sudo to appuser `{{ project_name }}`
 
