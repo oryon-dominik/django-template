@@ -57,13 +57,25 @@ def sha256(encoded: bytes) -> bytes:
     return hashlib.sha256(encoded).digest()
 
 
+def hex_sha256(encoded: bytes) -> str:
+    """SHA-256 hash HEX digest (:32)."""
+    return hashlib.sha256(encoded).hexdigest()
+
+
 def b64(hashed: bytes) -> bytes:
     """base64 encoded SHA-256 hash for some bytes."""
     return base64.b64encode(hashed)
 
 
-def hashme(file: Path) -> str:
-    """base64 encoded SHA-256 for a file."""
-    content: str | bytes = read_from_disk(file)
-    _content = content.encode() if isinstance(content, str) else content
-    return b64(sha256(_content)).decode()
+def hashme(file: Path, hexme: bool = False) -> str:
+    """Generate SHA-256 based hash.
+
+    hexme:
+        hex-digest or base64 (default)
+
+    Always read content as bytes to avoid read errors ["UnicodeDecodeError", ...]
+    """
+    content: bytes = read_from_disk(file, mode="rb")  # type: ignore  # rb mode will always return bytes
+    if hexme is True:
+        return hex_sha256(content)
+    return b64(sha256(content)).decode()
