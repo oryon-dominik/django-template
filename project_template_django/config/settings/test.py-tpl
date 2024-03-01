@@ -30,6 +30,8 @@ DEBUG = False
 
 DJANGO_RUNS_IN_TESTMODE = True
 
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+
 ALLOWED_HOSTS = ["testserver"]
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_METHODS = list(default_methods)
