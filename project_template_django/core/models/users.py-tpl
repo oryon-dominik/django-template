@@ -95,6 +95,11 @@ class CoreAbstractBaseUser(  # type: ignore # BUG: https://github.com/typeddjang
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+    @property
+    def username(self):
+        """Fallback to legacy username field to avoid attr errors in forms etc."""
+        return self.email
+
     def __str__(self):
         return self.get_email()
 
