@@ -21,6 +21,7 @@ class CoreUserAdmin(DjangoUserAdmin):
                     "is_active",
                     "is_staff",
                     "is_superuser",
+                    "verified",
                     "groups",
                     "user_permissions",
                 ),
@@ -39,7 +40,7 @@ class CoreUserAdmin(DjangoUserAdmin):
         ),
     )
     list_display = ("email", "name", "is_staff")
-    list_filter = ("is_staff", "is_superuser", "is_active", "groups")
+    list_filter = ("is_staff", "is_superuser", "is_active", "verified", "groups")
     search_fields = ("name", "email")
     filter_horizontal = (
         "groups",
