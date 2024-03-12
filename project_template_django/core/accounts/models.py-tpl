@@ -15,6 +15,6 @@ class User(CoreAbstractUser):
     class Meta(CoreAbstractUser.Meta):
         swappable = "AUTH_USER_MODEL"
 
-    objects: models.Manager["User"]
+    objects: models.Manager["User"]  # type: ignore[assignment, misc]  # This is a typehinting, no actual assignment.
     # ! All changes to the user model that add non-nullable fields break backwards compatibility with AUTH_USER_MODEL.
     ...

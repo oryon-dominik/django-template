@@ -27,7 +27,6 @@ from .celery import (
     CELERY_TASK_SOFT_TIME_LIMIT,
     CELERY_BEAT_SCHEDULER,
     CELERY_BEAT_SCHEDULE,
-    CELERY_RESULT_BACKEND,
     CELERY_TASK_DEFAULT_QUEUE,
     CELERY_ROUTES,
 )
@@ -129,3 +128,5 @@ from .{{ project_name }} import *  # noqa # pylint: disable=wildcard-import,unus
 
 # -----------------------------------------------------------------------------
 # pylint: enable=unused-import
+
+DJANGO_RUNS_IN_TESTMODE: bool = False

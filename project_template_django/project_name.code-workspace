@@ -30,6 +30,9 @@
             // live-share for remote collaboration
             "ms-vsliveshare.vsliveshare",
 
+            // gitless - a very good fork from gitlens, before it got proprietary
+            "maattdd.gitless",
+
             // nice to have
             // "stkb.rewrap",
             // "aaron-bond.better-comments",

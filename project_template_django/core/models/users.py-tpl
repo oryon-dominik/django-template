@@ -95,6 +95,11 @@ class CoreAbstractBaseUser(  # type: ignore # BUG: https://github.com/typeddjang
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+    @property
+    def username(self):
+        """Fallback to legacy username field to avoid attr errors in forms etc."""
+        return self.email
+
     def __str__(self):
         return self.get_email()
 
@@ -117,7 +122,11 @@ class CoreAbstractUser(CoreAbstractBaseUser):
         ADMIN = "adm", "Admin"  # dev only
         API = "api", "Api User"
 
-    verified = models.BooleanField(default=False)
+    verified = models.BooleanField(
+        _("verified"),
+        default=False,
+        help_text=_("Designates whether this user has been verified (usally via email)."),
+    )
     role = models.CharField(max_length=3, choices=Roles.choices, default=Roles.INCOMPLETE)
 
     def get_absolute_url(self):

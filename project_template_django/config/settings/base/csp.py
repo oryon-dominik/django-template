@@ -30,7 +30,7 @@ CSP_CONNECT_SRC = (SELF,)
 # CSP_CONNECT_SRC = (SELF, project_url)
 # CSP: style-src
 # The HTTP Content-Security-Policy (CSP) style-src directive specifies valid sources for stylesheets.
-# ! Tailwind needs unsafe-inline. TBD: add the nonce to the style tag. ({% verbatim {{request.csp_nonce}}{% endverbatim %})
+# ! Tailwind needs unsafe-inline. TBD: add the nonce to the style tag. ({% verbatim %}{{request.csp_nonce}}{% endverbatim %})
 CSP_STYLE_SRC = (
     "'unsafe-inline'",
     SELF,

@@ -76,3 +76,10 @@ if settings.DEBUG:
     urlpatterns += [
         path("__reload__/", include("django_browser_reload.urls")),
     ]
+
+
+if settings.DJANGO_RUNS_IN_TESTMODE:
+    settings.INSTALLED_APPS += ["test.tests.config.TestAppConfig"]
+    urlpatterns += [
+        path("", include("test.tests.config", namespace="tests")),
+    ]

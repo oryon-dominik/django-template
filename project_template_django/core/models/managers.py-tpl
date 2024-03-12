@@ -34,5 +34,6 @@ class CoreUserManager(BaseUserManager):
         )
         user.is_staff = True
         user.is_superuser = True
+        user.verified = True
         user.save(using=self._db)
         return user
