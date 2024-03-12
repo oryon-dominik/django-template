@@ -1,9 +1,8 @@
-from django.contrib.auth import views as auth_views
 from django.conf import settings
+from django.contrib.auth import views as auth_views
 from django.urls import path
 
-from . import forms
-from . import views
+from . import forms, views
 
 
 app_name = "accounts"
@@ -39,8 +38,8 @@ if hasattr(settings, "DJANGO_RUNS_IN_TESTMODE"):
     """
     EXAMPLE PROTECTED VIEW below
     """
-    from django.http import JsonResponse
     from django.contrib.auth.mixins import LoginRequiredMixin
+    from django.http import JsonResponse
     from django.views.generic import View
 
     class ProtectedView(LoginRequiredMixin, View):

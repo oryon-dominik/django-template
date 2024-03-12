@@ -5,7 +5,6 @@
 import os
 import subprocess
 
-# tui: import sys
 import webbrowser
 from datetime import datetime
 from pathlib import Path
@@ -345,13 +344,11 @@ def setup(production: bool = False, panic: bool = True, log_errors: bool = True)
     Create vital files and directories.
     if not in production:
         Write template and commithash info to pyproject.toml.
-        Start the TUI Configapp.
     """
     create_vital_files_and_directories(production=production)
     clean(panic=panic, log_errors=log_errors)
     if not production:
         write_info_to_pyproject_toml(path=CWD)
-        tui()
 
 
 @cli.command()

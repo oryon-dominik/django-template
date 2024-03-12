@@ -2,6 +2,10 @@
 # so, ignore linting errors for unused imports
 # ruff: noqa: F401
 
+from test.fixtures.clients import (  # noqa # pylint: disable=unused-import
+    client,
+)
+
 from test.fixtures.users import (  # noqa # pylint: disable=unused-import
     user,
     active_user,
@@ -10,8 +14,4 @@ from test.fixtures.users import (  # noqa # pylint: disable=unused-import
     inactive_user,
     valid_password,
     valid_user,
-)
-
-from test.fixtures.clients import (  # noqa # pylint: disable=unused-import
-    client,
 )
