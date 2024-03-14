@@ -78,19 +78,21 @@ def clean_pyc(panic: bool = True, log_errors: bool = True):
     _ = [unlink(p, panic=panic, log_errors=log_errors) for p in Path(CWD).rglob("*~")]
 
 
-def clean_logs(panic: bool = True, log_errors: bool = True, clean_frozen: bool = False):
+def clean_logs(panic: bool = True, log_errors: bool = True, clean_frozen: bool = False, freezeas: str = "frozen"):
     from core.inout.files import unlink  # pylint: disable=import-outside-toplevel
 
     print("Unlinking logs: logs/*")
 
     for path in (Path(CWD) / "logs").rglob("*"):
-        if path.name.startswith("frozen-") and not clean_frozen:
+        if path.name.startswith(freezeas) and not clean_frozen:
             continue
         # freeze the historic instance of the logfile
         if not clean_frozen:
-            dest = Path(
-                CWD
-            ) / "logs" / f"frozen-{path.stem}-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}-{path.suffix}"
+            dest = (
+                Path(CWD)
+                / "logs"
+                / f"{freezeas}-{path.stem}_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}{path.suffix}"
+            )
             dest.write_text(path.read_text())
         # delete the original
         unlink(path, panic=panic, log_errors=log_errors)
