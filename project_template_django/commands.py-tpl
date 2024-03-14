@@ -78,7 +78,7 @@ def clean_pyc(panic: bool = True, log_errors: bool = True):
     _ = [unlink(p, panic=panic, log_errors=log_errors) for p in Path(CWD).rglob("*~")]
 
 
-def clean_logs(panic: bool = True, log_errors: bool = True, clean_frozen: bool = False, freezeas: str = "frozen"):
+def clean_logs(panic: bool = True, log_errors: bool = True, clean_frozen: bool = True, freezeas: str = "frozen"):
     from core.inout.files import unlink  # pylint: disable=import-outside-toplevel
 
     print("Unlinking logs: logs/*")
