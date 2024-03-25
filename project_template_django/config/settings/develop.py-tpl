@@ -57,9 +57,17 @@ CORS_ALLOW_METHODS = [
     # 'PUT',
 ]
 
+
+# --- LOGGING -----------------------------------------------------------------
 # The logging-filter 'log_database_queries' will log to the file, if LOG_DATABASE is True
 # Turn it only on in develop
 LOG_DATABASE = False
+# Add DEBUG Loglevels for these loggers development.
+LOGGING["loggers"]["dev"]["level"] = "DEBUG"
+LOGGING["loggers"]["core.gitops"]["level"] = "DEBUG"
+LOGGING["loggers"]["core.io"]["level"] = "DEBUG"
+LOGGING["loggers"]["core.exceptions"]["level"] = "DEBUG"
+LOGGING["loggers"]["django.db.backends"]["level"] = "DEBUG"
 
 # for development emails are send to console
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

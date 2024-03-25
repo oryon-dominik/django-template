@@ -132,7 +132,7 @@ LOGGING: dict = {
         },
         "dev": {
             "handlers": ["console.rich"],
-            "level": "DEBUG",
+            "level": "WARNING",
             "propagate": True,
         },
         "rich": {
@@ -141,22 +141,22 @@ LOGGING: dict = {
             "propagate": True,
         },
         "core.gitops": {
-            "level": "DEBUG",
+            "level": "WARNING",
             "propagate": True,
             "handlers": ["console.rich", "server_log_file", "error_log_file"],
         },
         "core.io": {
-            "level": "DEBUG",
+            "level": "WARNING",
             "propagate": True,
             "handlers": ["console.rich", "server_log_file", "error_log_file"],
         },
         "core.exceptions": {
-            "level": "DEBUG",
+            "level": "WARNING",
             "propagate": True,
             "handlers": ["console.rich", "server_log_file", "error_log_file"],
         },
         "django.db.backends": {
-            "level": "DEBUG",
+            "level": "WARNING",
             "handlers": ["database_queries_file", "error_log_file"],
             "propagate": True,
         },
