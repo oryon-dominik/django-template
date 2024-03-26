@@ -19,8 +19,8 @@ User=root
 Group=root
 EnvironmentFile=/app/envs/production.env
 ExecStartPre=
-ExecStart=/apps/{{ project_name }}/src/.venv/bin/celery --app config.celeryapp beat --loglevel=INFO
-ExecReload=/apps/{{ project_name }}/src/.venv/bin/celery --app config.celeryapp beat --loglevel=INFO
+ExecStart=/apps/{{ project_name }}/src/.venv/bin/celery --app config.celeryapp beat --loglevel=INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+ExecReload=/apps/{{ project_name }}/src/.venv/bin/celery --app config.celeryapp beat --loglevel=INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
 
 PIDFile=/apps/{{ project_name }}/celerybeat.pid
 ExecStop=/bin/kill --signal TERM $MAINPID
