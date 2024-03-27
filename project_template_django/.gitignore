@@ -62,3 +62,7 @@ htmlcov/
 **/node_modules/
 frontend/dist/
 .env.production
+
+# Auto generated tailwind.css should not be committed.
+# It will be collected via staticfiles in Django.
+assets/css/tailwind.css
